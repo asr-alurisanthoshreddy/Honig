@@ -43,13 +43,22 @@ export class NewsProvider implements SearchProvider {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/everything?${params}`);
+      // Construct the original NewsAPI URL
+      const newsApiUrl = `${this.baseUrl}/everything?${params}`;
+      
+      // Use CORS proxy to bypass browser restrictions
+      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(newsApiUrl)}`;
+      
+      const response = await fetch(proxyUrl);
       
       if (!response.ok) {
-        throw new Error(`NewsAPI error: ${response.status} ${response.statusText}`);
+        throw new Error(`Proxy error: ${response.status} ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const proxyData = await response.json();
+      
+      // Parse the actual NewsAPI response from the proxy
+      const data = JSON.parse(proxyData.contents);
       
       if (data.status !== 'ok') {
         throw new Error(`NewsAPI error: ${data.message}`);
