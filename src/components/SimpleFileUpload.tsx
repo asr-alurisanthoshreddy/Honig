@@ -98,7 +98,7 @@ ${result.summary}`;
       console.error('Real file analysis failed:', error);
       
       // Enhanced error detection and categorization
-      const errorMessage = error.message || error.toString();
+      const errorMessage = error instanceof Error ? error.message : String(error);
       
       // Check for expired API key
       if (errorMessage.includes('API key expired') || errorMessage.includes('API_KEY_INVALID')) {

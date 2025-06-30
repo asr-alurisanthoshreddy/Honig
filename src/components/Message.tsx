@@ -107,7 +107,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
                       </>
                     )}
                   </button>
-                  {navigator.share && (
+                  {typeof navigator.share === 'function' && (
                     <button
                       onClick={handleShare}
                       className="flex items-center gap-1 px-2 py-1 text-xs text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors"
