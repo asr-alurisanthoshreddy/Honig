@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Clock, Database, Edit2, Check, X, Copy, Share2, Target, Globe, Brain, Search } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { formatDistanceToNow } from 'date-fns';
-import { Message as MessageType, useChatStore } from '../store/chatStore';
+import { Message as MessageType, useChatStore } from '../store/optimizedChatStore';
 
 interface MessageProps {
   message: MessageType;
@@ -22,7 +22,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
   const isHonigResponse = message.metadata?.fromHonig;
   const queryType = message.metadata?.queryType;
   const confidence = message.metadata?.confidence;
-  const processingTime = message.metadata?.processingStages?.total;
+  const processingTime = message.metadata?.processingStages?.total || message.metadata?.processingTime;
   const databaseUsed = message.metadata?.databaseUsed;
   const databaseSource = message.metadata?.databaseSource;
 
@@ -84,7 +84,6 @@ const Message: React.FC<MessageProps> = ({ message }) => {
               ref={codeBlockRef}
               className="overflow-hidden bg-gray-900 rounded-lg shadow-lg border border-gray-700"
             >
-              {/* Header with language and actions */}
               <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
                 <span className="text-xs text-gray-300 font-mono uppercase">
                   {match[1]}
@@ -120,7 +119,6 @@ const Message: React.FC<MessageProps> = ({ message }) => {
                 </div>
               </div>
               
-              {/* Code content */}
               <div className="overflow-x-auto">
                 <pre className="p-4 text-sm font-mono leading-relaxed text-gray-100">
                   <code className={`${className} block`} {...props}>
@@ -133,7 +131,6 @@ const Message: React.FC<MessageProps> = ({ message }) => {
         );
       }
 
-      // Inline code
       return (
         <code className="px-1.5 py-0.5 rounded-md bg-gray-200 dark:bg-gray-700 font-mono text-sm text-gray-800 dark:text-gray-200" {...props}>
           {children}
@@ -141,15 +138,12 @@ const Message: React.FC<MessageProps> = ({ message }) => {
       );
     },
     pre: ({ children }: any) => {
-      // Let the code component handle pre blocks
       return <>{children}</>;
     }
   };
 
-  // Process content to convert table format to code block
   const processContent = (content: string) => {
     if (content.includes('📊 ALL TABLES DETECTED AND FORMATTED')) {
-      // Convert the table to a proper code block format
       const tableContent = `📊 ALL TABLES DETECTED AND FORMATTED
 
 Table 1: Examination Schedule Table
@@ -197,98 +191,125 @@ Table 1: Examination Schedule Table
     return content;
   };
 
+  if (isUser) {
+    // User message - right aligned, compact design
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="py-3 px-4 sm:px-6 bg-white dark:bg-gray-900"
+      >
+        <div className="max-w-4xl mx-auto flex justify-end">
+          <div className="max-w-[85%] sm:max-w-[70%]">
+            <div className="bg-blue-600 text-white rounded-2xl rounded-br-md px-4 py-3 shadow-sm">
+              <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap break-words">
+                {message.content}
+              </p>
+            </div>
+            <div className="flex justify-end mt-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // Assistant message - full width, detailed design
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`py-4 px-4 sm:px-6 ${isUser ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'}`}
+      className="py-4 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800"
     >
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-start gap-4">
-          <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-            isUser 
-              ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' 
-              : isHonigResponse
-                ? 'bg-gradient-to-br from-purple-100 to-blue-100 text-purple-600 dark:from-purple-900 dark:to-blue-900 dark:text-purple-300'
-                : 'bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300'
-          }`}>
-            {isUser ? 'U' : isHonigResponse ? 'H' : 'AI'}
+      <div className="max-w-4xl mx-auto">
+        <div className="space-y-3">
+          {/* Header with Honig branding and metadata */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                <span className="text-white font-bold text-sm">H</span>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-gray-900 dark:text-gray-100">
+                    Honig
+                  </span>
+                  {isHonigResponse && (
+                    <span className="text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full">
+                      AI Research
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
+                  {processingTime && (
+                    <span className="ml-2">
+                      • {processingTime < 1000 ? `${processingTime}ms` : `${(processingTime / 1000).toFixed(1)}s`}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick metadata badges */}
+            <div className="flex items-center gap-2">
+              {databaseUsed && (
+                <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full flex items-center gap-1">
+                  <Database className="w-3 h-3" />
+                  DB
+                </span>
+              )}
+              {confidence && (
+                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full flex items-center gap-1">
+                  <Target className="w-3 h-3" />
+                  {Math.round(confidence * 100)}%
+                </span>
+              )}
+            </div>
           </div>
-          
-          <div className="flex-1 min-w-0 space-y-2">
-            <div className={`prose prose-gray dark:prose-invert max-w-none ${message.isLoading ? 'opacity-70' : ''}`}>
-              {message.isLoading && message.content === '' ? (
-                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+
+          {/* Message content */}
+          <div className={`prose prose-gray dark:prose-invert max-w-none ${message.isLoading ? 'opacity-70' : ''}`}>
+            {message.isLoading && message.content === '' ? (
+              <div className="flex items-center gap-3 py-4">
+                <div className="flex gap-1">
                   <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 animate-pulse"></div>
                   <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                 </div>
-              ) : (
+                <span className="text-sm text-gray-500 dark:text-gray-400">Thinking...</span>
+              </div>
+            ) : (
+              <div className="prose-content">
                 <ReactMarkdown components={renderers}>{processContent(message.content)}</ReactMarkdown>
-              )}
-            </div>
-            
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-gray-400">
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
-              </span>
-              
-              {isHonigResponse && (
-                <span className="flex items-center gap-1 text-purple-600 dark:text-purple-400">
-                  <Brain className="w-3 h-3" />
-                  Honig
-                </span>
-              )}
-              
-              {databaseUsed && (
-                <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <Database className="w-3 h-3" />
-                  Database {databaseSource === 'gemini_synthesis' ? '+ Gemini' : 'Only'}
-                </span>
-              )}
-              
+              </div>
+            )}
+          </div>
+
+          {/* Metadata and actions */}
+          {!message.isLoading && (
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700">
               {queryType && !databaseUsed && (
-                <span className="flex items-center gap-1 text-blue-600 dark:text-blue-400">
+                <span className="flex items-center gap-1">
                   <Search className="w-3 h-3" />
                   {queryType}
                 </span>
               )}
               
-              {confidence && (
-                <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                  <Target className="w-3 h-3" />
-                  {Math.round(confidence * 100)}% confidence
-                </span>
-              )}
-              
-              {processingTime && (
-                <span className="flex items-center gap-1 text-orange-600 dark:text-orange-400">
-                  <Clock className="w-3 h-3" />
-                  {(processingTime / 1000).toFixed(1)}s
-                </span>
-              )}
-              
               {hasLiveData && (
-                <>
-                  <button 
-                    onClick={() => setShowSources(!showSources)}
-                    className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    {showSources ? 'Hide sources' : `Show sources (${message.sources?.length})`}
-                  </button>
-                  
-                  {message.fromCache && (
-                    <span className="flex items-center gap-1">
-                      <Database className="w-3 h-3" />
-                      Cached result
-                    </span>
-                  )}
-                </>
+                <button 
+                  onClick={() => setShowSources(!showSources)}
+                  className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  {showSources ? 'Hide sources' : `Sources (${message.sources?.length})`}
+                </button>
               )}
               
-              {!isUser && !isGuestMode && (
+              {!isGuestMode && (
                 <button 
                   onClick={() => setShowingNote(true)}
                   className="flex items-center gap-1 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -298,89 +319,95 @@ Table 1: Examination Schedule Table
                 </button>
               )}
             </div>
-            
-            {!isUser && message.note && !showingNote && (
-              <div className="mt-2 pl-3 border-l-2 border-yellow-400 dark:border-yellow-600 text-sm italic text-gray-600 dark:text-gray-300">
-                {message.note}
+          )}
+          
+          {/* Note display */}
+          {!isUser && message.note && !showingNote && (
+            <div className="mt-3 pl-4 border-l-2 border-yellow-400 dark:border-yellow-600 text-sm italic text-gray-600 dark:text-gray-300 bg-yellow-50 dark:bg-yellow-900/10 p-3 rounded-r-lg">
+              {message.note}
+            </div>
+          )}
+          
+          {/* Note editing */}
+          {!isUser && showingNote && !isGuestMode && (
+            <div className="mt-3 space-y-3 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+              <textarea
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+                placeholder="Add a note or correction..."
+                className="w-full p-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white resize-none"
+                rows={3}
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={handleAddNote}
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Check className="w-4 h-4" />
+                  Save Note
+                </button>
+                <button
+                  onClick={handleCancelNote}
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                  Cancel
+                </button>
               </div>
-            )}
-            
-            {!isUser && showingNote && !isGuestMode && (
-              <div className="mt-2 space-y-2">
-                <textarea
-                  value={noteText}
-                  onChange={(e) => setNoteText(e.target.value)}
-                  placeholder="Add a note or correction..."
-                  className="w-full p-2 text-sm border border-gray-300 dark:border-gray-700 rounded focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                  rows={3}
-                />
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleAddNote}
-                    className="flex items-center gap-1 px-2 py-1 text-xs text-white bg-blue-600 rounded hover:bg-blue-700"
-                  >
-                    <Check className="w-3 h-3" />
-                    Save
-                  </button>
-                  <button
-                    onClick={handleCancelNote}
-                    className="flex items-center gap-1 px-2 py-1 text-xs text-gray-700 bg-gray-200 rounded hover:bg-gray-300 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
-                  >
-                    <X className="w-3 h-3" />
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            )}
-            
-            {hasLiveData && showSources && (
-              <div className="mt-3 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">
-                <h4 className="font-medium mb-2 text-gray-700 dark:text-gray-300">Sources</h4>
-                <div className="space-y-3">
-                  {message.sources?.map((source, i) => (
-                    <div key={i} className="border-b border-gray-200 dark:border-gray-600 pb-2 last:border-0 last:pb-0">
-                      <div className="flex items-start gap-2">
-                        <div className="flex-shrink-0 mt-0.5">
-                          {source.type === 'knowledge' ? (
-                            <Target className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                          ) : source.type === 'news' ? (
-                            <Globe className="w-3 h-3 text-red-600 dark:text-red-400" />
-                          ) : (
-                            <Globe className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+            </div>
+          )}
+          
+          {/* Sources display */}
+          {hasLiveData && showSources && (
+            <div className="mt-4 p-4 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+              <h4 className="font-medium mb-3 text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                <Globe className="w-4 h-4" />
+                Sources ({message.sources?.length})
+              </h4>
+              <div className="space-y-4">
+                {message.sources?.map((source, i) => (
+                  <div key={i} className="border-b border-gray-200 dark:border-gray-600 pb-3 last:border-0 last:pb-0">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 mt-1">
+                        {source.type === 'knowledge' ? (
+                          <Target className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                        ) : source.type === 'news' ? (
+                          <Globe className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        ) : (
+                          <Globe className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <a
+                          href={source.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-blue-600 dark:text-blue-400 hover:underline block mb-2 leading-tight"
+                        >
+                          {source.title}
+                        </a>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-2">
+                          {source.snippet}
+                        </p>
+                        <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="capitalize font-medium">{source.source}</span>
+                          {source.type && (
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              source.type === 'knowledge' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+                              source.type === 'news' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                              'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                            }`}>
+                              {source.type}
+                            </span>
                           )}
-                        </div>
-                        <div className="flex-1">
-                          <a
-                            href={source.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium text-blue-600 dark:text-blue-400 hover:underline block mb-1"
-                          >
-                            {source.title}
-                          </a>
-                          <p className="text-gray-600 dark:text-gray-300 text-xs line-clamp-2">
-                            {source.snippet}
-                          </p>
-                          <div className="mt-1 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                            <span className="capitalize">{source.source}</span>
-                            {source.type && (
-                              <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${
-                                source.type === 'knowledge' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
-                                source.type === 'news' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                                'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                              }`}>
-                                {source.type}
-                              </span>
-                            )}
-                          </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
