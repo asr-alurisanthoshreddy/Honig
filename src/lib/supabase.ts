@@ -85,10 +85,10 @@ function validateGeminiApiKey(): string {
   return geminiKey;
 }
 
-// **NEW: Enhanced Gemini response with conversation context for follow-up queries**
+// **FIXED: Enhanced Gemini response with ISOLATED file context**
 async function getGeminiResponseWithContext(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('🧠 Processing with conversation context...');
+    console.log('🧠 Processing with ISOLATED file context...');
     console.log(`📚 Context: ${conversationHistory.length} previous messages`);
     
     // Validate API key first
@@ -99,31 +99,35 @@ async function getGeminiResponseWithContext(message: string, conversationHistory
     const genAI = new GoogleGenerativeAI(geminiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+    // **KEY FIX: Isolate file context to only the most recent file analysis**
+    const relevantContext = getRelevantFileContext(message, conversationHistory);
+
     // Build comprehensive context prompt
-    let contextPrompt = `You are Honig, an advanced AI assistant developed by Honig. You have access to the complete conversation history and should use it to provide contextual, relevant responses.
+    let contextPrompt = `You are Honig, an advanced AI assistant developed by Honig. You have access to conversation history and should use it to provide contextual, relevant responses.
 
-**CRITICAL CONTEXT ANALYSIS INSTRUCTIONS:**
+**CRITICAL FILE ISOLATION INSTRUCTIONS:**
 
-1. **ANALYZE CONVERSATION HISTORY:** Review all previous messages to understand what the user has shared, especially any file content or extracted information.
+1. **TREAT EACH FILE UNIQUELY:** When a user uploads a file and later asks for codes/solutions, ONLY use content from the MOST RECENT file analysis, NOT from previous files.
 
-2. **DETECT FOLLOW-UP QUERIES:** Determine if the current query is asking for something specific based on previous content (like "codes for all questions" after file analysis).
+2. **FILE CONTEXT ISOLATION:** If the user asks for "codes for all questions" or similar follow-up queries, reference ONLY the content from the current/latest file they uploaded.
 
-3. **USE EXTRACTED CONTENT:** If the user previously shared file content with questions/problems, and now asks for "codes" or "solutions", provide specific code for those exact questions, NOT generic examples.
+3. **NO CROSS-FILE CONTAMINATION:** Do NOT mix content, tables, or information from different files unless the user explicitly asks to combine them.
 
-4. **MAINTAIN CONTEXT:** Reference specific information from previous messages and build upon what was already discussed.
+4. **DETECT FOLLOW-UP QUERIES:** Determine if the current query is asking for something specific based on the MOST RECENT file content.
 
-**CONVERSATION HISTORY:**
+5. **USE ONLY RELEVANT CONTENT:** If the user previously shared multiple files, use ONLY the content from the file that's relevant to their current question.
+
+**RELEVANT CONVERSATION CONTEXT:**
 `;
 
-    // Add complete conversation history for context
-    if (conversationHistory.length > 0) {
-      conversationHistory.forEach((msg, index) => {
+    // Add only relevant context (not all conversation history)
+    if (relevantContext.length > 0) {
+      relevantContext.forEach((msg, index) => {
         if (msg.role === 'user') {
-          contextPrompt += `\nUser Message ${index + 1}: ${msg.content}\n`;
+          contextPrompt += `\nUser Message: ${msg.content}\n`;
         } else {
-          // Include assistant responses, especially file analysis content
-          const content = msg.content.length > 1000 ? msg.content.substring(0, 1000) + '...[truncated]' : msg.content;
-          contextPrompt += `\nHonig Response ${index + 1}: ${content}\n`;
+          // Include assistant responses, especially the most recent file analysis
+          contextPrompt += `\nHonig Response: ${msg.content}\n`;
         }
       });
     }
@@ -133,26 +137,27 @@ async function getGeminiResponseWithContext(message: string, conversationHistory
 **RESPONSE INSTRUCTIONS:**
 
 1. **If this is a follow-up query** (like asking for codes after file analysis):
-   - Use the specific content from previous messages
-   - Provide solutions for the exact questions/problems mentioned earlier
-   - Reference the specific file content or extracted information
-   - Do NOT provide generic examples
+   - Use ONLY the content from the MOST RECENT file analysis
+   - Provide solutions for the exact questions/problems from THAT specific file
+   - Do NOT reference content from other files or previous analyses
+   - Focus exclusively on the current file's content
 
 2. **If this is a new query:**
    - Provide a comprehensive response
-   - Still reference relevant context from conversation history
+   - Reference relevant context but maintain file isolation
    - Use proper formatting with headings and bullet points
 
-3. **For code requests based on previous content:**
-   - Extract the specific questions/problems from the conversation history
-   - Provide working code solutions for each identified question
+3. **For code requests based on file content:**
+   - Extract the specific questions/problems from the MOST RECENT file analysis only
+   - Provide working code solutions for each identified question from that file
    - Use proper code blocks with language specification
    - Include explanations for each solution
+   - Do NOT include examples from other files
 
-4. **Always maintain conversation continuity:**
-   - Reference what was discussed before
-   - Build upon previous information
-   - Show understanding of the full context
+4. **File isolation principle:**
+   - Each file should be treated as a separate, independent context
+   - Do not mix tables, questions, or content from different files
+   - Only combine files if user explicitly requests it
 
 **FORMATTING REQUIREMENTS:**
 - Use proper markdown formatting
@@ -161,7 +166,9 @@ async function getGeminiResponseWithContext(message: string, conversationHistory
 - Use code blocks for code examples
 - Provide comprehensive, well-organized responses
 
-Analyze the conversation history and provide a contextual response to the current query:`;
+**CRITICAL:** If the user is asking for codes/solutions after a file analysis, use ONLY the content from the most recent file analysis. Do not include any tables, questions, or content from previous files.
+
+Analyze the relevant context and provide a response to the current query:`;
 
     const result = await model.generateContent([contextPrompt]);
     const response = await result.response;
@@ -198,18 +205,89 @@ Analyze the conversation history and provide a contextual response to the curren
   }
 }
 
-// **ENHANCED: Main response function with conversation context**
+// **NEW: Function to get relevant file context (isolates to most recent file)**
+function getRelevantFileContext(message: string, conversationHistory: any[]): any[] {
+  const messageLower = message.toLowerCase().trim();
+  
+  // Check if this is a follow-up query about file content
+  const isFileFollowUp = [
+    /give.*codes?.*for.*all/i,
+    /codes?.*for.*all.*questions?/i,
+    /provide.*codes?.*for.*all/i,
+    /write.*codes?.*for.*all/i,
+    /codes?.*for.*each/i,
+    /solutions?.*for.*all/i,
+    /solve.*all.*questions?/i,
+    /answers?.*for.*all/i,
+    /based on.*above/i,
+    /from.*previous/i,
+    /using.*extracted/i,
+    /for.*those.*questions?/i,
+    /for.*these.*questions?/i,
+    /from.*what.*you.*extracted/i,
+    /using.*the.*file/i,
+    /based.*on.*the.*file/i
+  ].some(pattern => pattern.test(messageLower));
+
+  if (!isFileFollowUp) {
+    // For non-file follow-up queries, return limited recent context
+    return conversationHistory.slice(-4); // Only last 4 messages
+  }
+
+  // For file follow-up queries, find the MOST RECENT file analysis
+  const fileAnalysisMessages = conversationHistory.filter(msg => 
+    msg.role === 'assistant' && (
+      msg.metadata?.fromFileAnalysis ||
+      msg.content.includes('📊 ALL TABLES DETECTED') ||
+      msg.content.includes('I\'ve analyzed your file') ||
+      msg.content.includes('COMPLETE DOCUMENT ANALYSIS') ||
+      msg.content.includes('COMPLETE IMAGE ANALYSIS') ||
+      msg.content.includes('COMPLETE TEXT FILE ANALYSIS')
+    )
+  );
+
+  if (fileAnalysisMessages.length === 0) {
+    // No file analysis found, return recent context
+    return conversationHistory.slice(-4);
+  }
+
+  // Get the MOST RECENT file analysis (last one in the array)
+  const mostRecentFileAnalysis = fileAnalysisMessages[fileAnalysisMessages.length - 1];
+  
+  // Find the index of this message in the conversation history
+  const fileAnalysisIndex = conversationHistory.findIndex(msg => 
+    msg.id === mostRecentFileAnalysis.id || 
+    (msg.role === 'assistant' && msg.content === mostRecentFileAnalysis.content)
+  );
+
+  if (fileAnalysisIndex === -1) {
+    // Fallback: return the most recent file analysis
+    return [mostRecentFileAnalysis];
+  }
+
+  // Return only the context from the most recent file analysis onwards
+  // This includes the user's file upload message and the analysis response
+  const relevantStartIndex = Math.max(0, fileAnalysisIndex - 1); // Include the user message before the analysis
+  const relevantContext = conversationHistory.slice(relevantStartIndex);
+
+  console.log(`🎯 ISOLATED FILE CONTEXT: Using only content from most recent file analysis (${relevantContext.length} messages)`);
+  console.log(`📄 File analysis content preview: ${mostRecentFileAnalysis.content.substring(0, 200)}...`);
+
+  return relevantContext;
+}
+
+// **ENHANCED: Main response function with ISOLATED file context**
 export async function getResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('🤖 Processing query with conversation context...');
-    console.log(`📚 Conversation context: ${conversationHistory.length} messages`);
+    console.log('🤖 Processing query with ISOLATED file context...');
+    console.log(`📚 Total conversation history: ${conversationHistory.length} messages`);
     
     // Check if Honig service is configured and should be used
     if (isProduction) {
       const config = honigService.getConfiguration();
       
       if (!config.isConfigured) {
-        console.warn('⚠️ Honig not configured, using contextual Gemini');
+        console.warn('⚠️ Honig not configured, using contextual Gemini with file isolation');
         return await getGeminiResponseWithContext(message, conversationHistory);
       }
       
@@ -217,9 +295,9 @@ export async function getResponse(message: string, conversationHistory: any[] = 
       const shouldUseHonig = HonigService.shouldUseHonig(message);
       const isFollowUpQuery = isFollowUpBasedOnContext(message, conversationHistory);
       
-      // **KEY FEATURE: Use contextual Gemini for follow-up queries**
+      // **KEY FEATURE: Use contextual Gemini with file isolation for follow-up queries**
       if (isFollowUpQuery || !shouldUseHonig) {
-        console.log('📝 Using contextual Gemini for follow-up/contextual query');
+        console.log('📝 Using contextual Gemini with ISOLATED file context for follow-up/contextual query');
         return await getGeminiResponseWithContext(message, conversationHistory);
       }
       
@@ -236,7 +314,7 @@ export async function getResponse(message: string, conversationHistory: any[] = 
 
       return result.response;
     } else {
-      // Not in production or not configured - use contextual response
+      // Not in production or not configured - use contextual response with file isolation
       return await getGeminiResponseWithContext(message, conversationHistory);
     }
 
@@ -245,7 +323,7 @@ export async function getResponse(message: string, conversationHistory: any[] = 
     
     // Try contextual Gemini as final fallback
     try {
-      console.log('🔄 Falling back to contextual Gemini');
+      console.log('🔄 Falling back to contextual Gemini with file isolation');
       return await getGeminiResponseWithContext(message, conversationHistory);
     } catch (fallbackError) {
       console.error('Even contextual Gemini failed:', fallbackError);
@@ -256,7 +334,7 @@ export async function getResponse(message: string, conversationHistory: any[] = 
   }
 }
 
-// **NEW: Function to detect follow-up queries based on conversation context**
+// **UPDATED: Function to detect follow-up queries based on conversation context**
 function isFollowUpBasedOnContext(message: string, conversationHistory: any[]): boolean {
   const messageLower = message.toLowerCase().trim();
   
@@ -309,7 +387,7 @@ function isFollowUpBasedOnContext(message: string, conversationHistory: any[]): 
   const isFollowUp = isFollowUpPattern && hasRelevantContext;
   
   if (isFollowUp) {
-    console.log('🎯 FOLLOW-UP QUERY DETECTED:', messageLower);
+    console.log('🎯 FOLLOW-UP QUERY DETECTED with FILE ISOLATION:', messageLower);
     console.log('📚 Has relevant context:', hasRelevantContext);
   }
   
