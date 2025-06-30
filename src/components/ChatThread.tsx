@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useChatStore } from '../store/optimizedChatStore';
+import { useChatStore } from '../store/chatStore';
 import Message from './Message';
 
 const ChatThread: React.FC = () => {

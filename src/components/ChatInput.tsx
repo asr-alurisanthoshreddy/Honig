@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, Paperclip, Mic, MicOff } from 'lucide-react';
-import { useChatStore } from '../store/optimizedChatStore';
+import { useChatStore } from '../store/chatStore';
 import { motion } from 'framer-motion';
 
 interface ChatInputProps {

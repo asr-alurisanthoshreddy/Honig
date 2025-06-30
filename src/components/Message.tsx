@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Clock, Database, Edit2, Check, X, Copy, Share2, Target, Globe, Brain, Search } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { formatDistanceToNow } from 'date-fns';
-import { Message as MessageType, useChatStore } from '../store/optimizedChatStore';
+import { Message as MessageType, useChatStore } from '../store/chatStore';
 
 interface MessageProps {
   message: MessageType;

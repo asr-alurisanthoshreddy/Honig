@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, X, Loader2, File, Image, FileText, AlertTriangle, Clock, CreditCard, ExternalLink } from 'lucide-react';
 import { DirectGeminiUpload } from '../lib/fileAnalysis/directGeminiUpload';
-import { useChatStore } from '../store/optimizedChatStore';
+import { useChatStore } from '../store/chatStore';
 
 interface SimpleFileUploadProps {
   isOpen: boolean;
