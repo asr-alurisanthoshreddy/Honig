@@ -9,8 +9,8 @@ import ChatInput from './components/ChatInput';
 import LoginPrompt from './components/LoginPrompt';
 import BeforeUnloadWarning from './components/BeforeUnloadWarning';
 import SimpleFileUpload from './components/SimpleFileUpload';
-import { useChatStore } from './store/enhancedChatStore';
-import { supabase, upsertUserProfile } from './lib/enhancedSupabase';
+import { useChatStore } from './store/optimizedChatStore';
+import { supabase, upsertUserProfile } from './lib/optimizedSupabase';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,7 +22,7 @@ function App() {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
-  const { setUserId, loadConversations, setGuestMode } = useChatStore();
+  const { setUserId, loadConversations, setGuestMode, persistenceError, clearPersistenceError } = useChatStore();
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -89,54 +89,8 @@ function App() {
       setIsLoading(false);
     });
 
-    const handleAuthError = (error: AuthError) => {
-      console.error('Auth error:', error);
-      
-      if (error.message.includes('Invalid login credentials')) {
-        setAuthError('Invalid email or password. Please check your credentials and try again.');
-      } else if (error.message.includes('Email not confirmed')) {
-        setAuthError('Please check your email and click the confirmation link before signing in.');
-      } else if (error.message.includes('Too many requests')) {
-        setAuthError('Too many login attempts. Please wait a few minutes before trying again.');
-      } else if (error.message.includes('User not found')) {
-        setAuthError('No account found with this email. Please sign up first or check your email address.');
-      } else if (error.message.includes('Password should be at least')) {
-        setAuthError('Password must be at least 6 characters long.');
-      } else if (error.message.includes('Unable to validate email address')) {
-        setAuthError('Please enter a valid email address.');
-      } else {
-        setAuthError(`Authentication error: ${error.message}`);
-      }
-    };
-
-    const originalFetch = window.fetch;
-    window.fetch = async (...args) => {
-      try {
-        const response = await originalFetch(...args);
-        
-        if (args[0]?.toString().includes('supabase.co/auth/v1') && !response.ok) {
-          const errorData = await response.clone().json().catch(() => ({}));
-          
-          if (errorData.code === 'invalid_credentials') {
-            setAuthError('Invalid email or password. Please check your credentials and try again.');
-          } else if (errorData.code === 'email_not_confirmed') {
-            setAuthError('Please check your email and click the confirmation link before signing in.');
-          } else if (errorData.code === 'too_many_requests') {
-            setAuthError('Too many login attempts. Please wait a few minutes before trying again.');
-          } else if (errorData.message) {
-            setAuthError(`Authentication error: ${errorData.message}`);
-          }
-        }
-        
-        return response;
-      } catch (error) {
-        return originalFetch(...args);
-      }
-    };
-
     return () => {
       subscription.unsubscribe();
-      window.fetch = originalFetch;
     };
   }, [setUserId, loadConversations, setGuestMode, isConfigured]);
 
@@ -357,6 +311,29 @@ function App() {
                 }}
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Persistence Error Notification */}
+      {persistenceError && (
+        <div className="fixed bottom-4 left-4 bg-red-600 text-white p-4 rounded-lg shadow-lg max-w-sm z-50">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <p className="text-sm font-medium">Database Error</p>
+              <p className="text-xs mt-1 opacity-90">{persistenceError}</p>
+            </div>
+            <button
+              onClick={clearPersistenceError}
+              className="text-white hover:text-gray-200 ml-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
