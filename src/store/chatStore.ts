@@ -57,6 +57,7 @@ type ChatState = {
   selectConversation: (id: string) => Promise<void>;
   deleteConversation: (id: string) => Promise<void>;
   addNote: (messageId: string, note: string) => Promise<void>;
+  getConversationHistory: () => Message[];
 };
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -66,6 +67,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
   userId: null,
   isProcessing: false,
   isGuestMode: true,
+
+  // **NEW: Get conversation history for context**
+  getConversationHistory: () => {
+    const messages = get().messages;
+    // Return all non-loading messages for context
+    return messages.filter(msg => !msg.isLoading && msg.content.trim() !== '');
+  },
 
   sendMessage: async (content: string) => {
     if (!content.trim()) return;
@@ -168,10 +176,20 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }));
 
     try {
-      // Get response from enhanced service
+      // **KEY FEATURE: Get conversation history for context**
+      const conversationHistory = get().getConversationHistory();
+      
+      console.log(`📚 Sending ${conversationHistory.length} messages as context to Gemini`);
+      console.log('🔍 Recent context preview:', conversationHistory.slice(-2).map(m => 
+        `${m.role}: ${m.content.substring(0, 100)}...`
+      ));
+
+      // Get response with FULL conversation context
       const startTime = Date.now();
-      const assistantResponse = await getResponse(content);
+      const assistantResponse = await getResponse(content, conversationHistory);
       const processingTime = Date.now() - startTime;
+
+      console.log(`✅ Response generated with conversation context in ${processingTime}ms`);
 
       // Update the loading message with the actual response
       set(state => ({
@@ -183,7 +201,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 isLoading: false,
                 metadata: {
                   processingTime,
-                  fromHonig: true
+                  fromHonig: true,
+                  hasContext: conversationHistory.length > 0,
+                  contextMessages: conversationHistory.length
                 }
               }
             : msg

@@ -85,55 +85,90 @@ function validateGeminiApiKey(): string {
   return geminiKey;
 }
 
-// **ENHANCED: Two-stage processing - Format first, then follow-up**
-export async function getResponse(message: string): Promise<string> {
+// **NEW: Enhanced Gemini response with conversation context for follow-up queries**
+async function getGeminiResponseWithContext(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('🤖 Processing query through enhanced two-stage pipeline...');
+    console.log('🧠 Processing with conversation context...');
+    console.log(`📚 Context: ${conversationHistory.length} previous messages`);
     
-    // **STAGE 1: Check if this is a follow-up request for formatted content**
-    const isFollowUpRequest = isFollowUpQuery(message);
-    const isCodeRequest = isCodeGenerationRequest(message);
-    
-    if (isFollowUpRequest || isCodeRequest) {
-      console.log('🎯 FOLLOW-UP/CODE DETECTED: Using two-stage processing');
-      return await twoStageContentGeneration(message);
-    }
-    
-    // Check if Honig service is configured
-    if (isProduction) {
-      const config = honigService.getConfiguration();
-      
-      if (!config.isConfigured) {
-        console.warn('⚠️ Honig not configured, using enhanced Gemini fallback');
-        return await twoStageContentGeneration(message);
-      }
-      
-      // Determine if query should use Honig
-      const shouldUseHonig = HonigService.shouldUseHonig(message);
-      
-      if (!shouldUseHonig) {
-        console.log('📝 Using enhanced Gemini for simple query');
-        return await twoStageContentGeneration(message);
-      }
-      
-      // Process through Honig
-      const result = await honigService.processQuery(message);
-      
-      console.log('✅ Honig processing completed:', {
-        queryType: result.metadata.queryType,
-        sourceCount: result.sources.length,
-        confidence: result.metadata.confidence,
-        processingTime: result.metadata.processingStages?.total
-      });
+    // Validate API key first
+    const geminiKey = validateGeminiApiKey();
 
-      return result.response;
-    } else {
-      // Not in production or not configured - use basic response
-      return await twoStageContentGeneration(message);
+    // Dynamic import to avoid build issues
+    const { GoogleGenerativeAI } = await import('@google/generative-ai');
+    const genAI = new GoogleGenerativeAI(geminiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    // Build comprehensive context prompt
+    let contextPrompt = `You are Honig, an advanced AI assistant developed by Honig. You have access to the complete conversation history and should use it to provide contextual, relevant responses.
+
+**CRITICAL CONTEXT ANALYSIS INSTRUCTIONS:**
+
+1. **ANALYZE CONVERSATION HISTORY:** Review all previous messages to understand what the user has shared, especially any file content or extracted information.
+
+2. **DETECT FOLLOW-UP QUERIES:** Determine if the current query is asking for something specific based on previous content (like "codes for all questions" after file analysis).
+
+3. **USE EXTRACTED CONTENT:** If the user previously shared file content with questions/problems, and now asks for "codes" or "solutions", provide specific code for those exact questions, NOT generic examples.
+
+4. **MAINTAIN CONTEXT:** Reference specific information from previous messages and build upon what was already discussed.
+
+**CONVERSATION HISTORY:**
+`;
+
+    // Add complete conversation history for context
+    if (conversationHistory.length > 0) {
+      conversationHistory.forEach((msg, index) => {
+        if (msg.role === 'user') {
+          contextPrompt += `\nUser Message ${index + 1}: ${msg.content}\n`;
+        } else {
+          // Include assistant responses, especially file analysis content
+          const content = msg.content.length > 1000 ? msg.content.substring(0, 1000) + '...[truncated]' : msg.content;
+          contextPrompt += `\nHonig Response ${index + 1}: ${content}\n`;
+        }
+      });
     }
+
+    contextPrompt += `\n**CURRENT USER QUERY:** "${message}"
+
+**RESPONSE INSTRUCTIONS:**
+
+1. **If this is a follow-up query** (like asking for codes after file analysis):
+   - Use the specific content from previous messages
+   - Provide solutions for the exact questions/problems mentioned earlier
+   - Reference the specific file content or extracted information
+   - Do NOT provide generic examples
+
+2. **If this is a new query:**
+   - Provide a comprehensive response
+   - Still reference relevant context from conversation history
+   - Use proper formatting with headings and bullet points
+
+3. **For code requests based on previous content:**
+   - Extract the specific questions/problems from the conversation history
+   - Provide working code solutions for each identified question
+   - Use proper code blocks with language specification
+   - Include explanations for each solution
+
+4. **Always maintain conversation continuity:**
+   - Reference what was discussed before
+   - Build upon previous information
+   - Show understanding of the full context
+
+**FORMATTING REQUIREMENTS:**
+- Use proper markdown formatting
+- Structure responses with clear headings
+- Put each bullet point on its own line
+- Use code blocks for code examples
+- Provide comprehensive, well-organized responses
+
+Analyze the conversation history and provide a contextual response to the current query:`;
+
+    const result = await model.generateContent([contextPrompt]);
+    const response = await result.response;
+    return response.text();
 
   } catch (error) {
-    console.error('Error in processing:', error);
+    console.error('💥 Contextual Gemini processing failed:', error);
     
     // Enhanced fallback with better error messages for expired/invalid API keys
     if (error instanceof Error) {
@@ -158,12 +193,62 @@ export async function getResponse(message: string): Promise<string> {
       }
     }
     
-    // Try two-stage processing as final fallback
+    // Generic fallback
+    return "Hello! I'm **Honig**, your AI research assistant. To use AI features, please configure your API keys as described in the README file. Once configured, I can help you with research, analysis, and much more!";
+  }
+}
+
+// **ENHANCED: Main response function with conversation context**
+export async function getResponse(message: string, conversationHistory: any[] = []): Promise<string> {
+  try {
+    console.log('🤖 Processing query with conversation context...');
+    console.log(`📚 Conversation context: ${conversationHistory.length} messages`);
+    
+    // Check if Honig service is configured and should be used
+    if (isProduction) {
+      const config = honigService.getConfiguration();
+      
+      if (!config.isConfigured) {
+        console.warn('⚠️ Honig not configured, using contextual Gemini');
+        return await getGeminiResponseWithContext(message, conversationHistory);
+      }
+      
+      // Determine if query should use Honig (for web search) or contextual Gemini (for follow-ups)
+      const shouldUseHonig = HonigService.shouldUseHonig(message);
+      const isFollowUpQuery = isFollowUpBasedOnContext(message, conversationHistory);
+      
+      // **KEY FEATURE: Use contextual Gemini for follow-up queries**
+      if (isFollowUpQuery || !shouldUseHonig) {
+        console.log('📝 Using contextual Gemini for follow-up/contextual query');
+        return await getGeminiResponseWithContext(message, conversationHistory);
+      }
+      
+      // Use Honig for web search queries
+      console.log('🔍 Using Honig for web search query');
+      const result = await honigService.processQuery(message);
+      
+      console.log('✅ Honig processing completed:', {
+        queryType: result.metadata.queryType,
+        sourceCount: result.sources.length,
+        confidence: result.metadata.confidence,
+        processingTime: result.metadata.processingStages?.total
+      });
+
+      return result.response;
+    } else {
+      // Not in production or not configured - use contextual response
+      return await getGeminiResponseWithContext(message, conversationHistory);
+    }
+
+  } catch (error) {
+    console.error('Error in processing:', error);
+    
+    // Try contextual Gemini as final fallback
     try {
-      console.log('🔄 Falling back to two-stage processing');
-      return await twoStageContentGeneration(message);
+      console.log('🔄 Falling back to contextual Gemini');
+      return await getGeminiResponseWithContext(message, conversationHistory);
     } catch (fallbackError) {
-      console.error('Even two-stage processing failed:', fallbackError);
+      console.error('Even contextual Gemini failed:', fallbackError);
       
       // Return a helpful message instead of crashing
       return "🔧 **Welcome to Honig!** \n\nThis is a powerful AI research assistant that can:\n\n🔍 **Search multiple sources** - Wikipedia, news, academic papers, forums\n🧠 **Intelligent analysis** - Understands your query type and selects best sources\n📊 **Comprehensive responses** - Combines information from various sources\n🎯 **Real-time information** - Gets the latest data on any topic\n\n**To get started:**\n1. Set up your API keys (see README.md)\n2. Ask any question and I'll search the web for answers\n3. Upload files for analysis\n4. Get real-time information on any topic\n\n*Currently running in demo mode - configure your API keys for full functionality.*";
@@ -171,184 +256,61 @@ export async function getResponse(message: string): Promise<string> {
   }
 }
 
-// **ENHANCED: Two-stage content generation with better error handling**
-async function twoStageContentGeneration(message: string): Promise<string> {
-  console.log('🚀 TWO-STAGE PROCESSING: Format first, then generate content');
+// **NEW: Function to detect follow-up queries based on conversation context**
+function isFollowUpBasedOnContext(message: string, conversationHistory: any[]): boolean {
+  const messageLower = message.toLowerCase().trim();
   
-  try {
-    // Validate API key first
-    const geminiKey = validateGeminiApiKey();
-
-    // Dynamic import to avoid build issues
-    const { GoogleGenerativeAI } = await import('@google/generative-ai');
-    const genAI = new GoogleGenerativeAI(geminiKey);
+  // Check if this looks like a follow-up query
+  const followUpIndicators = [
+    // Code requests that reference previous content
+    /give.*codes?.*for.*all/i,
+    /codes?.*for.*all.*questions?/i,
+    /provide.*codes?.*for.*all/i,
+    /write.*codes?.*for.*all/i,
+    /codes?.*for.*each/i,
+    /codes?.*for.*every/i,
+    /solutions?.*for.*all/i,
+    /solve.*all.*questions?/i,
+    /answers?.*for.*all/i,
     
-    // Test connection with a simple model call first
-    console.log('🔍 Testing API connection...');
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    // **STAGE 1: Generate well-formatted content structure**
-    console.log('📋 STAGE 1: Generating well-formatted content structure...');
+    // References to previous content
+    /based on.*above/i,
+    /from.*previous/i,
+    /using.*extracted/i,
+    /for.*those.*questions?/i,
+    /for.*these.*questions?/i,
+    /regarding.*that/i,
+    /about.*that/i,
+    /from.*what.*you.*extracted/i,
+    /using.*the.*file/i,
+    /based.*on.*the.*file/i,
     
-    const stage1Prompt = `
-You are Honig, an advanced AI assistant developed by Honig. You need to generate well-formatted, comprehensive content.
-
-**USER REQUEST:** "${message}"
-
-**CRITICAL FORMATTING REQUIREMENTS:**
-
-1. **CLEAR STRUCTURE** - Use proper headings and subheadings
-2. **BULLET POINTS** - Each point on a unique line with proper spacing
-3. **NUMBERED LISTS** - For sequential content
-4. **PROPER SPACING** - Clear separation between sections
-5. **COMPREHENSIVE CONTENT** - Provide complete, detailed information
-
-**FORMATTING GUIDELINES:**
-
-# Main Heading
-## Subheading
-### Sub-subheading
-
-**Bold Text** for emphasis
-
-• Bullet point 1
-• Bullet point 2
-• Bullet point 3
-
-1. Numbered item 1
-2. Numbered item 2
-3. Numbered item 3
-
-**For Code Requests:**
-- Provide 10-15 complete, working code examples
-- Each example should be 50-200 lines of actual code
-- Use proper code blocks with language specification
-- Include detailed explanations for each example
-
-**For General Requests:**
-- Structure content with clear headings
-- Use bullet points for lists
-- Provide comprehensive information
-- Ensure proper spacing and formatting
-
-Generate your well-formatted, comprehensive response:
-`;
-
-    const stage1Result = await model.generateContent([stage1Prompt]);
-    const stage1Response = await stage1Result.response;
-    const formattedContent = stage1Response.text();
-
-    console.log('✅ STAGE 1 COMPLETE: Content formatted and structured');
-    return formattedContent;
-
-  } catch (error) {
-    console.error('💥 Two-stage processing failed:', error);
-    
-    // Return a helpful fallback message
-    if (error instanceof Error && error.message.includes('VITE_GEMINI_API_KEY is not set')) {
-      return "🔧 **Welcome to Honig!** \n\nThis is a powerful AI research assistant. To use AI features, you'll need to:\n\n1. **Get a Gemini API key** from [Google AI Studio](https://makersuite.google.com/app/apikey)\n2. **Set up your environment** (see README.md for details)\n3. **Configure your API keys**\n\nFor now, you can explore the interface and see how the app is structured!";
-    }
-    
-    // Generic fallback
-    return "Hello! I'm **Honig**, your AI research assistant. To get started, please configure your API keys as described in the README file. Once configured, I can help you with research, analysis, and much more!";
-  }
-}
-
-// **ENHANCED: Better detection for code generation requests**
-function isCodeGenerationRequest(message: string): boolean {
-  const codePatterns = [
-    // Direct code requests
-    /give.*codes?/i,
-    /provide.*codes?/i,
-    /show.*codes?/i,
-    /write.*codes?/i,
-    /create.*codes?/i,
-    /generate.*codes?/i,
-    
-    // Programming language mentions
-    /in c\+\+/i,
-    /using c\+\+/i,
-    /c\+\+ code/i,
-    /c\+\+ program/i,
-    /c\+\+ example/i,
-    /in python/i,
-    /python code/i,
-    /in java/i,
-    /java code/i,
-    
-    // Programming concepts
-    /algorithm/i,
-    /function/i,
-    /class/i,
-    /program/i,
-    /implementation/i,
-    /solution/i,
-    
-    // Multiple items
-    /all.*codes?/i,
-    /codes? for all/i,
-    /every.*code/i,
-    /each.*code/i,
-    /complete.*codes?/i
+    // Programming language specific follow-ups
+    /in.*c\+\+.*for.*all/i,
+    /in.*python.*for.*all/i,
+    /in.*java.*for.*all/i,
+    /using.*c\+\+.*for.*all/i,
+    /using.*python.*for.*all/i,
   ];
-
-  return codePatterns.some(pattern => pattern.test(message));
-}
-
-// **ENHANCED: Better follow-up detection**
-function isFollowUpQuery(message: string): boolean {
-  const followUpPatterns = [
-    // Code requests
-    /give.*codes?/i,
-    /provide.*codes?/i,
-    /show.*codes?/i,
-    /write.*codes?/i,
-    /codes? for all/i,
-    /all codes?/i,
-    
-    // Programming language specific
-    /in c\+\+/i,
-    /in python/i,
-    /in java/i,
-    /in javascript/i,
-    /using c\+\+/i,
-    /using python/i,
-    
-    // Solution requests
-    /solutions? for all/i,
-    /all solutions?/i,
-    /solve all/i,
-    /answers? for all/i,
-    /all answers?/i,
-    
-    // Implementation requests
-    /implement all/i,
-    /create all/i,
-    /build all/i,
-    /make all/i,
-    
-    // Follow-up indicators
-    /for all questions/i,
-    /for each question/i,
-    /for every question/i,
-    /all of them/i,
-    /each one/i,
-    /every one/i,
-    
-    // Formatting requests
-    /format.*content/i,
-    /structure.*content/i,
-    /organize.*content/i,
-    /well.*formatted/i
-  ];
-
-  const messageText = message.toLowerCase().trim();
   
-  // Check if message matches follow-up patterns
-  const isFollowUp = followUpPatterns.some(pattern => pattern.test(messageText));
+  const isFollowUpPattern = followUpIndicators.some(pattern => pattern.test(messageLower));
+  
+  // Check if there's relevant previous content (like file analysis)
+  const hasRelevantContext = conversationHistory.some(msg => 
+    msg.role === 'assistant' && (
+      msg.content.includes('questions') ||
+      msg.content.includes('problems') ||
+      msg.content.includes('Table') ||
+      msg.content.includes('extracted') ||
+      msg.metadata?.fromFileAnalysis
+    )
+  );
+  
+  const isFollowUp = isFollowUpPattern && hasRelevantContext;
   
   if (isFollowUp) {
-    console.log('🎯 FOLLOW-UP DETECTED:', messageText);
+    console.log('🎯 FOLLOW-UP QUERY DETECTED:', messageLower);
+    console.log('📚 Has relevant context:', hasRelevantContext);
   }
   
   return isFollowUp;
