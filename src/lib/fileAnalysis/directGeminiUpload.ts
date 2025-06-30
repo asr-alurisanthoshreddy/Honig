@@ -98,6 +98,13 @@ You are Honig's UNIVERSAL Document Analysis System with ADVANCED TABLE DETECTION
 - **CODE BLOCK FORMAT:** Use \`\`\`table format for dark background
 - **CONSISTENT SPACING:** All columns must align perfectly across all rows
 - **PROPER PADDING:** Pad shorter content with spaces for alignment
+- **FIXED WIDTH COLUMNS:** Use exact character counts for each column
+
+**TABLE COLUMN WIDTH SPECIFICATIONS:**
+- **Column 1 (No.):** Exactly 4 characters wide
+- **Column 2 (Course Code):** Exactly 12 characters wide  
+- **Column 3 (Course Name):** Exactly 80 characters wide
+- **Column 4 (Date & Time):** Exactly 40 characters wide
 
 **MANDATORY UNIVERSAL STRUCTURED OUTPUT FORMAT:**
 
@@ -166,11 +173,17 @@ This section contains [description of what this section covers].
 ### **Table 1: [Descriptive Table Title]**
 
 \`\`\`table
-| No. | Column 1 Header                                                          | Column 2 Header                       | Column 3 Header                       |
-|-----|--------------------------------------------------------------------------|---------------------------------------|---------------------------------------|
-| 1   | [Data Cell 1,1 - padded to exact width]                                | [Data Cell 1,2 - padded to width]   | [Data Cell 1,3 - padded to width]   |
-| 2   | [Data Cell 2,1 - padded to exact width]                                | [Data Cell 2,2 - padded to width]   | [Data Cell 2,3 - padded to width]   |
-| 3   | [Data Cell 3,1 - padded to exact width]                                | [Data Cell 3,2 - padded to width]   | [Data Cell 3,3 - padded to width]   |
+| No. | Course Code  | Course Name                                                                      | Date & Time                              |
+|-----|--------------|----------------------------------------------------------------------------------|------------------------------------------|
+| 1   | A400504      | ADVANCED ENGLISH COMMUNICATION SKILLS LABORATORY                                |                                          |
+| 2   | A473505      | PRINCIPLES OF DATA ANALYTICS LABORATORY                                         |                                          |
+| 3   | A473506      | NATURAL LANGUAGE PROCESSING LABORATORY                                          |                                          |
+| 4   | A473801      | INDUSTRIAL ORIENTED MINI PROJECT/SUMMER INTERNSHIP/SKILL DEVELOPMENT COURSE    |                                          |
+| 5   | A473305      | NATURE INSPIRED COMPUTING                                                       | 02 June, 2025 (Monday) 01:30-03:30PM    |
+| 6   | A473306      | KNOWLEDGE REPRESENTATION AND REASONING                                          | 03 June, 2025 (Tuesday) 01:30-03:30PM   |
+| 7   | A473307      | PRINCIPLES DATA ANALYTICS                                                       | 04 June, 2025 (Wednesday) 01:30-03:30PM |
+| 8   | A473308      | NATURAL LANGUAGE PROCESSING                                                     | 05 June, 2025 (Thursday) 01:30-03:30PM  |
+| 9   | A473408      | COMPUTER VISION AND ROBOTICS (PE-II)                                           | 06 June, 2025 (Friday) 01:30-03:30PM    |
 \`\`\`
 
 **Table Description:** [What this table shows and its purpose]
@@ -180,10 +193,10 @@ This section contains [description of what this section covers].
 ### **Table 2: [Descriptive Table Title]**
 
 \`\`\`table
-| Header A                                                                 | Header B                              | Header C                              |
-|--------------------------------------------------------------------------|---------------------------------------|---------------------------------------|
-| [Value - padded to exact column width]                                  | [Value - padded to width]            | [Value - padded to width]            |
-| [Value - padded to exact column width]                                  | [Value - padded to width]            | [Value - padded to width]            |
+| Header A                                                                         | Header B                                 | Header C                                 |
+|----------------------------------------------------------------------------------|------------------------------------------|------------------------------------------|
+| [Value - padded to exactly 80 characters]                                       | [Value - padded to 40 chars]            | [Value - padded to 40 chars]            |
+| [Value - padded to exactly 80 characters]                                       | [Value - padded to 40 chars]            | [Value - padded to 40 chars]            |
 \`\`\`
 
 **Table Description:** [What this table shows and its purpose]
@@ -360,7 +373,11 @@ This section contains [description of what this section covers].
 **SPECIAL TABLE FORMATTING REQUIREMENTS:**
 ✅ Use proper markdown table format in code blocks: \`\`\`table
 ✅ Calculate exact column widths for PERFECT ALIGNMENT
-✅ Pad shorter content with spaces to match column width
+✅ Column 1: Exactly 4 characters (No.)
+✅ Column 2: Exactly 12 characters (Course Code)
+✅ Column 3: Exactly 80 characters (Course Name)
+✅ Column 4: Exactly 40 characters (Date & Time)
+✅ Pad shorter content with spaces to match exact column width
 ✅ Include table headers with proper alignment
 ✅ Extract ALL data from every cell accurately
 ✅ Give each table a descriptive title
@@ -374,7 +391,7 @@ This section contains [description of what this section covers].
 ✅ No cramped text - each instruction clearly separated
 ✅ Consistent formatting throughout the document
 
-**REMEMBER:** This must be a complete, perfectly structured extraction of ALL content in the PDF. No shortcuts, no summaries - extract everything with beautiful formatting, comprehensive organization, perfect table alignment in code blocks, and every bullet point on its own unique line.
+**REMEMBER:** This must be a complete, perfectly structured extraction of ALL content in the PDF. No shortcuts, no summaries - extract everything with beautiful formatting, comprehensive organization, perfect table alignment in code blocks with EXACT column widths, and every bullet point on its own unique line.
 `;
 
     const imagePart = {
@@ -409,6 +426,13 @@ You are Honig's UNIVERSAL Image Analysis System with ADVANCED TABLE DETECTION an
 - **CODE BLOCK FORMAT:** Use \`\`\`table format for dark background
 - **CONSISTENT SPACING:** All columns must align perfectly across all rows
 - **PROPER PADDING:** Pad shorter content with spaces for alignment
+- **FIXED WIDTH COLUMNS:** Use exact character counts for each column
+
+**TABLE COLUMN WIDTH SPECIFICATIONS:**
+- **Column 1 (No.):** Exactly 4 characters wide
+- **Column 2 (Course Code):** Exactly 12 characters wide  
+- **Column 3 (Course Name):** Exactly 80 characters wide
+- **Column 4 (Date & Time):** Exactly 40 characters wide
 
 **MANDATORY UNIVERSAL STRUCTURED OUTPUT FORMAT:**
 
@@ -489,11 +513,17 @@ You are Honig's UNIVERSAL Image Analysis System with ADVANCED TABLE DETECTION an
 ### **Table 1: [Descriptive Table Title]**
 
 \`\`\`table
-| No. | Column 1 Header                                                          | Column 2 Header                       | Column 3 Header                       |
-|-----|--------------------------------------------------------------------------|---------------------------------------|---------------------------------------|
-| 1   | [Data Cell 1,1 - padded to exact width]                                | [Data Cell 1,2 - padded to width]   | [Data Cell 1,3 - padded to width]   |
-| 2   | [Data Cell 2,1 - padded to exact width]                                | [Data Cell 2,2 - padded to width]   | [Data Cell 2,3 - padded to width]   |
-| 3   | [Data Cell 3,1 - padded to exact width]                                | [Data Cell 3,2 - padded to width]   | [Data Cell 3,3 - padded to width]   |
+| No. | Course Code  | Course Name                                                                      | Date & Time                              |
+|-----|--------------|----------------------------------------------------------------------------------|------------------------------------------|
+| 1   | A400504      | ADVANCED ENGLISH COMMUNICATION SKILLS LABORATORY                                |                                          |
+| 2   | A473505      | PRINCIPLES OF DATA ANALYTICS LABORATORY                                         |                                          |
+| 3   | A473506      | NATURAL LANGUAGE PROCESSING LABORATORY                                          |                                          |
+| 4   | A473801      | INDUSTRIAL ORIENTED MINI PROJECT/SUMMER INTERNSHIP/SKILL DEVELOPMENT COURSE    |                                          |
+| 5   | A473305      | NATURE INSPIRED COMPUTING                                                       | 02 June, 2025 (Monday) 01:30-03:30PM    |
+| 6   | A473306      | KNOWLEDGE REPRESENTATION AND REASONING                                          | 03 June, 2025 (Tuesday) 01:30-03:30PM   |
+| 7   | A473307      | PRINCIPLES DATA ANALYTICS                                                       | 04 June, 2025 (Wednesday) 01:30-03:30PM |
+| 8   | A473308      | NATURAL LANGUAGE PROCESSING                                                     | 05 June, 2025 (Thursday) 01:30-03:30PM  |
+| 9   | A473408      | COMPUTER VISION AND ROBOTICS (PE-II)                                           | 06 June, 2025 (Friday) 01:30-03:30PM    |
 \`\`\`
 
 **Table Description:** [What this table shows and its purpose]
@@ -503,10 +533,10 @@ You are Honig's UNIVERSAL Image Analysis System with ADVANCED TABLE DETECTION an
 ### **Table 2: [Descriptive Table Title]**
 
 \`\`\`table
-| Header A                                                                 | Header B                              | Header C                              |
-|--------------------------------------------------------------------------|---------------------------------------|---------------------------------------|
-| [Value - padded to exact column width]                                  | [Value - padded to width]            | [Value - padded to width]            |
-| [Value - padded to exact column width]                                  | [Value - padded to width]            | [Value - padded to width]            |
+| Header A                                                                         | Header B                                 | Header C                                 |
+|----------------------------------------------------------------------------------|------------------------------------------|------------------------------------------|
+| [Value - padded to exactly 80 characters]                                       | [Value - padded to 40 chars]            | [Value - padded to 40 chars]            |
+| [Value - padded to exactly 80 characters]                                       | [Value - padded to 40 chars]            | [Value - padded to 40 chars]            |
 \`\`\`
 
 **Table Description:** [What this table shows and its purpose]
@@ -673,7 +703,11 @@ You are Honig's UNIVERSAL Image Analysis System with ADVANCED TABLE DETECTION an
 **SPECIAL TABLE FORMATTING REQUIREMENTS:**
 ✅ Use proper markdown table format in code blocks: \`\`\`table
 ✅ Calculate exact column widths for PERFECT ALIGNMENT
-✅ Pad shorter content with spaces to match column width
+✅ Column 1: Exactly 4 characters (No.)
+✅ Column 2: Exactly 12 characters (Course Code)
+✅ Column 3: Exactly 80 characters (Course Name)
+✅ Column 4: Exactly 40 characters (Date & Time)
+✅ Pad shorter content with spaces to match exact column width
 ✅ Include table headers with proper alignment
 ✅ Extract ALL data from every cell accurately
 ✅ Give each table a descriptive title
@@ -687,7 +721,7 @@ You are Honig's UNIVERSAL Image Analysis System with ADVANCED TABLE DETECTION an
 ✅ No cramped text - each instruction clearly separated
 ✅ Consistent formatting throughout the document
 
-**REMEMBER:** This must be a complete OCR extraction with perfect organization, beautiful formatting, perfect table alignment in code blocks, and every bullet point on its own unique line. Read everything visible and structure it comprehensively.
+**REMEMBER:** This must be a complete OCR extraction with perfect organization, beautiful formatting, perfect table alignment in code blocks with EXACT column widths, and every bullet point on its own unique line. Read everything visible and structure it comprehensively.
 `;
 
     const imagePart = {
@@ -725,6 +759,13 @@ ${textContent}
 - **CODE BLOCK FORMAT:** Use \`\`\`table format for dark background
 - **CONSISTENT SPACING:** All columns must align perfectly across all rows
 - **PROPER PADDING:** Pad shorter content with spaces for alignment
+- **FIXED WIDTH COLUMNS:** Use exact character counts for each column
+
+**TABLE COLUMN WIDTH SPECIFICATIONS:**
+- **Column 1 (No.):** Exactly 4 characters wide
+- **Column 2 (Course Code):** Exactly 12 characters wide  
+- **Column 3 (Course Name):** Exactly 80 characters wide
+- **Column 4 (Date & Time):** Exactly 40 characters wide
 
 **MANDATORY UNIVERSAL STRUCTURED OUTPUT FORMAT:**
 
@@ -793,11 +834,17 @@ ${textContent}
 ### **Table 1: [Descriptive Table Title]**
 
 \`\`\`table
-| No. | Column 1 Header                                                          | Column 2 Header                       | Column 3 Header                       |
-|-----|--------------------------------------------------------------------------|---------------------------------------|---------------------------------------|
-| 1   | [Data Cell 1,1 - padded to exact width]                                | [Data Cell 1,2 - padded to width]   | [Data Cell 1,3 - padded to width]   |
-| 2   | [Data Cell 2,1 - padded to exact width]                                | [Data Cell 2,2 - padded to width]   | [Data Cell 2,3 - padded to width]   |
-| 3   | [Data Cell 3,1 - padded to exact width]                                | [Data Cell 3,2 - padded to width]   | [Data Cell 3,3 - padded to width]   |
+| No. | Course Code  | Course Name                                                                      | Date & Time                              |
+|-----|--------------|----------------------------------------------------------------------------------|------------------------------------------|
+| 1   | A400504      | ADVANCED ENGLISH COMMUNICATION SKILLS LABORATORY                                |                                          |
+| 2   | A473505      | PRINCIPLES OF DATA ANALYTICS LABORATORY                                         |                                          |
+| 3   | A473506      | NATURAL LANGUAGE PROCESSING LABORATORY                                          |                                          |
+| 4   | A473801      | INDUSTRIAL ORIENTED MINI PROJECT/SUMMER INTERNSHIP/SKILL DEVELOPMENT COURSE    |                                          |
+| 5   | A473305      | NATURE INSPIRED COMPUTING                                                       | 02 June, 2025 (Monday) 01:30-03:30PM    |
+| 6   | A473306      | KNOWLEDGE REPRESENTATION AND REASONING                                          | 03 June, 2025 (Tuesday) 01:30-03:30PM   |
+| 7   | A473307      | PRINCIPLES DATA ANALYTICS                                                       | 04 June, 2025 (Wednesday) 01:30-03:30PM |
+| 8   | A473308      | NATURAL LANGUAGE PROCESSING                                                     | 05 June, 2025 (Thursday) 01:30-03:30PM  |
+| 9   | A473408      | COMPUTER VISION AND ROBOTICS (PE-II)                                           | 06 June, 2025 (Friday) 01:30-03:30PM    |
 \`\`\`
 
 **Table Description:** [What this table shows and its purpose]
@@ -807,10 +854,10 @@ ${textContent}
 ### **Table 2: [Descriptive Table Title]**
 
 \`\`\`table
-| Header A                                                                 | Header B                              | Header C                              |
-|--------------------------------------------------------------------------|---------------------------------------|---------------------------------------|
-| [Value - padded to exact column width]                                  | [Value - padded to width]            | [Value - padded to width]            |
-| [Value - padded to exact column width]                                  | [Value - padded to width]            | [Value - padded to width]            |
+| Header A                                                                         | Header B                                 | Header C                                 |
+|----------------------------------------------------------------------------------|------------------------------------------|------------------------------------------|
+| [Value - padded to exactly 80 characters]                                       | [Value - padded to 40 chars]            | [Value - padded to 40 chars]            |
+| [Value - padded to exactly 80 characters]                                       | [Value - padded to 40 chars]            | [Value - padded to 40 chars]            |
 \`\`\`
 
 **Table Description:** [What this table shows and its purpose]
@@ -1026,7 +1073,11 @@ ${textContent}
 **SPECIAL TABLE FORMATTING REQUIREMENTS:**
 ✅ Use proper markdown table format in code blocks: \`\`\`table
 ✅ Calculate exact column widths for PERFECT ALIGNMENT
-✅ Pad shorter content with spaces to match column width
+✅ Column 1: Exactly 4 characters (No.)
+✅ Column 2: Exactly 12 characters (Course Code)
+✅ Column 3: Exactly 80 characters (Course Name)
+✅ Column 4: Exactly 40 characters (Date & Time)
+✅ Pad shorter content with spaces to match exact column width
 ✅ Include table headers with proper alignment
 ✅ Extract ALL data from every cell accurately
 ✅ Give each table a descriptive title
@@ -1040,7 +1091,7 @@ ${textContent}
 ✅ No cramped text - each instruction clearly separated
 ✅ Consistent formatting throughout the document
 
-**REMEMBER:** This must be a complete analysis of the entire file with perfect organization, beautiful formatting, comprehensive technical insights, perfect table alignment in code blocks, and every bullet point on its own unique line.
+**REMEMBER:** This must be a complete analysis of the entire file with perfect organization, beautiful formatting, comprehensive technical insights, perfect table alignment in code blocks with EXACT column widths, and every bullet point on its own unique line.
 `;
 
     const result = await this.model.generateContent([prompt]);
