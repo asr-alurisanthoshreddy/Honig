@@ -22,7 +22,15 @@ function App() {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
-  const { setUserId, loadConversations, setGuestMode, persistenceError, clearPersistenceError } = useChatStore();
+  const { 
+    setUserId, 
+    loadConversations, 
+    setGuestMode, 
+    persistenceError, 
+    clearPersistenceError,
+    dbConnectionStatus,
+    checkDatabaseConnection
+  } = useChatStore();
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,6 +47,9 @@ function App() {
       setIsLoading(false);
       return;
     }
+
+    // Check database connection on startup
+    checkDatabaseConnection();
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('Initial session:', session?.user?.id);
@@ -92,7 +103,7 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [setUserId, loadConversations, setGuestMode, isConfigured]);
+  }, [setUserId, loadConversations, setGuestMode, isConfigured, checkDatabaseConnection]);
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -325,6 +336,9 @@ function App() {
             <div className="flex-1">
               <p className="text-sm font-medium">Database Error</p>
               <p className="text-xs mt-1 opacity-90">{persistenceError}</p>
+              {dbConnectionStatus === 'disconnected' && (
+                <p className="text-xs mt-1 opacity-75">Database connection lost. Messages will be saved locally.</p>
+              )}
             </div>
             <button
               onClick={clearPersistenceError}

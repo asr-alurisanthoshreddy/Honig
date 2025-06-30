@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase, getResponse, logQuery, safeDbOperation } from '../lib/optimizedSupabase';
+import { supabase, getResponse, logQuery, safeDbOperation, testDatabaseConnection } from '../lib/optimizedSupabase';
 
 export type Message = {
   id: string;
@@ -35,6 +35,7 @@ type ChatState = {
   isProcessing: boolean;
   isGuestMode: boolean;
   persistenceError: string | null;
+  dbConnectionStatus: 'unknown' | 'connected' | 'disconnected';
   
   // Actions
   sendMessage: (content: string) => Promise<void>;
@@ -46,6 +47,7 @@ type ChatState = {
   deleteConversation: (id: string) => Promise<void>;
   addNote: (messageId: string, note: string) => Promise<void>;
   clearPersistenceError: () => void;
+  checkDatabaseConnection: () => Promise<void>;
 };
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -56,6 +58,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
   isProcessing: false,
   isGuestMode: true,
   persistenceError: null,
+  dbConnectionStatus: 'unknown',
+
+  checkDatabaseConnection: async () => {
+    const isConnected = await testDatabaseConnection();
+    set({ dbConnectionStatus: isConnected ? 'connected' : 'disconnected' });
+  },
 
   clearPersistenceError: () => {
     set({ persistenceError: null });
@@ -80,7 +88,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!currentConversationId && !isGuestMode && userId) {
       currentConversationId = uuidv4();
       
-      const success = await safeDbOperation(
+      // Try to create conversation, but don't block on failure
+      safeDbOperation(
         async () => {
           const { error } = await supabase
             .from('conversations')
@@ -96,13 +105,16 @@ export const useChatStore = create<ChatState>((set, get) => ({
         },
         false,
         'create conversation'
-      );
+      ).then(success => {
+        if (success) {
+          set({ currentConversationId });
+        } else {
+          console.warn('Failed to create conversation, continuing in memory');
+        }
+      });
 
-      if (success) {
-        set({ currentConversationId });
-      } else {
-        set({ persistenceError: 'Failed to create new conversation' });
-      }
+      // Set conversation ID immediately for UI responsiveness
+      set({ currentConversationId });
     }
 
     // Handle file analysis messages
@@ -127,18 +139,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
         safeDbOperation(
           async () => {
             await logQuery(userId, 'File Analysis', content, [], currentConversationId);
-            await supabase
-              .from('conversations')
-              .update({ updated_at: new Date().toISOString() })
-              .eq('id', currentConversationId);
             return true;
           },
           false,
           'persist file analysis'
-        ).then(success => {
-          if (!success) {
-            set({ persistenceError: 'Failed to save file analysis to database' });
-          }
+        ).catch(error => {
+          console.warn('Failed to persist file analysis:', error);
+          set({ persistenceError: 'Failed to save file analysis' });
         });
       }
       return;
@@ -194,24 +201,29 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
       // Persist to database asynchronously (non-blocking)
       if (!isGuestMode && userId && currentConversationId) {
+        // Don't await this - let it run in background
         safeDbOperation(
           async () => {
             await logQuery(userId, content, assistantResponse, [], currentConversationId);
+            
+            // Update conversation timestamp
             await supabase
               .from('conversations')
               .update({ updated_at: new Date().toISOString() })
               .eq('id', currentConversationId);
             
-            // Reload conversations in background
-            get().loadConversations();
             return true;
           },
           false,
           'persist message'
         ).then(success => {
-          if (!success) {
-            set({ persistenceError: 'Failed to save message to database' });
+          if (success) {
+            // Reload conversations in background
+            get().loadConversations();
           }
+        }).catch(error => {
+          console.warn('Failed to persist message:', error);
+          set({ persistenceError: 'Failed to save message' });
         });
       }
 
@@ -302,7 +314,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
             title: conv.title,
             updatedAt: new Date(conv.updated_at),
             messages: []
-          }))
+          })),
+          dbConnectionStatus: 'connected'
         });
 
         return true;
@@ -312,7 +325,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
     );
 
     if (!success) {
-      set({ persistenceError: 'Failed to load conversations from database' });
+      set({ 
+        persistenceError: 'Failed to load conversations',
+        dbConnectionStatus: 'disconnected'
+      });
     }
   },
 
@@ -363,7 +379,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     );
 
     if (!success) {
-      set({ persistenceError: 'Failed to load conversation messages' });
+      set({ persistenceError: 'Failed to load conversation' });
     }
   },
 
@@ -375,6 +391,19 @@ export const useChatStore = create<ChatState>((set, get) => ({
       throw new Error('User not authenticated');
     }
 
+    // Update UI immediately for better UX
+    set(state => {
+      const updatedConversations = state.conversations.filter(conv => conv.id !== id);
+      const shouldClearCurrent = state.currentConversationId === id;
+      
+      return {
+        conversations: updatedConversations,
+        currentConversationId: shouldClearCurrent ? null : state.currentConversationId,
+        messages: shouldClearCurrent ? [] : state.messages
+      };
+    });
+
+    // Try to delete from database
     const success = await safeDbOperation(
       async () => {
         // Delete queries first
@@ -400,21 +429,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
       'delete conversation'
     );
 
-    if (success) {
-      // Update UI immediately
-      set(state => {
-        const updatedConversations = state.conversations.filter(conv => conv.id !== id);
-        const shouldClearCurrent = state.currentConversationId === id;
-        
-        return {
-          conversations: updatedConversations,
-          currentConversationId: shouldClearCurrent ? null : state.currentConversationId,
-          messages: shouldClearCurrent ? [] : state.messages
-        };
-      });
-    } else {
-      set({ persistenceError: 'Failed to delete conversation' });
-      throw new Error('Failed to delete conversation');
+    if (!success) {
+      set({ persistenceError: 'Failed to delete conversation from database' });
+      // Reload conversations to restore state
+      get().loadConversations();
     }
   },
 
@@ -429,6 +447,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   setUserId: (id: string | null) => {
     set({ userId: id });
+    if (id) {
+      // Check database connection when user logs in
+      get().checkDatabaseConnection();
+    }
   },
 
   setGuestMode: (isGuest: boolean) => {
@@ -439,6 +461,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
     const isGuestMode = get().isGuestMode;
     if (isGuestMode) return;
 
+    // Update UI immediately
+    set(state => ({
+      messages: state.messages.map(msg => 
+        msg.id === messageId ? { ...msg, note } : msg
+      )
+    }));
+
+    // Try to persist to database
     const success = await safeDbOperation(
       async () => {
         const { error } = await supabase
@@ -453,13 +483,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       'add note'
     );
 
-    if (success) {
-      set(state => ({
-        messages: state.messages.map(msg => 
-          msg.id === messageId ? { ...msg, note } : msg
-        )
-      }));
-    } else {
+    if (!success) {
       set({ persistenceError: 'Failed to save note' });
     }
   }
