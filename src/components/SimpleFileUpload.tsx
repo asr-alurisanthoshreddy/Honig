@@ -326,12 +326,10 @@ ${result.summary}`;
             <div className="flex items-center gap-2 mb-2">
               <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span className="text-sm font-medium text-amber-800 dark:text-amber-200">
-                Real Analysis Mode
+                Analysis Mode
               </span>
             </div>
             <p className="text-xs text-amber-700 dark:text-amber-300">
-              This system performs genuine analysis of your file content. No templates or pre-written responses are used. 
-              The analysis is based entirely on what's actually in your file.
             </p>
           </div>
 
@@ -385,7 +383,6 @@ ${result.summary}`;
                 <p>• <strong>Documents:</strong> Read and analyze actual file content</p>
                 <p>• <strong>Code Files:</strong> Analyze real code structure and content</p>
                 <p className="mt-2 text-green-600 dark:text-green-400 font-medium">
-                  ✅ <strong>100% </strong> - No templates, no assumptions, no fake responses
                 </p>
               </div>
             </>
