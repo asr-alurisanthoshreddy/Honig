@@ -61,7 +61,11 @@ export class ContentSummarizer {
       };
     } catch (error) {
       console.error('Content summarization failed:', error);
-      throw new Error(`Summarization failed: ${error.message}`);
+      if (error instanceof Error) {
+        throw new Error(`Summarization failed: ${error.message}`);
+      } else {
+        throw new Error(`Summarization failed: ${String(error)}`);
+      }
     }
   }
 

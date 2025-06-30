@@ -9,7 +9,7 @@ export class GeminiProvider implements LLMProvider {
 
   private genAI: GoogleGenerativeAI;
   private model: any;
-  private isHealthy = false;
+  private healthyStatus = false;
 
   constructor(apiKey: string) {
     if (!apiKey || apiKey.trim() === '' || apiKey === 'your_gemini_api_key_here') {
@@ -19,15 +19,19 @@ export class GeminiProvider implements LLMProvider {
     try {
       this.genAI = new GoogleGenerativeAI(apiKey);
       this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-      this.isHealthy = true;
+      this.healthyStatus = true;
     } catch (error) {
       console.error('Failed to initialize Gemini provider:', error);
-      throw new Error(`Gemini initialization failed: ${error.message}`);
+      if (error instanceof Error) {
+        throw new Error(`Gemini initialization failed: ${error.message}`);
+      } else {
+        throw new Error(`Gemini initialization failed: ${String(error)}`);
+      }
     }
   }
 
   async generateResponse(prompt: string, context?: string): Promise<string> {
-    if (!this.isHealthy) {
+    if (!this.healthyStatus) {
       throw new Error('Gemini provider is not properly initialized');
     }
 
@@ -47,7 +51,7 @@ export class GeminiProvider implements LLMProvider {
       
       // Handle specific error types
       if (error?.message?.includes('API key not valid') || error?.message?.includes('API_KEY_INVALID')) {
-        this.isHealthy = false;
+        this.healthyStatus = false;
         throw new Error('Invalid Gemini API key. Please check your VITE_GEMINI_API_KEY environment variable.');
       } else if (error?.message?.includes('503') || error?.message?.includes('overloaded')) {
         throw new Error('The AI service is currently experiencing high traffic. Please try again in a moment.');
@@ -58,13 +62,14 @@ export class GeminiProvider implements LLMProvider {
       } else if (error?.message?.includes('400')) {
         throw new Error('Invalid request format. Please try rephrasing your question.');
       } else {
-        throw new Error(`AI service error: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        throw new Error(`AI service error: ${errorMessage}`);
       }
     }
   }
 
   async generateStreamingResponse(prompt: string, context?: string): Promise<AsyncIterable<string>> {
-    if (!this.isHealthy) {
+    if (!this.healthyStatus) {
       throw new Error('Gemini provider is not properly initialized');
     }
 
@@ -91,16 +96,17 @@ export class GeminiProvider implements LLMProvider {
       console.error('Gemini streaming error:', error);
       
       if (error?.message?.includes('API key not valid')) {
-        this.isHealthy = false;
+        this.healthyStatus = false;
         throw new Error('Invalid Gemini API key for streaming');
       }
       
-      throw new Error(`Streaming failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Streaming failed: ${errorMessage}`);
     }
   }
 
   isHealthy(): boolean {
-    return this.isHealthy;
+    return this.healthyStatus;
   }
 
   getModelInfo() {
@@ -115,7 +121,7 @@ export class GeminiProvider implements LLMProvider {
         'analysis',
         'multilingual'
       ],
-      isHealthy: this.isHealthy
+      isHealthy: this.healthyStatus
     };
   }
 }

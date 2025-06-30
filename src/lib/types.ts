@@ -31,6 +31,6 @@ export interface QueryClassification {
   needsLiveData: boolean;
   queryType: 'factual' | 'conversational' | 'creative' | 'analytical' | 'code';
   confidence: number;
-  suggestedModel?: string;
+  suggestedModel?: string | null | undefined;
   timeRange?: 'day' | 'week' | 'month' | 'year' | 'all';
 }

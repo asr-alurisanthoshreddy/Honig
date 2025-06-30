@@ -54,7 +54,11 @@ export class HonigService {
       console.log('✅ Honig: Engine initialized successfully');
       console.log('🔧 Configuration:', this.engine.getConfigurationStatus());
     } catch (error) {
-      console.error('❌ Honig: Failed to initialize engine:', error);
+      if (error instanceof Error) {
+        console.error('❌ Honig: Failed to initialize engine:', error.message);
+      } else {
+        console.error('❌ Honig: Failed to initialize engine:', error);
+      }
       this.isInitialized = true;
     }
   }
@@ -115,11 +119,12 @@ export class HonigService {
       console.error('💥 Honig: Query processing failed:', error);
       
       // Return error response
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
-        response: `I encountered an error while processing your request: ${error.message}. Please try again or rephrase your question.`,
+        response: `I encountered an error while processing your request: ${errorMessage}. Please try again or rephrase your question.`,
         sources: [],
         metadata: {
-          error: error.message,
+          error: errorMessage,
           fromHonig: true,
           failed: true
         }

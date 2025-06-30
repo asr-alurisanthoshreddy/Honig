@@ -178,7 +178,11 @@ export class HonigEngine {
 
     } catch (error) {
       console.error('💥 Honig: Query processing failed:', error);
-      throw new Error(`Honig processing failed: ${error.message}`);
+      if (error instanceof Error) {
+        throw new Error(`Honig processing failed: ${error.message}`);
+      } else {
+        throw new Error(`Honig processing failed: ${String(error)}`);
+      }
     }
   }
 

@@ -29,7 +29,11 @@ export class DirectGeminiUpload {
         console.log('✅ UNIVERSAL STRUCTURED FILE ANALYSIS with TABLE DETECTION initialized');
       });
     } catch (error) {
-      console.error('❌ Failed to initialize Structured File Analysis:', error);
+      if (error instanceof Error) {
+        console.error('❌ Failed to initialize Structured File Analysis:', error.message);
+      } else {
+        console.error('❌ Failed to initialize Structured File Analysis:', error);
+      }
     }
   }
 
@@ -66,7 +70,11 @@ export class DirectGeminiUpload {
       };
     } catch (error) {
       console.error('💥 Universal structured file analysis failed:', error);
-      throw new Error(`Failed to analyze file: ${error.message}`);
+      if (error instanceof Error) {
+        throw new Error(`Failed to analyze file: ${error.message}`);
+      } else {
+        throw new Error(`Failed to analyze file: ${String(error)}`);
+      }
     }
   }
 
