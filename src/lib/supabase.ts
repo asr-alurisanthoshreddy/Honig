@@ -21,9 +21,10 @@ try {
     console.warn('URL does not appear to be a standard Supabase URL format');
   }
 } catch (error) {
+  const errorMessage = error instanceof Error ? error.message : String(error);
   console.error('Invalid Supabase URL:', supabaseUrl);
   throw new Error(
-    `Invalid Supabase URL format: "${supabaseUrl}". Please check your VITE_SUPABASE_URL in .env file. The URL should start with https:// and typically end with .supabase.co. Error: ${error.message}`
+    `Invalid Supabase URL format: "${supabaseUrl}". Please check your VITE_SUPABASE_URL in .env file. The URL should start with https:// and typically end with .supabase.co. Error: ${errorMessage}`
   );
 }
 
@@ -129,20 +130,22 @@ export async function getResponse(message: string): Promise<string> {
     console.error('Error in processing:', error);
     
     // Enhanced fallback with better error messages for expired/invalid API keys
-    if (error.message.includes('API key expired') || error.message.includes('API_KEY_INVALID')) {
-      return "🔑 **API Key Expired**: Your Gemini API key has expired and needs to be renewed. Please:\n\n1. **Visit Google AI Studio**: Go to [makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)\n2. **Generate a new API key**: Create a fresh API key for your project\n3. **Update your .env file**: Replace the old `VITE_GEMINI_API_KEY` with the new one\n4. **Restart the server**: Run `npm run dev` to reload the environment variables\n\nOnce updated, file analysis and AI features will work normally again.";
-    }
-    
-    if (error.message.includes('API key not valid') || error.message.includes('Invalid API key') || error.message.includes('403')) {
-      return "❌ **Invalid API Key**: Your Gemini API key appears to be incorrect. Please:\n\n1. **Check your .env file**: Ensure `VITE_GEMINI_API_KEY` is set correctly\n2. **Verify the key format**: Gemini API keys typically start with 'AIza'\n3. **Get a valid key**: Visit [Google AI Studio](https://makersuite.google.com/app/apikey) to generate a new key\n4. **Restart the server**: Run `npm run dev` after updating the .env file\n\nRefer to the README file for detailed setup instructions.";
-    }
-    
-    if (error.message.includes('quota') || error.message.includes('rate limit')) {
-      return "⏳ **Usage Limit Reached**: I've reached my API usage limit. Please try again in a few minutes, or check your API quota in Google AI Studio.";
-    }
+    if (error instanceof Error) {
+      if (error.message.includes('API key expired') || error.message.includes('API_KEY_INVALID')) {
+        return "🔑 **API Key Expired**: Your Gemini API key has expired and needs to be renewed. Please:\n\n1. **Visit Google AI Studio**: Go to [makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)\n2. **Generate a new API key**: Create a fresh API key for your project\n3. **Update your .env file**: Replace the old `VITE_GEMINI_API_KEY` with the new one\n4. **Restart the server**: Run `npm run dev` to reload the environment variables\n\nOnce updated, file analysis and AI features will work normally again.";
+      }
+      
+      if (error.message.includes('API key not valid') || error.message.includes('Invalid API key') || error.message.includes('403')) {
+        return "❌ **Invalid API Key**: Your Gemini API key appears to be incorrect. Please:\n\n1. **Check your .env file**: Ensure `VITE_GEMINI_API_KEY` is set correctly\n2. **Verify the key format**: Gemini API keys typically start with 'AIza'\n3. **Get a valid key**: Visit [Google AI Studio](https://makersuite.google.com/app/apikey) to generate a new key\n4. **Restart the server**: Run `npm run dev` after updating the .env file\n\nRefer to the README file for detailed setup instructions.";
+      }
+      
+      if (error.message.includes('quota') || error.message.includes('rate limit')) {
+        return "⏳ **Usage Limit Reached**: I've reached my API usage limit. Please try again in a few minutes, or check your API quota in Google AI Studio.";
+      }
 
-    if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
-      return "🌐 **Network Connection Issue**: I'm having trouble connecting to the AI service. This could be due to:\n\n• **Network connectivity** - Check your internet connection\n• **Firewall/VPN** - Ensure access to `generativelanguage.googleapis.com`\n• **Browser extensions** - Try disabling ad-blockers or privacy extensions\n• **API key issues** - Verify your Gemini API key is valid\n\nPlease check these items and try again.";
+      if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
+        return "🌐 **Network Connection Issue**: I'm having trouble connecting to the AI service. This could be due to:\n\n• **Network connectivity** - Check your internet connection\n• **Firewall/VPN** - Ensure access to `generativelanguage.googleapis.com`\n• **Browser extensions** - Try disabling ad-blockers or privacy extensions\n• **API key issues** - Verify your Gemini API key is valid\n\nPlease check these items and try again.";
+      }
     }
     
     // Try two-stage processing as final fallback
@@ -153,12 +156,14 @@ export async function getResponse(message: string): Promise<string> {
       console.error('Even two-stage processing failed:', fallbackError);
       
       // Provide specific error guidance based on the fallback error
-      if (fallbackError.message.includes('API key expired') || fallbackError.message.includes('API_KEY_INVALID')) {
-        return "🔑 **API Key Expired**: Your Gemini API key has expired. Please visit [Google AI Studio](https://makersuite.google.com/app/apikey) to generate a new key, update your .env file, and restart the development server.";
-      }
-      
-      if (fallbackError.message.includes('Failed to fetch')) {
-        return "🚨 **Connection Failed**: Unable to reach the AI service. Please:\n\n1. **Check your internet connection**\n2. **Verify your Gemini API key** in the `.env` file\n3. **Restart the development server** with `npm run dev`\n4. **Disable browser extensions** that might block API requests\n5. **Check for firewall/VPN restrictions**\n\nIf the problem persists, please check the browser console for more details.";
+      if (fallbackError instanceof Error) {
+        if (fallbackError.message.includes('API key expired') || fallbackError.message.includes('API_KEY_INVALID')) {
+          return "🔑 **API Key Expired**: Your Gemini API key has expired. Please visit [Google AI Studio](https://makersuite.google.com/app/apikey) to generate a new key, update your .env file, and restart the development server.";
+        }
+        
+        if (fallbackError.message.includes('Failed to fetch')) {
+          return "🚨 **Connection Failed**: Unable to reach the AI service. Please:\n\n1. **Check your internet connection**\n2. **Verify your Gemini API key** in the `.env` file\n3. **Restart the development server** with `npm run dev`\n4. **Disable browser extensions** that might block API requests\n5. **Check for firewall/VPN restrictions**\n\nIf the problem persists, please check the browser console for more details.";
+        }
       }
       
       return "❌ **Technical Difficulties**: I'm currently experiencing issues. Please check your configuration and try again. If the problem persists, please review the setup instructions in the README file.";
@@ -309,23 +314,27 @@ Return the final, perfectly formatted content:
     console.error('💥 Two-stage processing failed:', error);
     
     // Provide specific error messages based on error type
-    if (error.message.includes('API key expired') || error.message.includes('API_KEY_INVALID')) {
-      throw new Error(`API key expired: Your Gemini API key has expired and needs to be renewed. Please visit Google AI Studio to generate a new key and update your VITE_GEMINI_API_KEY in the .env file.`);
+    if (error instanceof Error) {
+      if (error.message.includes('API key expired') || error.message.includes('API_KEY_INVALID')) {
+        throw new Error(`API key expired: Your Gemini API key has expired and needs to be renewed. Please visit Google AI Studio to generate a new key and update your VITE_GEMINI_API_KEY in the .env file.`);
+      }
+      
+      if (error.message.includes('Failed to fetch')) {
+        throw new Error(`Network connection failed: Unable to reach Google's AI service. Please check your internet connection and ensure access to generativelanguage.googleapis.com is not blocked by firewalls or browser extensions.`);
+      }
+      
+      if (error.message.includes('API key not valid') || error.message.includes('403')) {
+        throw new Error(`Invalid API key: Your Gemini API key appears to be incorrect or expired. Please verify your VITE_GEMINI_API_KEY in the .env file.`);
+      }
+      
+      if (error.message.includes('quota') || error.message.includes('rate limit')) {
+        throw new Error(`API quota exceeded: You've reached your usage limit. Please try again later or check your quota in Google AI Studio.`);
+      }
+      
+      throw new Error(`Two-stage processing failed: ${error.message}`);
+    } else {
+      throw new Error(`Two-stage processing failed: ${String(error)}`);
     }
-    
-    if (error.message.includes('Failed to fetch')) {
-      throw new Error(`Network connection failed: Unable to reach Google's AI service. Please check your internet connection and ensure access to generativelanguage.googleapis.com is not blocked by firewalls or browser extensions.`);
-    }
-    
-    if (error.message.includes('API key not valid') || error.message.includes('403')) {
-      throw new Error(`Invalid API key: Your Gemini API key appears to be incorrect or expired. Please verify your VITE_GEMINI_API_KEY in the .env file.`);
-    }
-    
-    if (error.message.includes('quota') || error.message.includes('rate limit')) {
-      throw new Error(`API quota exceeded: You've reached your usage limit. Please try again later or check your quota in Google AI Studio.`);
-    }
-    
-    throw new Error(`Two-stage processing failed: ${error.message}`);
   }
 }
 

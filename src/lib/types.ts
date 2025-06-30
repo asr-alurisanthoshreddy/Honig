@@ -3,7 +3,7 @@ export interface SearchResult {
   url: string;
   snippet: string;
   source: string;
-  type: 'web' | 'news' | 'knowledge' | 'academic';
+  type: 'web' | 'news' | 'knowledge' | 'academic' | 'category';
   relevanceScore?: number;
   publishedAt?: string;
   searchQuery?: string;
@@ -16,6 +16,8 @@ export interface SearchResult {
     displayLink?: string;
     type?: string;
     attributes?: any;
+    category?: string;
+    scrapedAt?: string;
   };
 }
 

@@ -260,12 +260,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
       // Determine error message based on error type
       let errorMessage = 'I apologize, but I encountered an error processing your request.';
       
-      if (error.message.includes('API key not valid') || error.message.includes('configuration')) {
-        errorMessage = 'I\'m currently experiencing configuration issues. Please ensure your API keys are properly set up.';
-      } else if (error.message.includes('quota') || error.message.includes('rate limit')) {
-        errorMessage = 'I\'ve reached my usage limit. Please try again in a few minutes.';
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        errorMessage = 'I\'m having trouble connecting to my services. Please check your internet connection and try again.';
+      if (error instanceof Error) {
+        if (error.message.includes('API key not valid') || error.message.includes('configuration')) {
+          errorMessage = 'I\'m currently experiencing configuration issues. Please ensure your API keys are properly set up.';
+        } else if (error.message.includes('quota') || error.message.includes('rate limit')) {
+          errorMessage = 'I\'ve reached my usage limit. Please try again in a few minutes.';
+        } else if (error.message.includes('network') || error.message.includes('fetch')) {
+          errorMessage = 'I\'m having trouble connecting to my services. Please check your internet connection and try again.';
+        }
       }
       
       // Update loading message with error
@@ -277,7 +279,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 content: errorMessage,
                 isLoading: false,
                 metadata: {
-                  error: error.message,
+                  error: error instanceof Error ? error.message : String(error),
                   processingTime: 0
                 }
               }

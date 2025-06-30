@@ -9,8 +9,13 @@ export interface DocumentChunk {
     endOffset: number;
     title?: string;
     url?: string;
+    type?: string;
+    sourceName?: string;
+    scrapedAt?: Date;
+    category?: string;
   };
   embedding?: number[];
+  relevanceScore?: number;
 }
 
 export interface ChunkingOptions {
