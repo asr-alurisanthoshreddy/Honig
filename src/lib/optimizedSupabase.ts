@@ -31,7 +31,7 @@ if (isProduction) {
   honigService.init(supabase);
 }
 
-// Enhanced Gemini response with conversation context
+// Enhanced Gemini response with FULL conversation context and email formatting
 async function getContextualGeminiResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
     const geminiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
@@ -50,58 +50,83 @@ async function getContextualGeminiResponse(message: string, conversationHistory:
       }
     });
 
-    // Build conversation context
-    let contextPrompt = `You are Honig, an AI research assistant developed by Honig. You maintain conversation context and provide helpful responses.
+    // Build comprehensive conversation context
+    let contextPrompt = `You are Honig, an AI research assistant developed by Honig. You maintain conversation context and provide helpful, contextual responses.
 
-CRITICAL: When users ask you to write emails, letters, or any formal documents, you MUST format them in code blocks using markdown.
+CRITICAL EMAIL/LETTER FORMATTING RULE:
+When users ask you to write emails, letters, or any formal documents, you MUST format them in code blocks using markdown. This is MANDATORY.
+
+CONVERSATION CONTEXT RULES:
+- ALWAYS reference previous messages when relevant
+- Build upon previous information shared
+- Remember what the user told you earlier
+- Use context to provide more personalized responses
 
 `;
 
-    // Add conversation history for context
+    // Add COMPLETE conversation history for context
     if (conversationHistory.length > 0) {
-      contextPrompt += "CONVERSATION HISTORY:\n";
-      const recentHistory = conversationHistory.slice(-6); // Last 6 messages for context
+      contextPrompt += "FULL CONVERSATION HISTORY:\n";
       
-      recentHistory.forEach((msg, index) => {
+      conversationHistory.forEach((msg, index) => {
         if (msg.role === 'user') {
           contextPrompt += `User: ${msg.content}\n`;
         } else {
-          contextPrompt += `Honig: ${msg.content.substring(0, 200)}...\n`;
+          // Include more of the assistant's response for better context
+          const content = msg.content.length > 500 ? msg.content.substring(0, 500) + '...' : msg.content;
+          contextPrompt += `Honig: ${content}\n`;
         }
       });
       contextPrompt += "\n";
     }
 
     // Check if this is an email/letter request
-    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter/i.test(message);
+    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter|write.*email|create.*email/i.test(message);
     
     if (isEmailRequest) {
-      contextPrompt += `IMPORTANT: The user is asking you to write an email or letter. You MUST:
-1. Format the email/letter content in a code block using markdown
+      contextPrompt += `CRITICAL EMAIL FORMATTING INSTRUCTIONS:
+The user is asking you to write an email or letter. You MUST:
+
+1. Format the ENTIRE email/letter content in a code block using markdown
 2. Use proper email structure (Subject, To, From, Body)
 3. Base the content on the previous conversation context
 4. Make it professional and relevant to what was discussed
+5. Reference specific information from our conversation
 
-Example format:
+MANDATORY FORMAT:
 \`\`\`
-Subject: [Relevant Subject]
+Subject: [Relevant Subject Based on Our Conversation]
 To: [Recipient]
 From: [Sender]
 
 Dear [Name],
 
-[Email body based on conversation context]
+[Email body that references and builds upon our previous conversation]
 
 Best regards,
 [Sender Name]
 \`\`\`
+
+IMPORTANT: The ENTIRE email must be inside the code block. Do not add any text outside the code block except for a brief introduction.
+
+`;
+    }
+
+    // Add context-aware instructions
+    if (conversationHistory.length > 0) {
+      contextPrompt += `CONTEXT-AWARE RESPONSE INSTRUCTIONS:
+- Reference specific information from our conversation
+- Build upon what we've already discussed
+- Use the user's name or details if they've shared them
+- Connect your response to previous topics
+- Show that you remember and understand the conversation flow
 
 `;
     }
 
     contextPrompt += `Current user message: ${message}
 
-Provide a helpful response that maintains conversation context. If writing emails/letters, use code block formatting as specified above.`;
+Provide a helpful response that maintains conversation context and follows all formatting rules above.`;
 
     const result = await model.generateContent([contextPrompt]);
     const response = await result.response;
@@ -123,12 +148,13 @@ Provide a helpful response that maintains conversation context. If writing email
   }
 }
 
-// Optimized response function with conversation context
+// Optimized response function with FULL conversation context
 export async function getResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('⚡ Processing query with conversation context...');
+    console.log('⚡ Processing query with FULL conversation context...');
+    console.log(`📚 Context: ${conversationHistory.length} messages`);
     
-    // 1. Check for instant responses first (0ms response time)
+    // 1. Check for instant responses first (only for new conversations)
     const instantResponse = fastCache.getInstantResponse(message);
     if (instantResponse && conversationHistory.length === 0) {
       console.log('🚀 Returning instant response (0ms)');
@@ -138,11 +164,18 @@ export async function getResponse(message: string, conversationHistory: any[] = 
     // 2. Determine processing strategy
     const needsWebSearch = shouldUseWebSearch(message);
     const isSimpleQuery = isSimpleConversationalQuery(message);
-    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter/i.test(message);
+    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter|write.*email|create.*email/i.test(message);
+    const hasContext = conversationHistory.length > 0;
+    const isFollowUp = message.toLowerCase().includes('based on') || 
+                      message.toLowerCase().includes('regarding that') || 
+                      message.toLowerCase().includes('about that') ||
+                      message.toLowerCase().includes('from what') ||
+                      message.toLowerCase().includes('using the');
     
-    // 3. Always use contextual response for follow-ups, emails, or when there's conversation history
-    if (conversationHistory.length > 0 || isEmailRequest || message.toLowerCase().includes('based on') || message.toLowerCase().includes('regarding that')) {
-      console.log('📝 Using contextual Gemini with conversation history');
+    // 3. ALWAYS use contextual response for emails, follow-ups, or when there's conversation history
+    if (hasContext || isEmailRequest || isFollowUp) {
+      console.log('📝 Using contextual Gemini with FULL conversation history');
+      console.log(`🔗 Context details: ${conversationHistory.length} messages, isEmail: ${isEmailRequest}, isFollowUp: ${isFollowUp}`);
       const response = await getContextualGeminiResponse(message, conversationHistory);
       fastCache.setCachedResponse(message, response);
       return response;
@@ -196,13 +229,15 @@ function shouldUseWebSearch(query: string): boolean {
   // Skip web search for short queries
   if (queryLower.length < 15) return false;
   
-  // Skip for greetings and basic questions
+  // Skip for greetings, emails, and basic questions
   const simplePatterns = [
     /^(hi|hello|hey|thanks|thank you|bye|goodbye)$/i,
     /^(who are you|what are you|how are you)$/i,
     /^(help|what can you do|capabilities)$/i,
     /write.*mail|compose.*mail|draft.*mail|email.*to|mail.*to/i,
-    /write.*letter|compose.*letter|draft.*letter/i
+    /write.*letter|compose.*letter|draft.*letter/i,
+    /write.*email|create.*email/i,
+    /based on|regarding that|about that|from what|using the/i
   ];
   
   if (simplePatterns.some(pattern => pattern.test(queryLower))) {
@@ -231,7 +266,8 @@ function isSimpleConversationalQuery(query: string): boolean {
     /^(can you|could you|would you|will you)/i,
     /\b(help|assist|support)\b/i,
     /write.*mail|compose.*mail|draft.*mail|email.*to|mail.*to/i,
-    /write.*letter|compose.*letter|draft.*letter/i
+    /write.*letter|compose.*letter|draft.*letter/i,
+    /write.*email|create.*email/i
   ];
   
   return conversationalPatterns.some(pattern => pattern.test(queryLower)) && queryLower.length < 100;

@@ -59,6 +59,7 @@ type ChatState = {
   addNote: (messageId: string, note: string) => Promise<void>;
   clearPersistenceError: () => void;
   checkDatabaseConnection: () => Promise<void>;
+  getConversationHistory: () => Message[];
 };
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -78,6 +79,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   clearPersistenceError: () => {
     set({ persistenceError: null });
+  },
+
+  getConversationHistory: () => {
+    const messages = get().messages;
+    return messages.filter(msg => !msg.isLoading && msg.content.trim() !== '');
   },
 
   sendMessage: async (content: string) => {
@@ -190,23 +196,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
     try {
       const startTime = Date.now();
       
-      // Get conversation history for context (last 10 messages)
-      const currentMessages = get().messages;
-      const conversationHistory = currentMessages
-        .filter(msg => !msg.isLoading && msg.id !== userMessageId && msg.id !== assistantMessageId)
-        .slice(-10) // Last 10 messages for context
-        .map(msg => ({
-          role: msg.role,
-          content: msg.content
-        }));
-
-      console.log(`📚 Using conversation context: ${conversationHistory.length} previous messages`);
+      // Get COMPLETE conversation history for context
+      const conversationHistory = get().getConversationHistory();
       
-      // Get response with conversation context
+      console.log(`📚 Using COMPLETE conversation context: ${conversationHistory.length} messages`);
+      console.log('📝 Recent context:', conversationHistory.slice(-4).map(m => `${m.role}: ${m.content.substring(0, 100)}...`));
+      
+      // Get response with FULL conversation context
       const assistantResponse = await getResponse(content, conversationHistory);
       const processingTime = Date.now() - startTime;
 
-      console.log(`⚡ Response generated in ${processingTime}ms with context`);
+      console.log(`⚡ Response generated in ${processingTime}ms with full context`);
 
       // Update UI immediately
       set(state => ({
@@ -219,7 +219,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 metadata: {
                   processingTime,
                   fromHonig: true,
-                  hasContext: conversationHistory.length > 0
+                  hasContext: conversationHistory.length > 0,
+                  contextMessages: conversationHistory.length
                 }
               }
             : msg
