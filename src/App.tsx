@@ -9,8 +9,8 @@ import ChatInput from './components/ChatInput';
 import LoginPrompt from './components/LoginPrompt';
 import BeforeUnloadWarning from './components/BeforeUnloadWarning';
 import SimpleFileUpload from './components/SimpleFileUpload';
-import { useChatStore } from './store/optimizedChatStore';
-import { supabase, upsertUserProfile } from './lib/optimizedSupabase';
+import { useChatStore } from './store/chatStore';
+import { supabase, upsertUserProfile } from './lib/supabase';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,15 +22,7 @@ function App() {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
-  const { 
-    setUserId, 
-    loadConversations, 
-    setGuestMode, 
-    persistenceError, 
-    clearPersistenceError,
-    dbConnectionStatus,
-    checkDatabaseConnection
-  } = useChatStore();
+  const { setUserId, loadConversations, setGuestMode } = useChatStore();
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,14 +34,12 @@ function App() {
 
   useEffect(() => {
     if (!isConfigured) {
+      // Skip auth setup if not configured
       setUserId(null);
       setGuestMode(true);
       setIsLoading(false);
       return;
     }
-
-    // Check database connection on startup
-    checkDatabaseConnection();
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('Initial session:', session?.user?.id);
@@ -58,6 +48,7 @@ function App() {
         setUserId(session.user.id);
         setGuestMode(false);
         upsertUserProfile(session.user);
+        // Load conversations after setting user ID with a small delay to ensure state is updated
         setTimeout(() => {
           console.log('Loading conversations after initial session');
           loadConversations();
@@ -74,13 +65,15 @@ function App() {
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state change:', event, session?.user?.id);
       
+      // Handle authentication errors
       if (event === 'SIGNED_IN' && session) {
-        setAuthError(null);
+        setAuthError(null); // Clear any previous errors on successful sign in
         setSession(session);
         setUserId(session.user.id);
         setGuestMode(false);
         upsertUserProfile(session.user);
-        setShowAuthModal(false);
+        setShowAuthModal(false); // Close auth modal on successful sign in
+        // Load conversations after setting user ID with a small delay to ensure state is updated
         setTimeout(() => {
           console.log('Loading conversations after auth state change');
           loadConversations();
@@ -89,7 +82,7 @@ function App() {
         setSession(null);
         setUserId(null);
         setGuestMode(true);
-        setAuthError(null);
+        setAuthError(null); // Clear errors on sign out
       } else if (event === 'USER_UPDATED') {
         setSession(session);
         if (session?.user) {
@@ -100,10 +93,59 @@ function App() {
       setIsLoading(false);
     });
 
+    // Listen for auth errors
+    const handleAuthError = (error: AuthError) => {
+      console.error('Auth error:', error);
+      
+      if (error.message.includes('Invalid login credentials')) {
+        setAuthError('Invalid email or password. Please check your credentials and try again.');
+      } else if (error.message.includes('Email not confirmed')) {
+        setAuthError('Please check your email and click the confirmation link before signing in.');
+      } else if (error.message.includes('Too many requests')) {
+        setAuthError('Too many login attempts. Please wait a few minutes before trying again.');
+      } else if (error.message.includes('User not found')) {
+        setAuthError('No account found with this email. Please sign up first or check your email address.');
+      } else if (error.message.includes('Password should be at least')) {
+        setAuthError('Password must be at least 6 characters long.');
+      } else if (error.message.includes('Unable to validate email address')) {
+        setAuthError('Please enter a valid email address.');
+      } else {
+        setAuthError(`Authentication error: ${error.message}`);
+      }
+    };
+
+    // Set up error handling for auth operations
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      try {
+        const response = await originalFetch(...args);
+        
+        // Check if this is a Supabase auth request that failed
+        if (args[0]?.toString().includes('supabase.co/auth/v1') && !response.ok) {
+          const errorData = await response.clone().json().catch(() => ({}));
+          
+          if (errorData.code === 'invalid_credentials') {
+            setAuthError('Invalid email or password. Please check your credentials and try again.');
+          } else if (errorData.code === 'email_not_confirmed') {
+            setAuthError('Please check your email and click the confirmation link before signing in.');
+          } else if (errorData.code === 'too_many_requests') {
+            setAuthError('Too many login attempts. Please wait a few minutes before trying again.');
+          } else if (errorData.message) {
+            setAuthError(`Authentication error: ${errorData.message}`);
+          }
+        }
+        
+        return response;
+      } catch (error) {
+        return originalFetch(...args);
+      }
+    };
+
     return () => {
       subscription.unsubscribe();
+      window.fetch = originalFetch; // Restore original fetch
     };
-  }, [setUserId, loadConversations, setGuestMode, isConfigured, checkDatabaseConnection]);
+  }, [setUserId, loadConversations, setGuestMode, isConfigured]);
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -117,6 +159,7 @@ function App() {
     }
   };
 
+  // Apply dark mode on mount and when changed
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -136,7 +179,7 @@ function App() {
   const handleProceedWithLogin = () => {
     setShowLoginPrompt(false);
     setShowAuthModal(true);
-    setAuthError(null);
+    setAuthError(null); // Clear any previous errors
   };
 
   const handleContinueAsGuest = () => {
@@ -145,7 +188,7 @@ function App() {
 
   const handleCloseAuthModal = () => {
     setShowAuthModal(false);
-    setAuthError(null);
+    setAuthError(null); // Clear errors when closing modal
   };
 
   const handleFileUpload = () => {
@@ -158,7 +201,7 @@ function App() {
       return;
     }
     setShowAuthModal(true);
-    setAuthError(null);
+    setAuthError(null); // Clear any previous errors
   };
 
   if (isLoading) {
@@ -174,6 +217,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
+      {/* Before unload warning component */}
       <BeforeUnloadWarning />
       
       <Header 
@@ -202,11 +246,13 @@ function App() {
         />
       </main>
 
+      {/* Simple File Upload Modal */}
       <SimpleFileUpload
         isOpen={showFileUpload}
         onClose={() => setShowFileUpload(false)}
       />
 
+      {/* Login Prompt Modal */}
       {showLoginPrompt && (
         <LoginPrompt
           onProceedWithLogin={handleProceedWithLogin}
@@ -215,6 +261,7 @@ function App() {
         />
       )}
 
+      {/* Auth Modal - only show if configured */}
       {showAuthModal && isConfigured && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -233,6 +280,7 @@ function App() {
                 </button>
               </div>
 
+              {/* Display authentication error */}
               {authError && (
                 <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
                   <div className="flex">
@@ -263,6 +311,7 @@ function App() {
                 </div>
               )}
 
+              {/* Helpful instructions */}
               <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
                 <div className="flex">
                   <div className="flex-shrink-0">
@@ -326,32 +375,7 @@ function App() {
         </div>
       )}
 
-      {/* Persistence Error Notification */}
-      {persistenceError && (
-        <div className="fixed bottom-4 left-4 bg-red-600 text-white p-4 rounded-lg shadow-lg max-w-sm z-50">
-          <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-            <div className="flex-1">
-              <p className="text-sm font-medium">Database Error</p>
-              <p className="text-xs mt-1 opacity-90">{persistenceError}</p>
-              {dbConnectionStatus === 'disconnected' && (
-                <p className="text-xs mt-1 opacity-75">Database connection lost. Messages will be saved locally.</p>
-              )}
-            </div>
-            <button
-              onClick={clearPersistenceError}
-              className="text-white hover:text-gray-200 ml-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-
+      {/* Configuration Notice */}
       {!isConfigured && (
         <div className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-sm">
           <div className="flex items-start gap-3">
