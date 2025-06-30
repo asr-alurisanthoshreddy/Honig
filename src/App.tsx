@@ -9,8 +9,8 @@ import ChatInput from './components/ChatInput';
 import LoginPrompt from './components/LoginPrompt';
 import BeforeUnloadWarning from './components/BeforeUnloadWarning';
 import SimpleFileUpload from './components/SimpleFileUpload';
-import { useChatStore } from './store/chatStore';
-import { supabase, upsertUserProfile } from './lib/supabase';
+import { useChatStore } from './store/enhancedChatStore';
+import { supabase, upsertUserProfile } from './lib/enhancedSupabase';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -34,7 +34,6 @@ function App() {
 
   useEffect(() => {
     if (!isConfigured) {
-      // Skip auth setup if not configured
       setUserId(null);
       setGuestMode(true);
       setIsLoading(false);
@@ -48,7 +47,6 @@ function App() {
         setUserId(session.user.id);
         setGuestMode(false);
         upsertUserProfile(session.user);
-        // Load conversations after setting user ID with a small delay to ensure state is updated
         setTimeout(() => {
           console.log('Loading conversations after initial session');
           loadConversations();
@@ -65,15 +63,13 @@ function App() {
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state change:', event, session?.user?.id);
       
-      // Handle authentication errors
       if (event === 'SIGNED_IN' && session) {
-        setAuthError(null); // Clear any previous errors on successful sign in
+        setAuthError(null);
         setSession(session);
         setUserId(session.user.id);
         setGuestMode(false);
         upsertUserProfile(session.user);
-        setShowAuthModal(false); // Close auth modal on successful sign in
-        // Load conversations after setting user ID with a small delay to ensure state is updated
+        setShowAuthModal(false);
         setTimeout(() => {
           console.log('Loading conversations after auth state change');
           loadConversations();
@@ -82,7 +78,7 @@ function App() {
         setSession(null);
         setUserId(null);
         setGuestMode(true);
-        setAuthError(null); // Clear errors on sign out
+        setAuthError(null);
       } else if (event === 'USER_UPDATED') {
         setSession(session);
         if (session?.user) {
@@ -93,7 +89,6 @@ function App() {
       setIsLoading(false);
     });
 
-    // Listen for auth errors
     const handleAuthError = (error: AuthError) => {
       console.error('Auth error:', error);
       
@@ -114,13 +109,11 @@ function App() {
       }
     };
 
-    // Set up error handling for auth operations
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
       try {
         const response = await originalFetch(...args);
         
-        // Check if this is a Supabase auth request that failed
         if (args[0]?.toString().includes('supabase.co/auth/v1') && !response.ok) {
           const errorData = await response.clone().json().catch(() => ({}));
           
@@ -143,7 +136,7 @@ function App() {
 
     return () => {
       subscription.unsubscribe();
-      window.fetch = originalFetch; // Restore original fetch
+      window.fetch = originalFetch;
     };
   }, [setUserId, loadConversations, setGuestMode, isConfigured]);
 
@@ -159,7 +152,6 @@ function App() {
     }
   };
 
-  // Apply dark mode on mount and when changed
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -179,7 +171,7 @@ function App() {
   const handleProceedWithLogin = () => {
     setShowLoginPrompt(false);
     setShowAuthModal(true);
-    setAuthError(null); // Clear any previous errors
+    setAuthError(null);
   };
 
   const handleContinueAsGuest = () => {
@@ -188,7 +180,7 @@ function App() {
 
   const handleCloseAuthModal = () => {
     setShowAuthModal(false);
-    setAuthError(null); // Clear errors when closing modal
+    setAuthError(null);
   };
 
   const handleFileUpload = () => {
@@ -201,7 +193,7 @@ function App() {
       return;
     }
     setShowAuthModal(true);
-    setAuthError(null); // Clear any previous errors
+    setAuthError(null);
   };
 
   if (isLoading) {
@@ -217,7 +209,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col">
-      {/* Before unload warning component */}
       <BeforeUnloadWarning />
       
       <Header 
@@ -246,13 +237,11 @@ function App() {
         />
       </main>
 
-      {/* Simple File Upload Modal */}
       <SimpleFileUpload
         isOpen={showFileUpload}
         onClose={() => setShowFileUpload(false)}
       />
 
-      {/* Login Prompt Modal */}
       {showLoginPrompt && (
         <LoginPrompt
           onProceedWithLogin={handleProceedWithLogin}
@@ -261,7 +250,6 @@ function App() {
         />
       )}
 
-      {/* Auth Modal - only show if configured */}
       {showAuthModal && isConfigured && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -280,7 +268,6 @@ function App() {
                 </button>
               </div>
 
-              {/* Display authentication error */}
               {authError && (
                 <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
                   <div className="flex">
@@ -311,7 +298,6 @@ function App() {
                 </div>
               )}
 
-              {/* Helpful instructions */}
               <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
                 <div className="flex">
                   <div className="flex-shrink-0">
@@ -375,7 +361,6 @@ function App() {
         </div>
       )}
 
-      {/* Configuration Notice */}
       {!isConfigured && (
         <div className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-sm">
           <div className="flex items-start gap-3">
