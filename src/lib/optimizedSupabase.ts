@@ -31,8 +31,8 @@ if (isProduction) {
   honigService.init(supabase);
 }
 
-// Fast Gemini response for immediate replies
-async function getFastGeminiResponse(message: string): Promise<string> {
+// Enhanced Gemini response with conversation context
+async function getContextualGeminiResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
     const geminiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
     
@@ -45,19 +45,70 @@ async function getFastGeminiResponse(message: string): Promise<string> {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-2.0-flash",
       generationConfig: {
-        maxOutputTokens: 1000, // Limit for faster responses
+        maxOutputTokens: 2000,
         temperature: 0.7,
       }
     });
 
-    const prompt = `You are Honig, developed by Honig. Provide a helpful, concise response to: ${message}`;
+    // Build conversation context
+    let contextPrompt = `You are Honig, an AI research assistant developed by Honig. You maintain conversation context and provide helpful responses.
+
+CRITICAL: When users ask you to write emails, letters, or any formal documents, you MUST format them in code blocks using markdown.
+
+`;
+
+    // Add conversation history for context
+    if (conversationHistory.length > 0) {
+      contextPrompt += "CONVERSATION HISTORY:\n";
+      const recentHistory = conversationHistory.slice(-6); // Last 6 messages for context
+      
+      recentHistory.forEach((msg, index) => {
+        if (msg.role === 'user') {
+          contextPrompt += `User: ${msg.content}\n`;
+        } else {
+          contextPrompt += `Honig: ${msg.content.substring(0, 200)}...\n`;
+        }
+      });
+      contextPrompt += "\n";
+    }
+
+    // Check if this is an email/letter request
+    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter/i.test(message);
     
-    const result = await model.generateContent([prompt]);
+    if (isEmailRequest) {
+      contextPrompt += `IMPORTANT: The user is asking you to write an email or letter. You MUST:
+1. Format the email/letter content in a code block using markdown
+2. Use proper email structure (Subject, To, From, Body)
+3. Base the content on the previous conversation context
+4. Make it professional and relevant to what was discussed
+
+Example format:
+\`\`\`
+Subject: [Relevant Subject]
+To: [Recipient]
+From: [Sender]
+
+Dear [Name],
+
+[Email body based on conversation context]
+
+Best regards,
+[Sender Name]
+\`\`\`
+
+`;
+    }
+
+    contextPrompt += `Current user message: ${message}
+
+Provide a helpful response that maintains conversation context. If writing emails/letters, use code block formatting as specified above.`;
+
+    const result = await model.generateContent([contextPrompt]);
     const response = await result.response;
     return response.text();
     
   } catch (error) {
-    console.error('Fast Gemini failed:', error);
+    console.error('Contextual Gemini failed:', error);
     
     if (error instanceof Error) {
       if (error.message.includes('API key')) {
@@ -72,14 +123,14 @@ async function getFastGeminiResponse(message: string): Promise<string> {
   }
 }
 
-// Optimized response function with multiple fast paths
-export async function getResponse(message: string): Promise<string> {
+// Optimized response function with conversation context
+export async function getResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('⚡ Processing query with optimized pipeline...');
+    console.log('⚡ Processing query with conversation context...');
     
     // 1. Check for instant responses first (0ms response time)
     const instantResponse = fastCache.getInstantResponse(message);
-    if (instantResponse) {
+    if (instantResponse && conversationHistory.length === 0) {
       console.log('🚀 Returning instant response (0ms)');
       return instantResponse;
     }
@@ -87,21 +138,29 @@ export async function getResponse(message: string): Promise<string> {
     // 2. Determine processing strategy
     const needsWebSearch = shouldUseWebSearch(message);
     const isSimpleQuery = isSimpleConversationalQuery(message);
+    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter/i.test(message);
     
-    // 3. Fast path for simple queries
-    if (isSimpleQuery || !needsWebSearch) {
-      console.log('📝 Using fast Gemini path for simple query');
-      const response = await getFastGeminiResponse(message);
+    // 3. Always use contextual response for follow-ups, emails, or when there's conversation history
+    if (conversationHistory.length > 0 || isEmailRequest || message.toLowerCase().includes('based on') || message.toLowerCase().includes('regarding that')) {
+      console.log('📝 Using contextual Gemini with conversation history');
+      const response = await getContextualGeminiResponse(message, conversationHistory);
       fastCache.setCachedResponse(message, response);
       return response;
     }
 
-    // 4. Use Honig for complex queries (only if configured and needed)
+    // 4. Fast path for simple queries without context
+    if (isSimpleQuery || !needsWebSearch) {
+      console.log('📝 Using fast Gemini path for simple query');
+      const response = await getContextualGeminiResponse(message, []);
+      fastCache.setCachedResponse(message, response);
+      return response;
+    }
+
+    // 5. Use Honig for complex queries (only if configured and needed)
     if (isProduction && honigService.isConfigured() && needsWebSearch) {
       console.log('🔍 Using Honig for complex query');
       
       try {
-        // Set a timeout for Honig processing
         const honigPromise = honigService.processQuery(message);
         const timeoutPromise = new Promise<never>((_, reject) => 
           setTimeout(() => reject(new Error('Honig timeout')), 15000)
@@ -111,15 +170,15 @@ export async function getResponse(message: string): Promise<string> {
         fastCache.setCachedResponse(message, result.response);
         return result.response;
       } catch (honigError) {
-        console.warn('Honig failed or timed out, falling back to fast response:', honigError);
-        const fallback = await getFastGeminiResponse(message);
+        console.warn('Honig failed or timed out, falling back to contextual response:', honigError);
+        const fallback = await getContextualGeminiResponse(message, conversationHistory);
         fastCache.setCachedResponse(message, fallback);
         return fallback;
       }
     } else {
-      // Fallback to fast response
-      console.log('📝 Using fast Gemini fallback');
-      const response = await getFastGeminiResponse(message);
+      // Fallback to contextual response
+      console.log('📝 Using contextual Gemini fallback');
+      const response = await getContextualGeminiResponse(message, conversationHistory);
       fastCache.setCachedResponse(message, response);
       return response;
     }
@@ -141,7 +200,9 @@ function shouldUseWebSearch(query: string): boolean {
   const simplePatterns = [
     /^(hi|hello|hey|thanks|thank you|bye|goodbye)$/i,
     /^(who are you|what are you|how are you)$/i,
-    /^(help|what can you do|capabilities)$/i
+    /^(help|what can you do|capabilities)$/i,
+    /write.*mail|compose.*mail|draft.*mail|email.*to|mail.*to/i,
+    /write.*letter|compose.*letter|draft.*letter/i
   ];
   
   if (simplePatterns.some(pattern => pattern.test(queryLower))) {
@@ -168,10 +229,12 @@ function isSimpleConversationalQuery(query: string): boolean {
   const conversationalPatterns = [
     /^(what is|define|explain|tell me about|how does|why does)/i,
     /^(can you|could you|would you|will you)/i,
-    /\b(help|assist|support)\b/i
+    /\b(help|assist|support)\b/i,
+    /write.*mail|compose.*mail|draft.*mail|email.*to|mail.*to/i,
+    /write.*letter|compose.*letter|draft.*letter/i
   ];
   
-  return conversationalPatterns.some(pattern => pattern.test(queryLower)) && queryLower.length < 50;
+  return conversationalPatterns.some(pattern => pattern.test(queryLower)) && queryLower.length < 100;
 }
 
 // Enhanced user profile function with error handling
@@ -251,13 +314,11 @@ export async function logQuery(
       console.error(`❌ Attempt ${attempt} failed:`, lastError.message);
       
       if (attempt < maxRetries) {
-        // Wait before retry (exponential backoff)
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
       }
     }
   }
 
-  // All retries failed
   console.error('❌ All retry attempts failed for query logging');
   throw new Error(`Failed to persist chat message after ${maxRetries} attempts: ${lastError?.message}`);
 }
@@ -276,7 +337,6 @@ export async function safeDbOperation<T>(
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`❌ Database operation '${operationName}' failed:`, errorMessage);
     
-    // Don't throw for non-critical operations
     if (operationName.includes('load') || operationName.includes('persist')) {
       return fallbackValue;
     }

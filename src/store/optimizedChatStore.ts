@@ -118,7 +118,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
         false,
         'create conversation'
       ).catch(() => {
-        // Silently handle conversation creation failure
         console.warn('Failed to create conversation in database, continuing in memory');
       });
     }
@@ -161,7 +160,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
           false,
           'persist file analysis'
         ).catch(() => {
-          // Silently handle persistence failure for file analysis
           console.warn('Failed to persist file analysis');
         });
       }
@@ -192,11 +190,23 @@ export const useChatStore = create<ChatState>((set, get) => ({
     try {
       const startTime = Date.now();
       
-      // Get optimized response
-      const assistantResponse = await getResponse(content);
+      // Get conversation history for context (last 10 messages)
+      const currentMessages = get().messages;
+      const conversationHistory = currentMessages
+        .filter(msg => !msg.isLoading && msg.id !== userMessageId && msg.id !== assistantMessageId)
+        .slice(-10) // Last 10 messages for context
+        .map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }));
+
+      console.log(`📚 Using conversation context: ${conversationHistory.length} previous messages`);
+      
+      // Get response with conversation context
+      const assistantResponse = await getResponse(content, conversationHistory);
       const processingTime = Date.now() - startTime;
 
-      console.log(`⚡ Response generated in ${processingTime}ms`);
+      console.log(`⚡ Response generated in ${processingTime}ms with context`);
 
       // Update UI immediately
       set(state => ({
@@ -208,7 +218,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 isLoading: false,
                 metadata: {
                   processingTime,
-                  fromHonig: true
+                  fromHonig: true,
+                  hasContext: conversationHistory.length > 0
                 }
               }
             : msg
@@ -251,7 +262,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
             get().loadConversations();
           }
         }).catch(() => {
-          // Completely silent - no error display to user
           console.warn('Failed to persist message to database');
         });
       }
@@ -404,7 +414,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
       'select conversation'
     );
 
-    // Don't show error for conversation loading failures
     if (!success) {
       console.warn('Failed to load conversation');
     }
