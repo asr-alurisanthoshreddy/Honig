@@ -84,21 +84,26 @@ export const useChatStore = create<ChatState>((set, get) => ({
       currentConversationId = uuidv4();
       
       // Create new conversation in database first
-      const { error: convError } = await supabase
-        .from('conversations')
-        .insert({
-          id: currentConversationId,
-          user_id: userId,
-          title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
-          updated_at: new Date().toISOString()
-        });
+      try {
+        const { error: convError } = await supabase
+          .from('conversations')
+          .insert({
+            id: currentConversationId,
+            user_id: userId,
+            title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
+            updated_at: new Date().toISOString()
+          });
 
-      if (convError) {
-        console.error('Error creating conversation:', convError);
-        return;
+        if (convError) {
+          console.error('Error creating conversation:', convError);
+          // Continue without database persistence
+        } else {
+          set({ currentConversationId });
+        }
+      } catch (error) {
+        console.error('Failed to create conversation:', error);
+        // Continue without database persistence
       }
-
-      set({ currentConversationId });
     }
 
     // For file analysis, add the message directly without processing
@@ -118,46 +123,22 @@ export const useChatStore = create<ChatState>((set, get) => ({
         messages: [...state.messages, fileAnalysisMessage]
       }));
 
-      // Store in database if user is logged in
+      // Store in database if user is logged in (non-blocking)
       if (!isGuestMode && userId && currentConversationId) {
         try {
-          const { error: queryError } = await supabase
-            .from('queries')
-            .insert({
-              id: assistantMessageId,
-              user_id: userId,
-              conversation_id: currentConversationId,
-              query_text: 'File Analysis',
-              response_text: content,
-              sources: [],
-            });
-
-          if (queryError) {
-            console.error('Error storing file analysis:', queryError);
-          }
-        } catch (dbError) {
-          console.error('Database error when storing file analysis:', dbError);
-        }
-
-        // Update conversation timestamp
-        try {
-          const { error: updateError } = await supabase
+          await logQuery(userId, 'File Analysis', content, [], currentConversationId);
+          
+          // Update conversation timestamp
+          await supabase
             .from('conversations')
             .update({ updated_at: new Date().toISOString() })
             .eq('id', currentConversationId);
 
-          if (updateError) {
-            console.error('Error updating conversation:', updateError);
-          }
+          // Reload conversations
+          get().loadConversations();
         } catch (dbError) {
-          console.error('Database error when updating conversation:', dbError);
-        }
-
-        // Reload conversations
-        try {
-          await get().loadConversations();
-        } catch (loadError) {
-          console.error('Error reloading conversations:', loadError);
+          console.warn('Failed to persist file analysis:', dbError);
+          // Don't show error to user for file analysis
         }
       }
 
@@ -187,7 +168,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }));
 
     try {
-      // Get response from enhanced RAG service with conversation context
+      // Get response from enhanced service
       const startTime = Date.now();
       const assistantResponse = await getResponse(content);
       const processingTime = Date.now() - startTime;
@@ -202,7 +183,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 isLoading: false,
                 metadata: {
                   processingTime,
-                  // Additional metadata would come from RAG service
+                  fromHonig: true
                 }
               }
             : msg
@@ -210,47 +191,22 @@ export const useChatStore = create<ChatState>((set, get) => ({
         isProcessing: false
       }));
 
-      // Store query in database only if user is logged in
+      // Store query in database only if user is logged in (non-blocking)
       if (!isGuestMode && userId && currentConversationId) {
         try {
-          const { error: queryError } = await supabase
-            .from('queries')
-            .insert({
-              id: userMessageId,
-              user_id: userId,
-              conversation_id: currentConversationId,
-              query_text: content,
-              response_text: assistantResponse,
-              sources: [], // Would be populated by RAG service
-            });
-
-          if (queryError) {
-            console.error('Error storing query:', queryError);
-          }
-        } catch (dbError) {
-          console.error('Database error when storing query:', dbError);
-          // Don't fail the entire operation if database logging fails
-        }
-
-        // Update conversation's updated_at timestamp (with error handling)
-        try {
-          const { error: updateError } = await supabase
+          await logQuery(userId, content, assistantResponse, [], currentConversationId);
+          
+          // Update conversation's updated_at timestamp
+          await supabase
             .from('conversations')
             .update({ updated_at: new Date().toISOString() })
             .eq('id', currentConversationId);
 
-          if (updateError) {
-            console.error('Error updating conversation:', updateError);
-          }
+          // Reload conversations to update the list
+          get().loadConversations();
         } catch (dbError) {
-          console.error('Database error when updating conversation:', dbError);
-        }
-
-        // Reload conversations to update the list (with error handling)
-        try {
-          await get().loadConversations();
-        } catch (loadError) {
-          console.error('Error reloading conversations:', loadError);
+          console.warn('Failed to persist message:', dbError);
+          // Don't show error to user - continue with in-memory operation
         }
       }
 
@@ -304,7 +260,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
         .eq('user_id', userId)
         .order('updated_at', { ascending: false });
 
-      if (convError) throw convError;
+      if (convError) {
+        console.warn('Failed to load conversations:', convError);
+        return;
+      }
 
       // Get messages for current conversation if one is selected
       const currentId = get().currentConversationId;
@@ -315,28 +274,30 @@ export const useChatStore = create<ChatState>((set, get) => ({
           .eq('conversation_id', currentId)
           .order('created_at', { ascending: true });
 
-        if (msgError) throw msgError;
+        if (msgError) {
+          console.warn('Failed to load messages:', msgError);
+        } else {
+          // Transform queries into messages
+          const formattedMessages = messages.flatMap(query => ([
+            {
+              id: query.id,
+              content: query.query_text,
+              role: 'user' as const,
+              timestamp: new Date(query.created_at),
+              sources: query.sources || []
+            },
+            {
+              id: uuidv4(),
+              content: query.response_text,
+              role: 'assistant' as const,
+              timestamp: new Date(query.created_at),
+              sources: query.sources || [],
+              note: query.notes || undefined
+            }
+          ]));
 
-        // Transform queries into messages
-        const formattedMessages = messages.flatMap(query => ([
-          {
-            id: query.id,
-            content: query.query_text,
-            role: 'user' as const,
-            timestamp: new Date(query.created_at),
-            sources: query.sources || []
-          },
-          {
-            id: uuidv4(),
-            content: query.response_text,
-            role: 'assistant' as const,
-            timestamp: new Date(query.created_at),
-            sources: query.sources || [],
-            note: query.notes || undefined
-          }
-        ]));
-
-        set({ messages: formattedMessages });
+          set({ messages: formattedMessages });
+        }
       }
 
       // Update conversations list
@@ -349,7 +310,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         }))
       });
     } catch (error) {
-      console.error('Error loading conversations:', error);
+      console.warn('Error loading conversations:', error);
       // Don't throw error to prevent UI crashes
     }
   },
@@ -366,7 +327,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
         .eq('conversation_id', id)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.warn('Failed to load conversation:', error);
+        return;
+      }
 
       // Transform queries into messages
       const formattedMessages = messages.flatMap(query => ([
@@ -396,7 +360,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         messages: formattedMessages
       });
     } catch (error) {
-      console.error('Error selecting conversation:', error);
+      console.warn('Error selecting conversation:', error);
       // Don't throw error to prevent UI crashes
     }
   },
@@ -490,7 +454,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
         .update({ notes: note })
         .eq('id', messageId);
 
-      if (error) throw error;
+      if (error) {
+        console.warn('Failed to save note:', error);
+        return;
+      }
 
       // Update the message in the UI
       set(state => ({
@@ -499,7 +466,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         )
       }));
     } catch (error) {
-      console.error('Error adding note:', error);
+      console.warn('Error adding note:', error);
       // Don't throw error to prevent UI crashes
     }
   }

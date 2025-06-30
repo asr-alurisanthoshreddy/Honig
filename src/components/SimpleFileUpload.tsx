@@ -9,7 +9,7 @@ interface SimpleFileUploadProps {
   onClose: () => void;
 }
 
-const SimpleFileUpload: React.FC<SimpleFileUploadProps> = ({ isOpen, onClose }) => {
+export const SimpleFileUpload: React.FC<SimpleFileUploadProps> = ({ isOpen, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
