@@ -31,7 +31,7 @@ if (isProduction) {
   honigService.init(supabase);
 }
 
-// Enhanced Gemini response with FULL conversation context and email formatting
+// Enhanced Gemini response with FULL conversation context and SPECIFIC email formatting
 async function getContextualGeminiResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
     const geminiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
@@ -51,10 +51,49 @@ async function getContextualGeminiResponse(message: string, conversationHistory:
     });
 
     // Build comprehensive conversation context
-    let contextPrompt = `You are Honig, an AI research assistant developed by Honig. You maintain conversation context and provide helpful, contextual responses.
+    let contextPrompt = `You are Honig, an AI research assistant developed by Honig. You maintain conversation context and provide helpful, well-structured responses.
 
-CRITICAL EMAIL/LETTER FORMATTING RULE:
-When users ask you to write emails, letters, or any formal documents, you MUST format them in code blocks using markdown. This is MANDATORY.
+CRITICAL FORMATTING RULES:
+
+1. **EMAIL/LETTER FORMATTING RULE (ONLY when specifically requested):**
+   - ONLY format emails/letters in code blocks when user explicitly asks to "write email", "write letter", "compose email", "draft email", "write mail", etc.
+   - When formatting emails in code blocks, use this EXACT format:
+   
+   \`\`\`
+   Subject: [Subject based on conversation]
+   To: [Recipient]
+   From: [Sender]
+   
+   Dear [Name],
+   
+   [Email body that references conversation context]
+   
+   Best regards,
+   [Sender Name]
+   \`\`\`
+
+2. **STRUCTURED RESPONSE FORMATTING (for all other responses):**
+   - Use proper headings with ## and ###
+   - Put each bullet point on its own unique line
+   - Use proper spacing between sections
+   - Structure information clearly with headings and subheadings
+   - Example format:
+   
+   ## Main Topic
+   
+   ### Subtopic 1
+   
+   • Bullet point 1
+   
+   • Bullet point 2
+   
+   • Bullet point 3
+   
+   ### Subtopic 2
+   
+   • Another bullet point
+   
+   • Another bullet point
 
 CONVERSATION CONTEXT RULES:
 - ALWAYS reference previous messages when relevant
@@ -80,12 +119,14 @@ CONVERSATION CONTEXT RULES:
       contextPrompt += "\n";
     }
 
-    // Check if this is an email/letter request
-    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter|write.*email|create.*email/i.test(message);
+    // Check if this is SPECIFICALLY an email/letter request
+    const isEmailRequest = /^(write|compose|draft|create|send)\s+(an?\s+)?(email|mail|letter|message)\s+(to|for|about)/i.test(message) ||
+                          /^(write|compose|draft|create)\s+(me\s+)?(an?\s+)?(email|mail|letter)/i.test(message) ||
+                          /email.*to|mail.*to|letter.*to/i.test(message);
     
     if (isEmailRequest) {
       contextPrompt += `CRITICAL EMAIL FORMATTING INSTRUCTIONS:
-The user is asking you to write an email or letter. You MUST:
+The user is SPECIFICALLY asking you to write an email or letter. You MUST:
 
 1. Format the ENTIRE email/letter content in a code block using markdown
 2. Use proper email structure (Subject, To, From, Body)
@@ -108,6 +149,38 @@ Best regards,
 \`\`\`
 
 IMPORTANT: The ENTIRE email must be inside the code block. Do not add any text outside the code block except for a brief introduction.
+
+`;
+    } else {
+      contextPrompt += `STRUCTURED RESPONSE FORMATTING INSTRUCTIONS:
+The user is asking for information or help (NOT an email/letter). You MUST:
+
+1. Provide well-structured information with proper headings
+2. Use ## for main headings and ### for subheadings
+3. Put each bullet point on its own unique line with proper spacing
+4. Use clear sections and proper spacing between them
+5. Make the response easy to read and well-organized
+
+EXAMPLE FORMAT:
+## Main Topic
+
+### Key Points
+
+• First important point
+
+• Second important point
+
+• Third important point
+
+### Additional Information
+
+• More details here
+
+• Another detail
+
+### Summary
+
+• Final summary point
 
 `;
     }
@@ -164,7 +237,9 @@ export async function getResponse(message: string, conversationHistory: any[] = 
     // 2. Determine processing strategy
     const needsWebSearch = shouldUseWebSearch(message);
     const isSimpleQuery = isSimpleConversationalQuery(message);
-    const isEmailRequest = /write.*mail|compose.*mail|draft.*mail|send.*mail|email.*to|mail.*to|write.*letter|compose.*letter|draft.*letter|write.*email|create.*email/i.test(message);
+    const isEmailRequest = /^(write|compose|draft|create|send)\s+(an?\s+)?(email|mail|letter|message)\s+(to|for|about)/i.test(message) ||
+                          /^(write|compose|draft|create)\s+(me\s+)?(an?\s+)?(email|mail|letter)/i.test(message) ||
+                          /email.*to|mail.*to|letter.*to/i.test(message);
     const hasContext = conversationHistory.length > 0;
     const isFollowUp = message.toLowerCase().includes('based on') || 
                       message.toLowerCase().includes('regarding that') || 
@@ -234,9 +309,8 @@ function shouldUseWebSearch(query: string): boolean {
     /^(hi|hello|hey|thanks|thank you|bye|goodbye)$/i,
     /^(who are you|what are you|how are you)$/i,
     /^(help|what can you do|capabilities)$/i,
-    /write.*mail|compose.*mail|draft.*mail|email.*to|mail.*to/i,
-    /write.*letter|compose.*letter|draft.*letter/i,
-    /write.*email|create.*email/i,
+    /^(write|compose|draft|create|send)\s+(an?\s+)?(email|mail|letter|message)/i,
+    /email.*to|mail.*to|letter.*to/i,
     /based on|regarding that|about that|from what|using the/i
   ];
   
@@ -265,9 +339,8 @@ function isSimpleConversationalQuery(query: string): boolean {
     /^(what is|define|explain|tell me about|how does|why does)/i,
     /^(can you|could you|would you|will you)/i,
     /\b(help|assist|support)\b/i,
-    /write.*mail|compose.*mail|draft.*mail|email.*to|mail.*to/i,
-    /write.*letter|compose.*letter|draft.*letter/i,
-    /write.*email|create.*email/i
+    /^(write|compose|draft|create|send)\s+(an?\s+)?(email|mail|letter|message)/i,
+    /email.*to|mail.*to|letter.*to/i
   ];
   
   return conversationalPatterns.some(pattern => pattern.test(queryLower)) && queryLower.length < 100;
