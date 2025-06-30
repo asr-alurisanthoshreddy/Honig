@@ -414,7 +414,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
                 </div>
               ) : (
                 // Check if content contains the specific table format
-                content.includes('📊 ALL TABLES DETECTED AND FORMATTED') ? 
+                message.content.includes('📊 ALL TABLES DETECTED AND FORMATTED') ? 
                   processContent(message.content) :
                   <ReactMarkdown components={renderers}>{message.content}</ReactMarkdown>
               )}
