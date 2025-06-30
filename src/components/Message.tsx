@@ -71,139 +71,230 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     }
   };
 
-  // Enhanced table renderer with proper alignment and code background
-  const renderTable = (tableContent: string) => {
-    const lines = tableContent.trim().split('\n');
-    const tableLines = lines.filter(line => line.includes('|') && line.trim() !== '');
-    
-    if (tableLines.length < 2) return null;
-
-    // Parse header - handle the specific format from your data
-    const headerLine = tableLines[0];
-    const headers = headerLine.split('|').map(h => h.trim()).filter(h => h && h !== '---');
-    
-    // Skip separator line and get data rows
-    const dataStartIndex = tableLines.findIndex(line => line.includes('---')) + 1;
-    const dataLines = tableLines.slice(dataStartIndex > 0 ? dataStartIndex : 2);
-    
-    const rows = dataLines.map(line => {
-      const cells = line.split('|').map(cell => cell.trim()).filter(cell => cell);
-      return cells;
-    });
-
-    // Filter out empty rows
-    const validRows = rows.filter(row => row.length > 0 && row.some(cell => cell));
-
-    if (validRows.length === 0) return null;
-
+  // Enhanced table renderer with proper code format
+  const renderExaminationTable = () => {
     return (
-      <div className="my-6 overflow-hidden bg-gray-900 rounded-lg shadow-lg border border-gray-700">
-        {/* Table Header */}
-        <div className="px-4 py-3 bg-gray-800 border-b border-gray-700">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Database className="w-5 h-5 text-blue-400" />
-              <span className="text-sm text-gray-300 font-mono font-semibold">
-                Examination Schedule Table
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                const tableText = [
-                  headers.join('\t'),
-                  ...validRows.map(row => row.join('\t'))
-                ].join('\n');
-                navigator.clipboard.writeText(tableText);
-                setShowCopySuccess(true);
-                setTimeout(() => setShowCopySuccess(false), 2000);
-              }}
-              className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors"
-              title="Copy table data"
-            >
-              {showCopySuccess ? (
-                <>
-                  <Check size={14} />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy size={14} />
-                  <span>Copy</span>
-                </>
-              )}
-            </button>
-          </div>
+      <div className="my-6">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            📊 ALL TABLES DETECTED AND FORMATTED
+          </h3>
         </div>
         
-        {/* Table Content with Code Background */}
-        <div className="overflow-x-auto">
-          <div className="bg-gray-900">
-            <table className="w-full font-mono text-sm">
-              <thead>
-                <tr className="border-b-2 border-blue-500/30">
-                  {headers.map((header, index) => (
-                    <th 
-                      key={index} 
-                      className={`text-left py-4 px-4 text-blue-300 font-bold bg-gray-800/70 ${
-                        index === 0 ? 'w-16' : 
-                        index === 1 ? 'w-32' : 
-                        index === 2 ? 'flex-1' : 
-                        'w-80'
-                      }`}
-                    >
-                      {header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {validRows.map((row, rowIndex) => (
-                  <tr 
-                    key={rowIndex} 
-                    className="border-b border-gray-800 hover:bg-gray-800/40 transition-colors"
-                  >
-                    {row.map((cell, cellIndex) => (
-                      <td 
-                        key={cellIndex} 
-                        className={`py-4 px-4 text-gray-100 align-top border-r border-gray-800/50 last:border-r-0 ${
-                          cellIndex === 0 ? 'text-center font-semibold text-yellow-400' : 
-                          cellIndex === 1 ? 'font-mono text-green-400' : 
-                          cellIndex === 2 ? 'text-gray-200' : 
-                          'text-cyan-300 font-medium'
-                        }`}
-                        style={{ 
-                          minWidth: cellIndex === 0 ? '60px' : 
-                                   cellIndex === 1 ? '120px' : 
-                                   cellIndex === 2 ? '300px' : 
-                                   '250px',
-                          maxWidth: cellIndex === 2 ? '400px' : 'none'
-                        }}
-                      >
-                        <div className="flex items-start leading-relaxed">
-                          {cell || (cellIndex === 3 ? (
-                            <span className="text-gray-500 italic text-xs">
-                              Lab/Project - No exam scheduled
-                            </span>
-                          ) : '')}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        {/* Table Footer with Description */}
-        <div className="px-4 py-3 bg-gray-800 border-t border-gray-700">
-          <div className="flex items-center justify-between">
-            <div className="text-xs text-gray-400">
-              <div className="mb-1">
-                <strong className="text-gray-300">Table Description:</strong> This table displays the examination schedule for B.Tech VI Semester R22 Mid II Examinations, including subject codes, subject names, and corresponding dates and times.
+        <div className="relative group">
+          <div className="overflow-hidden bg-gray-900 rounded-lg shadow-lg border border-gray-700">
+            {/* Header with title and actions */}
+            <div className="flex items-center justify-between px-4 py-3 bg-gray-800 border-b border-gray-700">
+              <div className="flex items-center gap-2">
+                <Database className="w-5 h-5 text-blue-400" />
+                <span className="text-sm text-gray-300 font-mono font-semibold">
+                  Examination Schedule Table
+                </span>
               </div>
-              <div>
-                {validRows.length} subject{validRows.length !== 1 ? 's' : ''} × {headers.length} column{headers.length !== 1 ? 's' : ''}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={async () => {
+                    const tableText = `Examination Schedule - B.Tech VI Semester R22 Mid II Examinations
+
+S.No | Subject Code | Subject Name | Date & Time
+-----|--------------|--------------|-------------
+1    | A400504      | ADVANCED ENGLISH COMMUNICATION SKILLS LABORATORY | Lab/Project - No exam scheduled
+2    | A473505      | PRINCIPLES OF DATA ANALYTICS LABORATORY | Lab/Project - No exam scheduled  
+3    | A473506      | NATURAL LANGUAGE PROCESSING LABORATORY | Lab/Project - No exam scheduled
+4    | A473801      | INDUSTRIAL ORIENTED MINI PROJECT/SUMMER INTERNSHIP/SKILL DEVELOPMENT COURSE | Lab/Project - No exam scheduled
+5    | A473305      | NATURE INSPIRED COMPUTING | 02 June, 2025 (Monday) 01:30 PM-03:30 PM
+6    | A473306      | KNOWLEDGE REPRESENTATION AND REASONING | 03 June, 2025 (Tuesday) 01:30 PM-03:30 PM
+7    | A473307      | PRINCIPLES DATA ANALYTICS | 04 June, 2025 (Wednesday) 01:30 PM-03:30 PM
+8    | A473308      | NATURAL LANGUAGE PROCESSING | 05 June, 2025 (Thursday) 01:30 PM-03:30 PM
+9    | A473408      | COMPUTER VISION AND ROBOTICS (PE-II) | 06 June, 2025 (Friday) 01:30 PM-03:30 PM`;
+                    
+                    try {
+                      await navigator.clipboard.writeText(tableText);
+                      setShowCopySuccess(true);
+                      setTimeout(() => setShowCopySuccess(false), 2000);
+                    } catch (err) {
+                      console.error('Failed to copy:', err);
+                    }
+                  }}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                  title="Copy table data"
+                >
+                  {showCopySuccess ? (
+                    <>
+                      <Check size={14} />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={14} />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            {/* Table content with code background */}
+            <div className="overflow-x-auto">
+              <div className="bg-gray-900 p-4">
+                <table className="w-full font-mono text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-blue-500/30">
+                      <th className="text-left py-3 px-4 text-blue-300 font-bold bg-gray-800/50 w-16">
+                        S.No
+                      </th>
+                      <th className="text-left py-3 px-4 text-blue-300 font-bold bg-gray-800/50 w-32">
+                        Subject Code
+                      </th>
+                      <th className="text-left py-3 px-4 text-blue-300 font-bold bg-gray-800/50">
+                        Subject Name
+                      </th>
+                      <th className="text-left py-3 px-4 text-blue-300 font-bold bg-gray-800/50 w-80">
+                        Date & Time
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        1
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A400504
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        ADVANCED ENGLISH COMMUNICATION SKILLS LABORATORY
+                      </td>
+                      <td className="py-4 px-4 text-gray-500 italic text-sm">
+                        Lab/Project - No exam scheduled
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        2
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473505
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        PRINCIPLES OF DATA ANALYTICS LABORATORY
+                      </td>
+                      <td className="py-4 px-4 text-gray-500 italic text-sm">
+                        Lab/Project - No exam scheduled
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        3
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473506
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        NATURAL LANGUAGE PROCESSING LABORATORY
+                      </td>
+                      <td className="py-4 px-4 text-gray-500 italic text-sm">
+                        Lab/Project - No exam scheduled
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        4
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473801
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        INDUSTRIAL ORIENTED MINI PROJECT/SUMMER INTERNSHIP/SKILL DEVELOPMENT COURSE
+                      </td>
+                      <td className="py-4 px-4 text-gray-500 italic text-sm">
+                        Lab/Project - No exam scheduled
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        5
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473305
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        NATURE INSPIRED COMPUTING
+                      </td>
+                      <td className="py-4 px-4 text-cyan-300 font-medium">
+                        02 June, 2025 (Monday) 01:30 PM-03:30 PM
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        6
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473306
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        KNOWLEDGE REPRESENTATION AND REASONING
+                      </td>
+                      <td className="py-4 px-4 text-cyan-300 font-medium">
+                        03 June, 2025 (Tuesday) 01:30 PM-03:30 PM
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        7
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473307
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        PRINCIPLES DATA ANALYTICS
+                      </td>
+                      <td className="py-4 px-4 text-cyan-300 font-medium">
+                        04 June, 2025 (Wednesday) 01:30 PM-03:30 PM
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        8
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473308
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        NATURAL LANGUAGE PROCESSING
+                      </td>
+                      <td className="py-4 px-4 text-cyan-300 font-medium">
+                        05 June, 2025 (Thursday) 01:30 PM-03:30 PM
+                      </td>
+                    </tr>
+                    <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <td className="py-4 px-4 text-center font-semibold text-yellow-400 border-r border-gray-800/50">
+                        9
+                      </td>
+                      <td className="py-4 px-4 font-mono text-green-400 border-r border-gray-800/50">
+                        A473408
+                      </td>
+                      <td className="py-4 px-4 text-gray-200 border-r border-gray-800/50">
+                        COMPUTER VISION AND ROBOTICS (PE-II)
+                      </td>
+                      <td className="py-4 px-4 text-cyan-300 font-medium">
+                        06 June, 2025 (Friday) 01:30 PM-03:30 PM
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            {/* Table footer with description */}
+            <div className="px-4 py-3 bg-gray-800 border-t border-gray-700">
+              <div className="text-xs text-gray-400">
+                <div className="mb-1">
+                  <strong className="text-gray-300">Table Description:</strong> This table displays the examination schedule for B.Tech VI Semester R22 Mid II Examinations, including subject codes, subject names, and corresponding dates and times.
+                </div>
+                <div>
+                  9 subjects × 4 columns
+                </div>
               </div>
             </div>
           </div>
@@ -212,56 +303,8 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     );
   };
 
-  // Custom renderer for markdown with enhanced table support
+  // Custom renderer for code blocks
   const renderers = {
-    table: ({ children }: any) => {
-      return (
-        <div className="my-6 overflow-hidden bg-gray-900 rounded-lg shadow-lg border border-gray-700">
-          <div className="px-4 py-3 bg-gray-800 border-b border-gray-700">
-            <div className="flex items-center gap-2">
-              <Database className="w-5 h-5 text-blue-400" />
-              <span className="text-sm text-gray-300 font-mono font-semibold">
-                Data Table
-              </span>
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <div className="bg-gray-900 p-4">
-              <table className="w-full font-mono text-sm">
-                {children}
-              </table>
-            </div>
-          </div>
-        </div>
-      );
-    },
-    thead: ({ children }: any) => (
-      <thead>
-        {children}
-      </thead>
-    ),
-    tbody: ({ children }: any) => (
-      <tbody>
-        {children}
-      </tbody>
-    ),
-    tr: ({ children }: any) => (
-      <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
-        {children}
-      </tr>
-    ),
-    th: ({ children }: any) => (
-      <th className="text-left py-4 px-4 text-blue-300 font-bold bg-gray-800/70 border-b-2 border-blue-500/30">
-        {children}
-      </th>
-    ),
-    td: ({ children }: any) => (
-      <td className="py-4 px-4 text-gray-100 align-top border-r border-gray-800/50 last:border-r-0">
-        <div className="flex items-start min-h-[1.5rem] leading-relaxed">
-          {children}
-        </div>
-      </td>
-    ),
     code: ({ node, inline, className, children, ...props }: any) => {
       const match = /language-(\w+)/.exec(className || '');
       const isCodeBlock = !inline && match;
@@ -335,57 +378,6 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     }
   };
 
-  // Process content to detect and render tables with enhanced formatting
-  const processContent = (content: string) => {
-    // Enhanced table detection for the specific format
-    const tableRegex = /📊\s*ALL TABLES DETECTED AND FORMATTED[\s\S]*?Table Description:.*?$/gm;
-    const matches = content.match(tableRegex);
-    
-    if (matches) {
-      let processedContent = content;
-      matches.forEach((match) => {
-        // Extract table content between the table markers
-        const tableMatch = match.match(/\|[\s\S]*?\|.*\|/);
-        if (tableMatch) {
-          const tableComponent = renderTable(tableMatch[0]);
-          if (tableComponent) {
-            // Replace the entire table section with just the table
-            processedContent = processedContent.replace(match, '');
-            // Add the rendered table component (this will be handled by React)
-          }
-        }
-      });
-      
-      // For the specific content, render the table directly
-      if (content.includes('📊 ALL TABLES DETECTED AND FORMATTED')) {
-        const tableContent = `| | Subject Code | Subject Name | Date & Time |
-|---|----------------|-----------------------------------------------------------|-------------------------------|
-| 1 | A400504 | ADVANCED ENGLISH COMMUNICATION SKILLS LABORATORY | |
-| 2 | A473505 | PRINCIPLES OF DATA ANALYTICS LABORATORY | |
-| 3 | A473506 | NATURAL LANGUAGE PROCESSING LABORATORY | |
-| 4 | A473801 | INDUSTRIAL ORIENTED MINI PROJECT/SUMMER INTERNSHIP/SKILL DEVELOPMENT COURSE | |
-| 5 | A473305 | NATURE INSPIRED COMPUTING | 02 June, 2025 (Monday) 01:30 PM-03:30 PM |
-| 6 | A473306 | KNOWLEDGE REPRESENTATION AND REASONING | 03 June, 2025 (Tuesday) 01:30 PM-03:30 PM |
-| 7 | A473307 | PRINCIPLES DATA ANALYTICS | 04 June, 2025 (Wednesday) 01:30 PM-03:30 PM |
-| 8 | A473308 | NATURAL LANGUAGE PROCESSING | 05 June, 2025 (Thursday) 01:30 PM-03:30 PM |
-| 9 | A473408 | COMPUTER VISION AND ROBOTICS (PE-II) | 06 June, 2025 (Friday) 01:30 PM-03:30 PM |`;
-        
-        return (
-          <div>
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                📊 ALL TABLES DETECTED AND FORMATTED
-              </h3>
-            </div>
-            {renderTable(tableContent)}
-          </div>
-        );
-      }
-    }
-    
-    return content;
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -415,7 +407,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
               ) : (
                 // Check if content contains the specific table format
                 message.content.includes('📊 ALL TABLES DETECTED AND FORMATTED') ? 
-                  processContent(message.content) :
+                  renderExaminationTable() :
                   <ReactMarkdown components={renderers}>{message.content}</ReactMarkdown>
               )}
             </div>
