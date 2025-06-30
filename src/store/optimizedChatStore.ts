@@ -17,6 +17,17 @@ export type Message = {
     error?: string;
     fromFileAnalysis?: boolean;
     fromHonig?: boolean;
+    confidence?: number;
+    databaseUsed?: boolean;
+    databaseSource?: string;
+    processingStages?: {
+      databaseCheck?: number;
+      queryProcessing?: number;
+      sourceRetrieval?: number;
+      contentScraping?: number;
+      synthesis?: number;
+      total: number;
+    };
   };
 };
 
