@@ -9,8 +9,8 @@ import ChatInput from './components/ChatInput';
 import LoginPrompt from './components/LoginPrompt';
 import BeforeUnloadWarning from './components/BeforeUnloadWarning';
 import SimpleFileUpload from './components/SimpleFileUpload';
-import { useChatStore } from './store/chatStore';
-import { supabase, upsertUserProfile } from './lib/supabase';
+import { useChatStore } from './store/optimizedChatStore';
+import { supabase, upsertUserProfile } from './lib/optimizedSupabase';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

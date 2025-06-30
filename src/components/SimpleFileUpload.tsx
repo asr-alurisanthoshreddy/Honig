@@ -2,14 +2,14 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, X, Loader2, File, Image, FileText, AlertTriangle, Clock, CreditCard, ExternalLink } from 'lucide-react';
 import { DirectGeminiUpload } from '../lib/fileAnalysis/directGeminiUpload';
-import { useChatStore } from '../store/chatStore';
+import { useChatStore } from '../store/optimizedChatStore';
 
 interface SimpleFileUploadProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const SimpleFileUpload: React.FC<SimpleFileUploadProps> = ({ isOpen, onClose }) => {
+const SimpleFileUpload: React.FC<SimpleFileUploadProps> = ({ isOpen, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
