@@ -31,7 +31,7 @@ if (isProduction) {
   honigService.init(supabase);
 }
 
-// Enhanced Gemini response with FULL conversation context and PROPER email formatting
+// Enhanced Gemini response with PERFECT email paragraph formatting
 async function getContextualGeminiResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
     const geminiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
@@ -57,7 +57,7 @@ CRITICAL FORMATTING RULES:
 
 1. **EMAIL/LETTER FORMATTING RULE (ONLY when specifically requested):**
    - ONLY format emails/letters in code blocks when user explicitly asks to "write email", "write letter", "compose email", "draft email", "write mail", etc.
-   - When formatting emails in code blocks, use this EXACT format with PROPER PARAGRAPHS:
+   - When formatting emails in code blocks, you MUST use this EXACT format with PROPER PARAGRAPHS:
    
    \`\`\`
    Subject: [Subject based on conversation]
@@ -66,45 +66,31 @@ CRITICAL FORMATTING RULES:
    
    Dear [Name],
    
-   [First paragraph of email body that references conversation context]
+   [First paragraph - 2-3 sentences about the main topic]
    
-   [Second paragraph with additional details]
+   [Second paragraph - 2-3 sentences with specific details]
    
-   [Third paragraph if needed]
+   [Third paragraph - 2-3 sentences with additional context]
+   
+   [Closing paragraph - 1-2 sentences with professional closing]
    
    Best regards,
    [Sender Name]
    \`\`\`
 
-   CRITICAL EMAIL FORMATTING REQUIREMENTS:
-   - Each paragraph must be on its own line with blank lines between paragraphs
-   - Use proper paragraph structure, NOT single long lines
-   - Break content into logical paragraphs (2-4 sentences each)
-   - Include proper spacing between all sections
-   - Reference conversation context in the email content
+   CRITICAL EMAIL PARAGRAPH REQUIREMENTS:
+   - Each paragraph MUST be separated by blank lines
+   - Each paragraph should be 2-3 sentences maximum
+   - Break content into logical, readable paragraphs
+   - Do NOT write long single paragraphs
+   - Use proper line breaks between all sections
+   - Reference conversation context naturally in the email
 
 2. **STRUCTURED RESPONSE FORMATTING (for all other responses):**
    - Use proper headings with ## and ###
    - Put each bullet point on its own unique line
    - Use proper spacing between sections
    - Structure information clearly with headings and subheadings
-   - Example format:
-   
-   ## Main Topic
-   
-   ### Subtopic 1
-   
-   • Bullet point 1
-   
-   • Bullet point 2
-   
-   • Bullet point 3
-   
-   ### Subtopic 2
-   
-   • Another bullet point
-   
-   • Another bullet point
 
 CONVERSATION CONTEXT RULES:
 - ALWAYS reference previous messages when relevant
@@ -142,41 +128,60 @@ The user is SPECIFICALLY asking you to write an email or letter. You MUST:
 1. Format the ENTIRE email/letter content in a code block using markdown
 2. Use proper email structure (Subject, To, From, Body)
 3. Base the content on the previous conversation context
-4. Make it professional and relevant to what was discussed
-5. Reference specific information from our conversation
-6. BREAK THE EMAIL BODY INTO PROPER PARAGRAPHS - DO NOT write everything in one long line
-7. Each paragraph should be 2-4 sentences and focus on one main point
-8. Use blank lines between paragraphs for proper spacing
+4. BREAK THE EMAIL BODY INTO PROPER PARAGRAPHS WITH BLANK LINES BETWEEN THEM
+5. Each paragraph should be 2-3 sentences maximum
+6. Reference specific information from our conversation
+7. Use professional language appropriate for the recipient
 
-MANDATORY EMAIL FORMAT WITH PROPER PARAGRAPHS:
+MANDATORY EMAIL FORMAT WITH PERFECT PARAGRAPH STRUCTURE:
+
 \`\`\`
-Subject: [Relevant Subject Based on Our Conversation]
-To: [Recipient]
-From: [Sender]
+Subject: [Create relevant subject based on our conversation]
+To: [Recipient from user's request]
+From: honig@honig.ai
 
-Dear [Name],
+Dear [Recipient Name],
 
-[First paragraph - Introduction and main purpose, referencing our conversation]
+[Opening paragraph - 2-3 sentences introducing the purpose and referencing our conversation]
 
-[Second paragraph - Key details and specific information from our discussion]
+[Main content paragraph 1 - 2-3 sentences with key information from our discussion]
 
-[Third paragraph - Additional context or next steps if needed]
+[Main content paragraph 2 - 2-3 sentences with additional details or context]
 
-[Closing paragraph - Professional closing statement]
+[Closing paragraph - 1-2 sentences with professional closing and next steps if needed]
 
 Best regards,
-[Sender Name]
+Honig AI Research Assistant
 \`\`\`
 
-CRITICAL PARAGRAPH REQUIREMENTS:
-- Each paragraph must be on its own line
-- Use blank lines between paragraphs
-- Break content into logical, readable paragraphs
-- Do NOT write the entire email body as one long paragraph
-- Each paragraph should have 2-4 sentences maximum
-- Focus each paragraph on one main idea or topic
+CRITICAL PARAGRAPH FORMATTING RULES:
+- Each paragraph MUST be on its own line
+- Use blank lines between ALL paragraphs
+- Maximum 3 sentences per paragraph
+- Each paragraph should focus on one main idea
+- Do NOT write long single paragraphs
+- The ENTIRE email must be inside the code block
+- Do not add any text outside the code block
 
-IMPORTANT: The ENTIRE email must be inside the code block. Do not add any text outside the code block except for a brief introduction.
+EXAMPLE OF PERFECT PARAGRAPH STRUCTURE:
+\`\`\`
+Subject: Report on ByteDance's OmniHuman-1 Technology
+To: president@whitehouse.gov
+From: honig@honig.ai
+
+Dear Mr. President,
+
+I am writing to bring to your attention a concerning development in artificial intelligence technology. Based on our recent discussion about deepfake capabilities, I wanted to formally report ByteDance's new OmniHuman-1 system.
+
+This advanced AI system can generate highly realistic deepfake videos using only a single reference image and audio clip. The technology appears to surpass existing deepfake systems in terms of realism and ease of use.
+
+Given the potential implications for national security and public trust, I believe this technology warrants immediate evaluation. The ability to create convincing fake videos could be misused for misinformation campaigns or other malicious purposes.
+
+I urge you to consider establishing a task force to assess this technology and develop appropriate regulatory responses.
+
+Best regards,
+Honig AI Research Assistant
+\`\`\`
 
 `;
     } else {
@@ -227,7 +232,7 @@ EXAMPLE FORMAT:
 
     contextPrompt += `Current user message: ${message}
 
-Provide a helpful response that maintains conversation context and follows all formatting rules above.`;
+Provide a helpful response that maintains conversation context and follows all formatting rules above. If this is an email request, ensure PERFECT paragraph structure with blank lines between paragraphs.`;
 
     const result = await model.generateContent([contextPrompt]);
     const response = await result.response;
