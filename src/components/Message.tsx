@@ -71,8 +71,157 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     }
   };
 
-  // Custom renderer for code blocks
+  // Enhanced table detection and rendering
+  const renderTable = (tableContent: string) => {
+    const lines = tableContent.trim().split('\n');
+    const tableLines = lines.filter(line => line.includes('|'));
+    
+    if (tableLines.length < 2) return null;
+
+    // Parse header
+    const headerLine = tableLines[0];
+    const headers = headerLine.split('|').map(h => h.trim()).filter(h => h);
+    
+    // Skip separator line (usually contains dashes)
+    const dataLines = tableLines.slice(2);
+    const rows = dataLines.map(line => 
+      line.split('|').map(cell => cell.trim()).filter(cell => cell)
+    );
+
+    return (
+      <div className="my-6 overflow-hidden bg-gray-900 rounded-lg shadow-lg border border-gray-700">
+        {/* Table Header */}
+        <div className="px-4 py-2 bg-gray-800 border-b border-gray-700">
+          <div className="flex items-center gap-2">
+            <Database className="w-4 h-4 text-blue-400" />
+            <span className="text-xs text-gray-300 font-mono uppercase">
+              Data Table
+            </span>
+          </div>
+        </div>
+        
+        {/* Table Content with Code Background */}
+        <div className="overflow-x-auto">
+          <div className="p-4 bg-gray-900">
+            <table className="w-full font-mono text-sm">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  {headers.map((header, index) => (
+                    <th 
+                      key={index} 
+                      className="text-left py-2 px-3 text-blue-300 font-semibold bg-gray-800/50 first:rounded-l last:rounded-r"
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, rowIndex) => (
+                  <tr 
+                    key={rowIndex} 
+                    className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors"
+                  >
+                    {row.map((cell, cellIndex) => (
+                      <td 
+                        key={cellIndex} 
+                        className="py-2 px-3 text-gray-100 align-top"
+                        style={{ 
+                          minWidth: cellIndex === 0 ? '200px' : 'auto',
+                          verticalAlign: 'top'
+                        }}
+                      >
+                        <div className="flex items-start">
+                          {cell}
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        {/* Table Footer */}
+        <div className="px-4 py-2 bg-gray-800 border-t border-gray-700">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-400">
+              {rows.length} row{rows.length !== 1 ? 's' : ''} × {headers.length} column{headers.length !== 1 ? 's' : ''}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  const tableText = [
+                    headers.join('\t'),
+                    ...rows.map(row => row.join('\t'))
+                  ].join('\n');
+                  navigator.clipboard.writeText(tableText);
+                }}
+                className="flex items-center gap-1 px-2 py-1 text-xs text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                title="Copy table data"
+              >
+                <Copy size={12} />
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Custom renderer for markdown with enhanced table support
   const renderers = {
+    table: ({ children }: any) => {
+      // Extract table content and render with custom styling
+      return (
+        <div className="my-6 overflow-hidden bg-gray-900 rounded-lg shadow-lg border border-gray-700">
+          <div className="px-4 py-2 bg-gray-800 border-b border-gray-700">
+            <div className="flex items-center gap-2">
+              <Database className="w-4 h-4 text-blue-400" />
+              <span className="text-xs text-gray-300 font-mono uppercase">
+                Data Table
+              </span>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <div className="p-4 bg-gray-900">
+              <table className="w-full font-mono text-sm">
+                {children}
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    },
+    thead: ({ children }: any) => (
+      <thead>
+        {children}
+      </thead>
+    ),
+    tbody: ({ children }: any) => (
+      <tbody>
+        {children}
+      </tbody>
+    ),
+    tr: ({ children }: any) => (
+      <tr className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+        {children}
+      </tr>
+    ),
+    th: ({ children }: any) => (
+      <th className="text-left py-3 px-4 text-blue-300 font-semibold bg-gray-800/50 border-b-2 border-blue-500/30">
+        {children}
+      </th>
+    ),
+    td: ({ children }: any) => (
+      <td className="py-3 px-4 text-gray-100 align-top border-r border-gray-800/50 last:border-r-0">
+        <div className="flex items-start min-h-[1.5rem]">
+          {children}
+        </div>
+      </td>
+    ),
     code: ({ node, inline, className, children, ...props }: any) => {
       const match = /language-(\w+)/.exec(className || '');
       const isCodeBlock = !inline && match;
@@ -146,6 +295,29 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     }
   };
 
+  // Process content to detect and render tables
+  const processContent = (content: string) => {
+    // Check if content contains table-like structure
+    const tableRegex = /\|.*\|[\s\S]*?\|.*\|/g;
+    const tables = content.match(tableRegex);
+    
+    if (tables) {
+      let processedContent = content;
+      tables.forEach((table, index) => {
+        const tableComponent = renderTable(table);
+        if (tableComponent) {
+          // Replace table markdown with a placeholder that ReactMarkdown will ignore
+          processedContent = processedContent.replace(table, `\n\n[TABLE_${index}]\n\n`);
+        }
+      });
+      
+      // For now, just use ReactMarkdown with custom renderers
+      return content;
+    }
+    
+    return content;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -173,7 +345,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
                   <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                 </div>
               ) : (
-                <ReactMarkdown components={renderers}>{message.content}</ReactMarkdown>
+                <ReactMarkdown components={renderers}>{processContent(message.content)}</ReactMarkdown>
               )}
             </div>
             
