@@ -1,0 +1,1001 @@
+id,created_at,trigger_type,trigger_words,response_text
+1,2025-06-02T12:48:44.752266,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+2,2025-06-02T12:48:44.752279,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+3,2025-06-02T12:48:44.752283,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+4,2025-06-02T12:48:44.752286,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+5,2025-06-02T12:48:44.752290,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+6,2025-06-02T12:48:44.752294,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+7,2025-06-02T12:48:44.752299,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+8,2025-06-02T12:48:44.752303,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+9,2025-06-02T12:48:44.752306,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+10,2025-06-02T12:48:44.752309,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+11,2025-06-02T12:48:44.752313,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+12,2025-06-02T12:48:44.752316,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+13,2025-06-02T12:48:44.752319,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+14,2025-06-02T12:48:44.752323,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+15,2025-06-02T12:48:44.752325,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+16,2025-06-02T12:48:44.752328,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+17,2025-06-02T12:48:44.752331,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+18,2025-06-02T12:48:44.752334,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+19,2025-06-02T12:48:44.752337,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+20,2025-06-02T12:48:44.752339,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+21,2025-06-02T12:48:44.752342,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+22,2025-06-02T12:48:44.752345,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+23,2025-06-02T12:48:44.752347,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+24,2025-06-02T12:48:44.752350,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+25,2025-06-02T12:48:44.752353,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+26,2025-06-02T12:48:44.752356,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+27,2025-06-02T12:48:44.752359,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+28,2025-06-02T12:48:44.752362,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+29,2025-06-02T12:48:44.752364,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+30,2025-06-02T12:48:44.752367,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+31,2025-06-02T12:48:44.752370,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+32,2025-06-02T12:48:44.752372,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+33,2025-06-02T12:48:44.752375,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+34,2025-06-02T12:48:44.752378,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+35,2025-06-02T12:48:44.752381,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+36,2025-06-02T12:48:44.752384,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+37,2025-06-02T12:48:44.752387,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+38,2025-06-02T12:48:44.752390,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+39,2025-06-02T12:48:44.752392,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+40,2025-06-02T12:48:44.752395,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+41,2025-06-02T12:48:44.752399,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+42,2025-06-02T12:48:44.752403,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+43,2025-06-02T12:48:44.752405,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+44,2025-06-02T12:48:44.752409,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+45,2025-06-02T12:48:44.752412,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+46,2025-06-02T12:48:44.752414,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+47,2025-06-02T12:48:44.752417,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+48,2025-06-02T12:48:44.752420,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+49,2025-06-02T12:48:44.752423,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+50,2025-06-02T12:48:44.752425,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+51,2025-06-02T12:48:44.752428,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+52,2025-06-02T12:48:44.752431,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+53,2025-06-02T12:48:44.752434,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+54,2025-06-02T12:48:44.752437,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+55,2025-06-02T12:48:44.752440,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+56,2025-06-02T12:48:44.752443,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+57,2025-06-02T12:48:44.752447,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+58,2025-06-02T12:48:44.752593,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+59,2025-06-02T12:48:44.752604,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+60,2025-06-02T12:48:44.752609,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+61,2025-06-02T12:48:44.752614,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+62,2025-06-02T12:48:44.752621,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+63,2025-06-02T12:48:44.752626,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+64,2025-06-02T12:48:44.752631,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+65,2025-06-02T12:48:44.752636,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+66,2025-06-02T12:48:44.752643,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+67,2025-06-02T12:48:44.752647,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+68,2025-06-02T12:48:44.752650,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+69,2025-06-02T12:48:44.752652,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+70,2025-06-02T12:48:44.752655,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+71,2025-06-02T12:48:44.752658,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+72,2025-06-02T12:48:44.752660,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+73,2025-06-02T12:48:44.752663,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+74,2025-06-02T12:48:44.752666,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+75,2025-06-02T12:48:44.752669,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+76,2025-06-02T12:48:44.752672,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+77,2025-06-02T12:48:44.752675,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+78,2025-06-02T12:48:44.752678,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+79,2025-06-02T12:48:44.752681,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+80,2025-06-02T12:48:44.752684,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+81,2025-06-02T12:48:44.752686,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+82,2025-06-02T12:48:44.752691,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+83,2025-06-02T12:48:44.752693,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+84,2025-06-02T12:48:44.752696,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+85,2025-06-02T12:48:44.752698,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+86,2025-06-02T12:48:44.752701,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+87,2025-06-02T12:48:44.752704,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+88,2025-06-02T12:48:44.752706,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+89,2025-06-02T12:48:44.752709,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+90,2025-06-02T12:48:44.752712,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+91,2025-06-02T12:48:44.752715,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+92,2025-06-02T12:48:44.752718,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+93,2025-06-02T12:48:44.752721,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+94,2025-06-02T12:48:44.752724,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+95,2025-06-02T12:48:44.752726,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+96,2025-06-02T12:48:44.752729,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+97,2025-06-02T12:48:44.752731,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+98,2025-06-02T12:48:44.752734,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+99,2025-06-02T12:48:44.752736,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+100,2025-06-02T12:48:44.752739,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+101,2025-06-02T12:48:44.752743,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+102,2025-06-02T12:48:44.752747,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+103,2025-06-02T12:48:44.752752,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+104,2025-06-02T12:48:44.752757,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+105,2025-06-02T12:48:44.752762,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+106,2025-06-02T12:48:44.752767,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+107,2025-06-02T12:48:44.752772,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+108,2025-06-02T12:48:44.752776,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+109,2025-06-02T12:48:44.752781,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+110,2025-06-02T12:48:44.752786,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+111,2025-06-02T12:48:44.752791,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+112,2025-06-02T12:48:44.752796,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+113,2025-06-02T12:48:44.752800,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+114,2025-06-02T12:48:44.752805,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+115,2025-06-02T12:48:44.752810,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+116,2025-06-02T12:48:44.752815,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+117,2025-06-02T12:48:44.752820,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+118,2025-06-02T12:48:44.752825,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+119,2025-06-02T12:48:44.752830,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+120,2025-06-02T12:48:44.752834,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+121,2025-06-02T12:48:44.752838,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+122,2025-06-02T12:48:44.752843,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+123,2025-06-02T12:48:44.752847,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+124,2025-06-02T12:48:44.752852,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+125,2025-06-02T12:48:44.752858,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+126,2025-06-02T12:48:44.752864,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+127,2025-06-02T12:48:44.752868,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+128,2025-06-02T12:48:44.752873,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+129,2025-06-02T12:48:44.752878,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+130,2025-06-02T12:48:44.752884,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+131,2025-06-02T12:48:44.752889,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+132,2025-06-02T12:48:44.752894,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+133,2025-06-02T12:48:44.752901,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+134,2025-06-02T12:48:44.752905,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+135,2025-06-02T12:48:44.752910,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+136,2025-06-02T12:48:44.752914,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+137,2025-06-02T12:48:44.752919,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+138,2025-06-02T12:48:44.752923,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+139,2025-06-02T12:48:44.752929,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+140,2025-06-02T12:48:44.752934,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+141,2025-06-02T12:48:44.752940,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+142,2025-06-02T12:48:44.752945,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+143,2025-06-02T12:48:44.752950,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+144,2025-06-02T12:48:44.752955,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+145,2025-06-02T12:48:44.752960,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+146,2025-06-02T12:48:44.752964,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+147,2025-06-02T12:48:44.752968,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+148,2025-06-02T12:48:44.752974,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+149,2025-06-02T12:48:44.752979,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+150,2025-06-02T12:48:44.752987,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+151,2025-06-02T12:48:44.752992,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+152,2025-06-02T12:48:44.752997,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+153,2025-06-02T12:48:44.753002,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+154,2025-06-02T12:48:44.753007,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+155,2025-06-02T12:48:44.753011,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+156,2025-06-02T12:48:44.753016,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+157,2025-06-02T12:48:44.753022,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+158,2025-06-02T12:48:44.753026,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+159,2025-06-02T12:48:44.753030,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+160,2025-06-02T12:48:44.753035,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+161,2025-06-02T12:48:44.753039,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+162,2025-06-02T12:48:44.753044,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+163,2025-06-02T12:48:44.753048,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+164,2025-06-02T12:48:44.753053,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+165,2025-06-02T12:48:44.753061,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+166,2025-06-02T12:48:44.753066,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+167,2025-06-02T12:48:44.753072,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+168,2025-06-02T12:48:44.753077,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+169,2025-06-02T12:48:44.753082,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+170,2025-06-02T12:48:44.753088,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+171,2025-06-02T12:48:44.753093,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+172,2025-06-02T12:48:44.753099,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+173,2025-06-02T12:48:44.753104,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+174,2025-06-02T12:48:44.753110,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+175,2025-06-02T12:48:44.753115,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+176,2025-06-02T12:48:44.753119,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+177,2025-06-02T12:48:44.753124,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+178,2025-06-02T12:48:44.753129,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+179,2025-06-02T12:48:44.753135,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+180,2025-06-02T12:48:44.753157,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+181,2025-06-02T12:48:44.753164,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+182,2025-06-02T12:48:44.753169,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+183,2025-06-02T12:48:44.753175,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+184,2025-06-02T12:48:44.753179,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+185,2025-06-02T12:48:44.753184,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+186,2025-06-02T12:48:44.753189,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+187,2025-06-02T12:48:44.753193,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+188,2025-06-02T12:48:44.753198,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+189,2025-06-02T12:48:44.753204,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+190,2025-06-02T12:48:44.753209,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+191,2025-06-02T12:48:44.753214,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+192,2025-06-02T12:48:44.753219,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+193,2025-06-02T12:48:44.753224,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+194,2025-06-02T12:48:44.753228,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+195,2025-06-02T12:48:44.753233,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+196,2025-06-02T12:48:44.753239,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+197,2025-06-02T12:48:44.753246,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+198,2025-06-02T12:48:44.753251,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+199,2025-06-02T12:48:44.753256,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+200,2025-06-02T12:48:44.753261,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+201,2025-06-02T12:48:44.753266,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+202,2025-06-02T12:48:44.753272,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+203,2025-06-02T12:48:44.753277,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+204,2025-06-02T12:48:44.753281,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+205,2025-06-02T12:48:44.753286,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+206,2025-06-02T12:48:44.753291,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+207,2025-06-02T12:48:44.753296,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+208,2025-06-02T12:48:44.753301,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+209,2025-06-02T12:48:44.753307,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+210,2025-06-02T12:48:44.753311,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+211,2025-06-02T12:48:44.753317,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+212,2025-06-02T12:48:44.753321,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+213,2025-06-02T12:48:44.753326,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+214,2025-06-02T12:48:44.753331,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+215,2025-06-02T12:48:44.753336,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+216,2025-06-02T12:48:44.753341,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+217,2025-06-02T12:48:44.753346,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+218,2025-06-02T12:48:44.753352,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+219,2025-06-02T12:48:44.753358,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+220,2025-06-02T12:48:44.753363,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+221,2025-06-02T12:48:44.753369,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+222,2025-06-02T12:48:44.753375,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+223,2025-06-02T12:48:44.753380,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+224,2025-06-02T12:48:44.753386,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+225,2025-06-02T12:48:44.753390,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+226,2025-06-02T12:48:44.753395,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+227,2025-06-02T12:48:44.753400,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+228,2025-06-02T12:48:44.753405,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+229,2025-06-02T12:48:44.753412,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+230,2025-06-02T12:48:44.753417,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+231,2025-06-02T12:48:44.753423,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+232,2025-06-02T12:48:44.753428,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+233,2025-06-02T12:48:44.753433,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+234,2025-06-02T12:48:44.753440,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+235,2025-06-02T12:48:44.753446,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+236,2025-06-02T12:48:44.753451,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+237,2025-06-02T12:48:44.753457,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+238,2025-06-02T12:48:44.753462,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+239,2025-06-02T12:48:44.753467,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+240,2025-06-02T12:48:44.753472,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+241,2025-06-02T12:48:44.753477,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+242,2025-06-02T12:48:44.753482,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+243,2025-06-02T12:48:44.753487,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+244,2025-06-02T12:48:44.753493,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+245,2025-06-02T12:48:44.753499,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+246,2025-06-02T12:48:44.753504,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+247,2025-06-02T12:48:44.753510,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+248,2025-06-02T12:48:44.753516,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+249,2025-06-02T12:48:44.753521,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+250,2025-06-02T12:48:44.753526,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+251,2025-06-02T12:48:44.753531,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+252,2025-06-02T12:48:44.753536,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+253,2025-06-02T12:48:44.753544,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+254,2025-06-02T12:48:44.753550,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+255,2025-06-02T12:48:44.753555,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+256,2025-06-02T12:48:44.753561,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+257,2025-06-02T12:48:44.753567,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+258,2025-06-02T12:48:44.753572,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+259,2025-06-02T12:48:44.753578,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+260,2025-06-02T12:48:44.753584,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+261,2025-06-02T12:48:44.753592,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+262,2025-06-02T12:48:44.753597,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+263,2025-06-02T12:48:44.753618,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+264,2025-06-02T12:48:44.753624,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+265,2025-06-02T12:48:44.753629,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+266,2025-06-02T12:48:44.753634,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+267,2025-06-02T12:48:44.753639,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+268,2025-06-02T12:48:44.753644,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+269,2025-06-02T12:48:44.753650,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+270,2025-06-02T12:48:44.753656,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+271,2025-06-02T12:48:44.753661,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+272,2025-06-02T12:48:44.753670,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+273,2025-06-02T12:48:44.753675,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+274,2025-06-02T12:48:44.753681,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+275,2025-06-02T12:48:44.753686,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+276,2025-06-02T12:48:44.753691,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+277,2025-06-02T12:48:44.753697,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+278,2025-06-02T12:48:44.753702,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+279,2025-06-02T12:48:44.753707,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+280,2025-06-02T12:48:44.753713,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+281,2025-06-02T12:48:44.753718,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+282,2025-06-02T12:48:44.753723,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+283,2025-06-02T12:48:44.753729,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+284,2025-06-02T12:48:44.753734,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+285,2025-06-02T12:48:44.753740,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+286,2025-06-02T12:48:44.753746,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+287,2025-06-02T12:48:44.753752,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+288,2025-06-02T12:48:44.753756,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+289,2025-06-02T12:48:44.753762,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+290,2025-06-02T12:48:44.753767,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+291,2025-06-02T12:48:44.753772,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+292,2025-06-02T12:48:44.753777,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+293,2025-06-02T12:48:44.753783,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+294,2025-06-02T12:48:44.753789,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+295,2025-06-02T12:48:44.753803,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+296,2025-06-02T12:48:44.753809,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+297,2025-06-02T12:48:44.753814,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+298,2025-06-02T12:48:44.753820,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+299,2025-06-02T12:48:44.753825,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+300,2025-06-02T12:48:44.753832,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+301,2025-06-02T12:48:44.753837,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+302,2025-06-02T12:48:44.753843,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+303,2025-06-02T12:48:44.753848,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+304,2025-06-02T12:48:44.753853,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+305,2025-06-02T12:48:44.753858,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+306,2025-06-02T12:48:44.753864,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+307,2025-06-02T12:48:44.753869,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+308,2025-06-02T12:48:44.753874,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+309,2025-06-02T12:48:44.753879,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+310,2025-06-02T12:48:44.753886,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+311,2025-06-02T12:48:44.753892,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+312,2025-06-02T12:48:44.753898,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+313,2025-06-02T12:48:44.753904,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+314,2025-06-02T12:48:44.753909,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+315,2025-06-02T12:48:44.753913,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+316,2025-06-02T12:48:44.753918,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+317,2025-06-02T12:48:44.753925,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+318,2025-06-02T12:48:44.753930,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+319,2025-06-02T12:48:44.753935,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+320,2025-06-02T12:48:44.753949,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+321,2025-06-02T12:48:44.753955,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+322,2025-06-02T12:48:44.753960,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+323,2025-06-02T12:48:44.753966,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+324,2025-06-02T12:48:44.753971,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+325,2025-06-02T12:48:44.753979,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+326,2025-06-02T12:48:44.753984,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+327,2025-06-02T12:48:44.753990,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+328,2025-06-02T12:48:44.753995,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+329,2025-06-02T12:48:44.754000,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+330,2025-06-02T12:48:44.754005,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+331,2025-06-02T12:48:44.754010,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+332,2025-06-02T12:48:44.754016,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+333,2025-06-02T12:48:44.754021,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+334,2025-06-02T12:48:44.754026,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+335,2025-06-02T12:48:44.754031,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+336,2025-06-02T12:48:44.754036,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+337,2025-06-02T12:48:44.754041,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+338,2025-06-02T12:48:44.754046,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+339,2025-06-02T12:48:44.754051,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+340,2025-06-02T12:48:44.754056,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+341,2025-06-02T12:48:44.754061,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+342,2025-06-02T12:48:44.754066,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+343,2025-06-02T12:48:44.754070,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+344,2025-06-02T12:48:44.754075,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+345,2025-06-02T12:48:44.754080,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+346,2025-06-02T12:48:44.754085,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+347,2025-06-02T12:48:44.754090,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+348,2025-06-02T12:48:44.754095,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+349,2025-06-02T12:48:44.754101,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+350,2025-06-02T12:48:44.754106,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+351,2025-06-02T12:48:44.754111,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+352,2025-06-02T12:48:44.754115,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+353,2025-06-02T12:48:44.754117,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+354,2025-06-02T12:48:44.754121,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+355,2025-06-02T12:48:44.754124,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+356,2025-06-02T12:48:44.754126,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+357,2025-06-02T12:48:44.754130,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+358,2025-06-02T12:48:44.754133,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+359,2025-06-02T12:48:44.754137,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+360,2025-06-02T12:48:44.754139,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+361,2025-06-02T12:48:44.754143,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+362,2025-06-02T12:48:44.754145,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+363,2025-06-02T12:48:44.754148,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+364,2025-06-02T12:48:44.754151,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+365,2025-06-02T12:48:44.754154,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+366,2025-06-02T12:48:44.754156,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+367,2025-06-02T12:48:44.754159,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+368,2025-06-02T12:48:44.754161,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+369,2025-06-02T12:48:44.754165,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+370,2025-06-02T12:48:44.754167,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+371,2025-06-02T12:48:44.754173,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+372,2025-06-02T12:48:44.754175,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+373,2025-06-02T12:48:44.754178,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+374,2025-06-02T12:48:44.754181,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+375,2025-06-02T12:48:44.754184,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+376,2025-06-02T12:48:44.754186,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+377,2025-06-02T12:48:44.754189,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+378,2025-06-02T12:48:44.754192,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+379,2025-06-02T12:48:44.754194,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+380,2025-06-02T12:48:44.754197,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+381,2025-06-02T12:48:44.754201,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+382,2025-06-02T12:48:44.754203,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+383,2025-06-02T12:48:44.754206,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+384,2025-06-02T12:48:44.754208,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+385,2025-06-02T12:48:44.754211,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+386,2025-06-02T12:48:44.754214,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+387,2025-06-02T12:48:44.754217,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+388,2025-06-02T12:48:44.754219,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+389,2025-06-02T12:48:44.754223,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+390,2025-06-02T12:48:44.754226,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+391,2025-06-02T12:48:44.754229,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+392,2025-06-02T12:48:44.754231,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+393,2025-06-02T12:48:44.754234,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+394,2025-06-02T12:48:44.754236,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+395,2025-06-02T12:48:44.754239,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+396,2025-06-02T12:48:44.754241,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+397,2025-06-02T12:48:44.754244,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+398,2025-06-02T12:48:44.754246,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+399,2025-06-02T12:48:44.754249,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+400,2025-06-02T12:48:44.754252,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+401,2025-06-02T12:48:44.754255,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+402,2025-06-02T12:48:44.754259,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+403,2025-06-02T12:48:44.754262,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+404,2025-06-02T12:48:44.754265,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+405,2025-06-02T12:48:44.754267,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+406,2025-06-02T12:48:44.754270,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+407,2025-06-02T12:48:44.754272,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+408,2025-06-02T12:48:44.754275,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+409,2025-06-02T12:48:44.754278,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+410,2025-06-02T12:48:44.754280,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+411,2025-06-02T12:48:44.754283,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+412,2025-06-02T12:48:44.754285,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+413,2025-06-02T12:48:44.754288,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+414,2025-06-02T12:48:44.754291,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+415,2025-06-02T12:48:44.754294,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+416,2025-06-02T12:48:44.754297,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+417,2025-06-02T12:48:44.754299,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+418,2025-06-02T12:48:44.754302,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+419,2025-06-02T12:48:44.754305,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+420,2025-06-02T12:48:44.754307,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+421,2025-06-02T12:48:44.754311,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+422,2025-06-02T12:48:44.754315,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+423,2025-06-02T12:48:44.754320,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+424,2025-06-02T12:48:44.754324,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+425,2025-06-02T12:48:44.754329,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+426,2025-06-02T12:48:44.754334,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+427,2025-06-02T12:48:44.754338,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+428,2025-06-02T12:48:44.754343,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+429,2025-06-02T12:48:44.754349,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+430,2025-06-02T12:48:44.754354,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+431,2025-06-02T12:48:44.754360,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+432,2025-06-02T12:48:44.754365,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+433,2025-06-02T12:48:44.754370,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+434,2025-06-02T12:48:44.754374,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+435,2025-06-02T12:48:44.754379,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+436,2025-06-02T12:48:44.754383,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+437,2025-06-02T12:48:44.754388,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+438,2025-06-02T12:48:44.754393,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+439,2025-06-02T12:48:44.754398,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+440,2025-06-02T12:48:44.754404,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+441,2025-06-02T12:48:44.754409,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+442,2025-06-02T12:48:44.754414,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+443,2025-06-02T12:48:44.754419,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+444,2025-06-02T12:48:44.754424,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+445,2025-06-02T12:48:44.754433,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+446,2025-06-02T12:48:44.754438,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+447,2025-06-02T12:48:44.754443,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+448,2025-06-02T12:48:44.754448,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+449,2025-06-02T12:48:44.754452,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+450,2025-06-02T12:48:44.754457,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+451,2025-06-02T12:48:44.754461,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+452,2025-06-02T12:48:44.754466,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+453,2025-06-02T12:48:44.754473,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+454,2025-06-02T12:48:44.754478,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+455,2025-06-02T12:48:44.754482,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+456,2025-06-02T12:48:44.754488,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+457,2025-06-02T12:48:44.754493,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+458,2025-06-02T12:48:44.754500,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+459,2025-06-02T12:48:44.754504,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+460,2025-06-02T12:48:44.754509,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+461,2025-06-02T12:48:44.754514,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+462,2025-06-02T12:48:44.754519,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+463,2025-06-02T12:48:44.754524,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+464,2025-06-02T12:48:44.754528,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+465,2025-06-02T12:48:44.754533,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+466,2025-06-02T12:48:44.754537,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+467,2025-06-02T12:48:44.754542,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+468,2025-06-02T12:48:44.754548,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+469,2025-06-02T12:48:44.754555,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+470,2025-06-02T12:48:44.754560,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+471,2025-06-02T12:48:44.754564,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+472,2025-06-02T12:48:44.754569,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+473,2025-06-02T12:48:44.754574,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+474,2025-06-02T12:48:44.754578,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+475,2025-06-02T12:48:44.754583,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+476,2025-06-02T12:48:44.754587,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+477,2025-06-02T12:48:44.754593,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+478,2025-06-02T12:48:44.754598,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+479,2025-06-02T12:48:44.754604,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+480,2025-06-02T12:48:44.754609,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+481,2025-06-02T12:48:44.754615,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+482,2025-06-02T12:48:44.754620,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+483,2025-06-02T12:48:44.754625,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+484,2025-06-02T12:48:44.754630,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+485,2025-06-02T12:48:44.754636,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+486,2025-06-02T12:48:44.754641,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+487,2025-06-02T12:48:44.754645,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+488,2025-06-02T12:48:44.754650,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+489,2025-06-02T12:48:44.754655,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+490,2025-06-02T12:48:44.754660,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+491,2025-06-02T12:48:44.754665,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+492,2025-06-02T12:48:44.754670,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+493,2025-06-02T12:48:44.754676,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+494,2025-06-02T12:48:44.754681,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+495,2025-06-02T12:48:44.754687,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+496,2025-06-02T12:48:44.754692,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+497,2025-06-02T12:48:44.754697,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+498,2025-06-02T12:48:44.754702,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+499,2025-06-02T12:48:44.754707,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+500,2025-06-02T12:48:44.754712,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+501,2025-06-02T12:48:44.754717,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+502,2025-06-02T12:48:44.754721,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+503,2025-06-02T12:48:44.754726,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+504,2025-06-02T12:48:44.754732,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+505,2025-06-02T12:48:44.754737,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+506,2025-06-02T12:48:44.754743,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+507,2025-06-02T12:48:44.754747,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+508,2025-06-02T12:48:44.754753,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+509,2025-06-02T12:48:44.754761,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+510,2025-06-02T12:48:44.754766,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+511,2025-06-02T12:48:44.754771,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+512,2025-06-02T12:48:44.754777,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+513,2025-06-02T12:48:44.754782,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+514,2025-06-02T12:48:44.754786,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+515,2025-06-02T12:48:44.754791,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+516,2025-06-02T12:48:44.754796,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+517,2025-06-02T12:48:44.754802,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+518,2025-06-02T12:48:44.754807,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+519,2025-06-02T12:48:44.754827,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+520,2025-06-02T12:48:44.754834,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+521,2025-06-02T12:48:44.754840,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+522,2025-06-02T12:48:44.754845,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+523,2025-06-02T12:48:44.754850,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+524,2025-06-02T12:48:44.754855,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+525,2025-06-02T12:48:44.754860,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+526,2025-06-02T12:48:44.754865,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+527,2025-06-02T12:48:44.754870,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+528,2025-06-02T12:48:44.754875,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+529,2025-06-02T12:48:44.754880,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+530,2025-06-02T12:48:44.754885,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+531,2025-06-02T12:48:44.754890,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+532,2025-06-02T12:48:44.754896,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+533,2025-06-02T12:48:44.754901,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+534,2025-06-02T12:48:44.754907,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+535,2025-06-02T12:48:44.754931,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+536,2025-06-02T12:48:44.754936,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+537,2025-06-02T12:48:44.754941,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+538,2025-06-02T12:48:44.754946,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+539,2025-06-02T12:48:44.754950,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+540,2025-06-02T12:48:44.754955,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+541,2025-06-02T12:48:44.755654,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+542,2025-06-02T12:48:44.755672,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+543,2025-06-02T12:48:44.755678,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+544,2025-06-02T12:48:44.755684,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+545,2025-06-02T12:48:44.755690,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+546,2025-06-02T12:48:44.755695,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+547,2025-06-02T12:48:44.755702,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+548,2025-06-02T12:48:44.755707,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+549,2025-06-02T12:48:44.755716,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+550,2025-06-02T12:48:44.755721,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+551,2025-06-02T12:48:44.755727,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+552,2025-06-02T12:48:44.755761,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+553,2025-06-02T12:48:44.755768,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+554,2025-06-02T12:48:44.755773,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+555,2025-06-02T12:48:44.755779,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+556,2025-06-02T12:48:44.755785,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+557,2025-06-02T12:48:44.755792,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+558,2025-06-02T12:48:44.755819,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+559,2025-06-02T12:48:44.755825,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+560,2025-06-02T12:48:44.755832,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+561,2025-06-02T12:48:44.755838,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+562,2025-06-02T12:48:44.755844,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+563,2025-06-02T12:48:44.755849,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+564,2025-06-02T12:48:44.755856,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+565,2025-06-02T12:48:44.755866,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+566,2025-06-02T12:48:44.755891,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+567,2025-06-02T12:48:44.755898,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+568,2025-06-02T12:48:44.755903,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+569,2025-06-02T12:48:44.755908,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+570,2025-06-02T12:48:44.755914,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+571,2025-06-02T12:48:44.755920,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+572,2025-06-02T12:48:44.755925,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+573,2025-06-02T12:48:44.755935,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+574,2025-06-02T12:48:44.755941,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+575,2025-06-02T12:48:44.755946,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+576,2025-06-02T12:48:44.755951,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+577,2025-06-02T12:48:44.755973,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+578,2025-06-02T12:48:44.755980,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+579,2025-06-02T12:48:44.755985,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+580,2025-06-02T12:48:44.755990,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+581,2025-06-02T12:48:44.756014,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+582,2025-06-02T12:48:44.756022,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+583,2025-06-02T12:48:44.756028,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+584,2025-06-02T12:48:44.756034,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+585,2025-06-02T12:48:44.756038,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+586,2025-06-02T12:48:44.756045,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+587,2025-06-02T12:48:44.756051,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+588,2025-06-02T12:48:44.756056,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+589,2025-06-02T12:48:44.756063,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+590,2025-06-02T12:48:44.756067,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+591,2025-06-02T12:48:44.756072,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+592,2025-06-02T12:48:44.756077,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+593,2025-06-02T12:48:44.756082,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+594,2025-06-02T12:48:44.756090,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+595,2025-06-02T12:48:44.756096,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+596,2025-06-02T12:48:44.756101,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+597,2025-06-02T12:48:44.756111,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+598,2025-06-02T12:48:44.756117,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+599,2025-06-02T12:48:44.756123,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+600,2025-06-02T12:48:44.756128,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+601,2025-06-02T12:48:44.756133,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+602,2025-06-02T12:48:44.756138,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+603,2025-06-02T12:48:44.756143,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+604,2025-06-02T12:48:44.756148,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+605,2025-06-02T12:48:44.756153,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+606,2025-06-02T12:48:44.756158,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+607,2025-06-02T12:48:44.756164,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+608,2025-06-02T12:48:44.756170,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+609,2025-06-02T12:48:44.756176,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+610,2025-06-02T12:48:44.756181,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+611,2025-06-02T12:48:44.756186,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+612,2025-06-02T12:48:44.756192,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+613,2025-06-02T12:48:44.756200,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+614,2025-06-02T12:48:44.756217,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+615,2025-06-02T12:48:44.756227,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+616,2025-06-02T12:48:44.756233,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+617,2025-06-02T12:48:44.756237,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+618,2025-06-02T12:48:44.756242,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+619,2025-06-02T12:48:44.756246,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+620,2025-06-02T12:48:44.756251,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+621,2025-06-02T12:48:44.756257,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+622,2025-06-02T12:48:44.756262,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+623,2025-06-02T12:48:44.756268,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+624,2025-06-02T12:48:44.756273,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+625,2025-06-02T12:48:44.756279,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+626,2025-06-02T12:48:44.756284,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+627,2025-06-02T12:48:44.756290,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+628,2025-06-02T12:48:44.756294,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+629,2025-06-02T12:48:44.756299,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+630,2025-06-02T12:48:44.756304,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+631,2025-06-02T12:48:44.756308,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+632,2025-06-02T12:48:44.756313,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+633,2025-06-02T12:48:44.756318,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+634,2025-06-02T12:48:44.756323,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+635,2025-06-02T12:48:44.756328,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+636,2025-06-02T12:48:44.756332,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+637,2025-06-02T12:48:44.756355,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+638,2025-06-02T12:48:44.756363,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+639,2025-06-02T12:48:44.756368,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+640,2025-06-02T12:48:44.756385,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+641,2025-06-02T12:48:44.756389,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+642,2025-06-02T12:48:44.756394,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+643,2025-06-02T12:48:44.756398,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+644,2025-06-02T12:48:44.756408,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+645,2025-06-02T12:48:44.756417,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+646,2025-06-02T12:48:44.756422,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+647,2025-06-02T12:48:44.756433,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+648,2025-06-02T12:48:44.756446,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+649,2025-06-02T12:48:44.756452,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+650,2025-06-02T12:48:44.756457,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+651,2025-06-02T12:48:44.756463,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+652,2025-06-02T12:48:44.756468,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+653,2025-06-02T12:48:44.756473,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+654,2025-06-02T12:48:44.756478,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+655,2025-06-02T12:48:44.756482,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+656,2025-06-02T12:48:44.756486,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+657,2025-06-02T12:48:44.756491,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+658,2025-06-02T12:48:44.756495,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+659,2025-06-02T12:48:44.756500,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+660,2025-06-02T12:48:44.756505,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+661,2025-06-02T12:48:44.756511,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+662,2025-06-02T12:48:44.756516,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+663,2025-06-02T12:48:44.756520,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+664,2025-06-02T12:48:44.756526,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+665,2025-06-02T12:48:44.756531,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+666,2025-06-02T12:48:44.756536,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+667,2025-06-02T12:48:44.756540,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+668,2025-06-02T12:48:44.756545,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+669,2025-06-02T12:48:44.756550,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+670,2025-06-02T12:48:44.756553,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+671,2025-06-02T12:48:44.756556,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+672,2025-06-02T12:48:44.756558,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+673,2025-06-02T12:48:44.756561,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+674,2025-06-02T12:48:44.756565,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+675,2025-06-02T12:48:44.756570,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+676,2025-06-02T12:48:44.756579,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+677,2025-06-02T12:48:44.756597,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+678,2025-06-02T12:48:44.756602,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+679,2025-06-02T12:48:44.756614,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+680,2025-06-02T12:48:44.756619,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+681,2025-06-02T12:48:44.756624,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+682,2025-06-02T12:48:44.756628,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+683,2025-06-02T12:48:44.756633,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+684,2025-06-02T12:48:44.756636,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+685,2025-06-02T12:48:44.756641,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+686,2025-06-02T12:48:44.756645,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+687,2025-06-02T12:48:44.756650,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+688,2025-06-02T12:48:44.756655,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+689,2025-06-02T12:48:44.756660,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+690,2025-06-02T12:48:44.756666,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+691,2025-06-02T12:48:44.756679,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+692,2025-06-02T12:48:44.756685,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+693,2025-06-02T12:48:44.756690,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+694,2025-06-02T12:48:44.756700,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+695,2025-06-02T12:48:44.756705,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+696,2025-06-02T12:48:44.756710,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+697,2025-06-02T12:48:44.756715,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+698,2025-06-02T12:48:44.756718,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+699,2025-06-02T12:48:44.756721,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+700,2025-06-02T12:48:44.756724,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+701,2025-06-02T12:48:44.756730,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+702,2025-06-02T12:48:44.756736,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+703,2025-06-02T12:48:44.756741,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+704,2025-06-02T12:48:44.756753,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+705,2025-06-02T12:48:44.756758,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+706,2025-06-02T12:48:44.756763,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+707,2025-06-02T12:48:44.756768,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+708,2025-06-02T12:48:44.756779,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+709,2025-06-02T12:48:44.756788,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+710,2025-06-02T12:48:44.756793,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+711,2025-06-02T12:48:44.756803,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+712,2025-06-02T12:48:44.756809,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+713,2025-06-02T12:48:44.756813,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+714,2025-06-02T12:48:44.756816,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+715,2025-06-02T12:48:44.756818,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+716,2025-06-02T12:48:44.756822,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+717,2025-06-02T12:48:44.756824,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+718,2025-06-02T12:48:44.756827,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+719,2025-06-02T12:48:44.756829,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+720,2025-06-02T12:48:44.756832,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+721,2025-06-02T12:48:44.756835,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+722,2025-06-02T12:48:44.756838,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+723,2025-06-02T12:48:44.756842,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+724,2025-06-02T12:48:44.756848,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+725,2025-06-02T12:48:44.756852,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+726,2025-06-02T12:48:44.756857,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+727,2025-06-02T12:48:44.756862,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+728,2025-06-02T12:48:44.756866,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+729,2025-06-02T12:48:44.756871,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+730,2025-06-02T12:48:44.756876,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+731,2025-06-02T12:48:44.756881,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+732,2025-06-02T12:48:44.756885,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+733,2025-06-02T12:48:44.756889,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+734,2025-06-02T12:48:44.756894,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+735,2025-06-02T12:48:44.756899,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+736,2025-06-02T12:48:44.756903,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+737,2025-06-02T12:48:44.756907,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+738,2025-06-02T12:48:44.756912,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+739,2025-06-02T12:48:44.756917,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+740,2025-06-02T12:48:44.756931,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+741,2025-06-02T12:48:44.756940,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+742,2025-06-02T12:48:44.756947,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+743,2025-06-02T12:48:44.756958,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+744,2025-06-02T12:48:44.756964,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+745,2025-06-02T12:48:44.756970,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+746,2025-06-02T12:48:44.756975,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+747,2025-06-02T12:48:44.756979,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+748,2025-06-02T12:48:44.756984,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+749,2025-06-02T12:48:44.756989,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+750,2025-06-02T12:48:44.756994,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+751,2025-06-02T12:48:44.756998,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+752,2025-06-02T12:48:44.757003,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+753,2025-06-02T12:48:44.757005,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+754,2025-06-02T12:48:44.757008,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+755,2025-06-02T12:48:44.757011,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+756,2025-06-02T12:48:44.757014,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+757,2025-06-02T12:48:44.757017,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+758,2025-06-02T12:48:44.757019,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+759,2025-06-02T12:48:44.757022,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+760,2025-06-02T12:48:44.757024,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+761,2025-06-02T12:48:44.757078,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+762,2025-06-02T12:48:44.757089,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+763,2025-06-02T12:48:44.757095,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+764,2025-06-02T12:48:44.757100,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+765,2025-06-02T12:48:44.757104,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+766,2025-06-02T12:48:44.757107,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+767,2025-06-02T12:48:44.757109,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+768,2025-06-02T12:48:44.757113,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+769,2025-06-02T12:48:44.757115,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+770,2025-06-02T12:48:44.757118,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+771,2025-06-02T12:48:44.757121,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+772,2025-06-02T12:48:44.757130,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+773,2025-06-02T12:48:44.757135,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+774,2025-06-02T12:48:44.757137,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+775,2025-06-02T12:48:44.757146,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+776,2025-06-02T12:48:44.757149,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+777,2025-06-02T12:48:44.757151,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+778,2025-06-02T12:48:44.757154,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+779,2025-06-02T12:48:44.757157,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+780,2025-06-02T12:48:44.757159,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+781,2025-06-02T12:48:44.757163,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+782,2025-06-02T12:48:44.757165,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+783,2025-06-02T12:48:44.757168,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+784,2025-06-02T12:48:44.757170,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+785,2025-06-02T12:48:44.757173,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+786,2025-06-02T12:48:44.757175,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+787,2025-06-02T12:48:44.757178,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+788,2025-06-02T12:48:44.757180,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+789,2025-06-02T12:48:44.757183,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+790,2025-06-02T12:48:44.757185,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+791,2025-06-02T12:48:44.757188,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+792,2025-06-02T12:48:44.757191,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+793,2025-06-02T12:48:44.757193,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+794,2025-06-02T12:48:44.757196,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+795,2025-06-02T12:48:44.757199,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+796,2025-06-02T12:48:44.757203,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+797,2025-06-02T12:48:44.757205,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+798,2025-06-02T12:48:44.757208,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+799,2025-06-02T12:48:44.757210,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+800,2025-06-02T12:48:44.757213,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+801,2025-06-02T12:48:44.757216,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+802,2025-06-02T12:48:44.757221,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+803,2025-06-02T12:48:44.757232,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+804,2025-06-02T12:48:44.757238,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+805,2025-06-02T12:48:44.757246,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+806,2025-06-02T12:48:44.757251,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+807,2025-06-02T12:48:44.757263,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+808,2025-06-02T12:48:44.757268,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+809,2025-06-02T12:48:44.757273,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+810,2025-06-02T12:48:44.757278,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+811,2025-06-02T12:48:44.757282,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+812,2025-06-02T12:48:44.757285,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+813,2025-06-02T12:48:44.757287,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+814,2025-06-02T12:48:44.757290,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+815,2025-06-02T12:48:44.757293,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+816,2025-06-02T12:48:44.757295,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+817,2025-06-02T12:48:44.757300,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+818,2025-06-02T12:48:44.757303,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+819,2025-06-02T12:48:44.757305,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+820,2025-06-02T12:48:44.757309,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+821,2025-06-02T12:48:44.757311,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+822,2025-06-02T12:48:44.757319,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+823,2025-06-02T12:48:44.757323,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+824,2025-06-02T12:48:44.757325,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+825,2025-06-02T12:48:44.757328,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+826,2025-06-02T12:48:44.757337,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+827,2025-06-02T12:48:44.757339,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+828,2025-06-02T12:48:44.757342,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+829,2025-06-02T12:48:44.757345,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+830,2025-06-02T12:48:44.757347,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+831,2025-06-02T12:48:44.757354,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+832,2025-06-02T12:48:44.757358,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+833,2025-06-02T12:48:44.757361,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+834,2025-06-02T12:48:44.757364,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+835,2025-06-02T12:48:44.757367,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+836,2025-06-02T12:48:44.757374,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+837,2025-06-02T12:48:44.757381,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+838,2025-06-02T12:48:44.757385,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+839,2025-06-02T12:48:44.757397,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+840,2025-06-02T12:48:44.757402,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+841,2025-06-02T12:48:44.757407,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+842,2025-06-02T12:48:44.757412,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+843,2025-06-02T12:48:44.757417,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+844,2025-06-02T12:48:44.757421,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+845,2025-06-02T12:48:44.757424,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+846,2025-06-02T12:48:44.757427,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+847,2025-06-02T12:48:44.757430,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+848,2025-06-02T12:48:44.757433,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+849,2025-06-02T12:48:44.757435,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+850,2025-06-02T12:48:44.757438,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+851,2025-06-02T12:48:44.757440,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+852,2025-06-02T12:48:44.757443,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+853,2025-06-02T12:48:44.757446,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+854,2025-06-02T12:48:44.757448,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+855,2025-06-02T12:48:44.757451,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+856,2025-06-02T12:48:44.757456,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+857,2025-06-02T12:48:44.757461,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+858,2025-06-02T12:48:44.757466,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+859,2025-06-02T12:48:44.757471,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+860,2025-06-02T12:48:44.757476,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+861,2025-06-02T12:48:44.757480,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+862,2025-06-02T12:48:44.757503,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+863,2025-06-02T12:48:44.757510,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+864,2025-06-02T12:48:44.757515,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+865,2025-06-02T12:48:44.757520,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+866,2025-06-02T12:48:44.757532,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+867,2025-06-02T12:48:44.757537,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+868,2025-06-02T12:48:44.757543,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+869,2025-06-02T12:48:44.757551,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+870,2025-06-02T12:48:44.757557,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+871,2025-06-02T12:48:44.757568,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+872,2025-06-02T12:48:44.757575,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+873,2025-06-02T12:48:44.757580,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+874,2025-06-02T12:48:44.757585,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+875,2025-06-02T12:48:44.757589,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+876,2025-06-02T12:48:44.757594,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+877,2025-06-02T12:48:44.757599,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+878,2025-06-02T12:48:44.757603,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+879,2025-06-02T12:48:44.757608,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+880,2025-06-02T12:48:44.757612,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+881,2025-06-02T12:48:44.757617,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+882,2025-06-02T12:48:44.757622,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+883,2025-06-02T12:48:44.757627,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+884,2025-06-02T12:48:44.757632,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+885,2025-06-02T12:48:44.757638,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+886,2025-06-02T12:48:44.757642,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+887,2025-06-02T12:48:44.757650,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+888,2025-06-02T12:48:44.757654,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+889,2025-06-02T12:48:44.757659,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+890,2025-06-02T12:48:44.757671,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+891,2025-06-02T12:48:44.757677,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+892,2025-06-02T12:48:44.757681,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+893,2025-06-02T12:48:44.757686,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+894,2025-06-02T12:48:44.757690,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+895,2025-06-02T12:48:44.757695,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+896,2025-06-02T12:48:44.757700,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+897,2025-06-02T12:48:44.757704,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+898,2025-06-02T12:48:44.757710,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+899,2025-06-02T12:48:44.757724,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+900,2025-06-02T12:48:44.757730,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+901,2025-06-02T12:48:44.757738,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+902,2025-06-02T12:48:44.757743,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+903,2025-06-02T12:48:44.757753,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+904,2025-06-02T12:48:44.757760,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+905,2025-06-02T12:48:44.757765,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+906,2025-06-02T12:48:44.757769,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+907,2025-06-02T12:48:44.757773,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+908,2025-06-02T12:48:44.757776,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+909,2025-06-02T12:48:44.757778,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+910,2025-06-02T12:48:44.757781,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+911,2025-06-02T12:48:44.757787,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+912,2025-06-02T12:48:44.757791,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+913,2025-06-02T12:48:44.757796,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+914,2025-06-02T12:48:44.757801,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+915,2025-06-02T12:48:44.757805,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+916,2025-06-02T12:48:44.757810,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+917,2025-06-02T12:48:44.757815,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+918,2025-06-02T12:48:44.757819,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+919,2025-06-02T12:48:44.757824,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+920,2025-06-02T12:48:44.757829,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+921,2025-06-02T12:48:44.757834,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+922,2025-06-02T12:48:44.757842,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+923,2025-06-02T12:48:44.757847,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+924,2025-06-02T12:48:44.757853,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+925,2025-06-02T12:48:44.757858,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+926,2025-06-02T12:48:44.757863,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+927,2025-06-02T12:48:44.757867,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+928,2025-06-02T12:48:44.757872,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+929,2025-06-02T12:48:44.757877,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+930,2025-06-02T12:48:44.757894,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+931,2025-06-02T12:48:44.757899,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+932,2025-06-02T12:48:44.757904,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+933,2025-06-02T12:48:44.757912,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+934,2025-06-02T12:48:44.757917,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+935,2025-06-02T12:48:44.757928,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+936,2025-06-02T12:48:44.757933,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+937,2025-06-02T12:48:44.757940,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+938,2025-06-02T12:48:44.757944,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+939,2025-06-02T12:48:44.757949,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+940,2025-06-02T12:48:44.757954,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+941,2025-06-02T12:48:44.757959,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+942,2025-06-02T12:48:44.757964,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+943,2025-06-02T12:48:44.757969,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+944,2025-06-02T12:48:44.757974,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+945,2025-06-02T12:48:44.757978,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+946,2025-06-02T12:48:44.757983,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+947,2025-06-02T12:48:44.757987,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+948,2025-06-02T12:48:44.757992,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+949,2025-06-02T12:48:44.758001,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+950,2025-06-02T12:48:44.758015,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+951,2025-06-02T12:48:44.758022,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+952,2025-06-02T12:48:44.758027,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+953,2025-06-02T12:48:44.758032,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+954,2025-06-02T12:48:44.758042,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+955,2025-06-02T12:48:44.758047,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+956,2025-06-02T12:48:44.758051,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+957,2025-06-02T12:48:44.758054,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+958,2025-06-02T12:48:44.758056,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+959,2025-06-02T12:48:44.758059,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+960,2025-06-02T12:48:44.758062,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+961,2025-06-02T12:48:44.758065,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+962,2025-06-02T12:48:44.758071,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+963,2025-06-02T12:48:44.758074,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+964,2025-06-02T12:48:44.758077,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+965,2025-06-02T12:48:44.758081,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+966,2025-06-02T12:48:44.758084,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+967,2025-06-02T12:48:44.758090,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+968,2025-06-02T12:48:44.758092,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+969,2025-06-02T12:48:44.758095,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+970,2025-06-02T12:48:44.758097,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+971,2025-06-02T12:48:44.758103,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+972,2025-06-02T12:48:44.758106,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+973,2025-06-02T12:48:44.758109,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+974,2025-06-02T12:48:44.758122,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+975,2025-06-02T12:48:44.758125,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+976,2025-06-02T12:48:44.758128,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+977,2025-06-02T12:48:44.758130,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+978,2025-06-02T12:48:44.758133,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+979,2025-06-02T12:48:44.758135,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+980,2025-06-02T12:48:44.758138,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+981,2025-06-02T12:48:44.758140,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+982,2025-06-02T12:48:44.758143,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+983,2025-06-02T12:48:44.758146,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+984,2025-06-02T12:48:44.758148,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+985,2025-06-02T12:48:44.758151,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+986,2025-06-02T12:48:44.758154,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+987,2025-06-02T12:48:44.758156,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
+988,2025-06-02T12:48:44.758160,feedback_negative,"{bad,terrible,not good,worst}",I'm sorry to hear that. I'll try to improve.
+989,2025-06-02T12:48:44.758163,greeting,"{hi,hello,hey,good morning,good evening}",Hello! How can I help you today?
+990,2025-06-02T12:48:44.758165,greeting,"{yo,hiya,howdy,what's up,sup}",Hey there! What's up?
+991,2025-06-02T12:48:44.758168,goodbye,"{bye,goodbye,see you,later,cya}",Goodbye! Have a great day!
+992,2025-06-02T12:48:44.758170,goodbye,"{take care,farewell,see ya}",Take care! Talk to you soon.
+993,2025-06-02T12:48:44.758173,thanks,"{thanks,thank you,thx,ty}",You're welcome! 😊
+994,2025-06-02T12:48:44.758179,thanks,"{much appreciated,thanks a lot}",Glad I could help!
+995,2025-06-02T12:48:44.758182,affirmation,"{yes,yeah,yep,of course,sure}",Great! Let's continue.
+996,2025-06-02T12:48:44.758186,affirmation,"{absolutely,definitely,sure thing}","Perfect, let's do it."
+997,2025-06-02T12:48:44.758189,negation,"{no,nope,nah,not really}",No worries! Let me know if you change your mind.
+998,2025-06-02T12:48:44.758192,help,"{help,assist,need help,can you help,i need assistance}",Sure! I'm here to assist. What do you need help with?
+999,2025-06-02T12:48:44.758195,confusion,"{what,huh,idk,what do you mean,i don't get it}",Let me explain that more clearly...
+1000,2025-06-02T12:48:44.758197,feedback_positive,"{great,awesome,cool,nice,well done}",Thanks! Glad you liked it.
