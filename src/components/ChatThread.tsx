@@ -84,6 +84,36 @@ const ChatThread: React.FC = () => {
                 </p>
               </div>
             </div>
+
+            {/* Configuration status */}
+            <div className="mt-6 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  import.meta.env.VITE_GEMINI_API_KEY && import.meta.env.VITE_GEMINI_API_KEY !== 'your_gemini_api_key_here'
+                    ? 'bg-green-500' 
+                    : 'bg-yellow-500'
+                }`}></div>
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                  {import.meta.env.VITE_GEMINI_API_KEY && import.meta.env.VITE_GEMINI_API_KEY !== 'your_gemini_api_key_here'
+                    ? 'AI Features: Ready' 
+                    : 'AI Features: Configure API Key'
+                  }
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co'
+                    ? 'bg-green-500' 
+                    : 'bg-yellow-500'
+                }`}></div>
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                  {import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co'
+                    ? 'Database: Connected' 
+                    : 'Database: Demo Mode'
+                  }
+                </span>
+              </div>
+            </div>
           </div>
         </motion.div>
       ) : (

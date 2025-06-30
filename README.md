@@ -2,47 +2,73 @@
 
 Honig is a sophisticated AI assistant that leverages real-time web search and Retrieval-Augmented Generation (RAG) to deliver accurate and context-aware answers. The system uses a dual-stage Gemini pipeline for optimal results.
 
-## 🚨 **IMPORTANT: Setup Required**
+## 🚀 Live Demo
 
-**Before using this application, you MUST configure your Supabase credentials:**
+**Deployed Application:** https://charming-pithivier-97db65.netlify.app
 
-1. **Create a Supabase Project**: Go to [supabase.com](https://supabase.com) and create a new project
-2. **Get Your Credentials**: 
-   - Navigate to your project dashboard
-   - Go to Settings → API
-   - Copy your Project URL and anon/public key
-3. **Update Environment Variables**: 
-   - Open the `.env` file in your project root
-   - Replace `your_supabase_project_url_here` with your actual Supabase URL
-   - Replace `your_supabase_anon_key_here` with your actual anon key
-4. **Restart the Development Server**: Run `npm run dev` again after updating the `.env` file
+The application is deployed and ready to use! You can:
+- ✅ **Try it immediately** - The app works in demo mode without any setup
+- ✅ **Explore the interface** - See all features and capabilities
+- ✅ **Test basic functionality** - Chat interface, file upload, dark mode
+- ⚙️ **Configure for full features** - Add API keys for AI capabilities
 
-## 🧠 How Honig Works
+## 🎯 Quick Start (No Setup Required)
 
-Honig uses an intelligent dual-stage processing pipeline:
+1. **Visit the live demo**: https://charming-pithivier-97db65.netlify.app
+2. **Explore the interface** - Try the chat, toggle dark mode, explore features
+3. **See the app in action** - All UI components are fully functional
 
-### Stage 1: Query Processing with Gemini
-- Analyzes and refines the user's raw query
-- Determines query type (factual, opinion, news, technical, general)
-- Selects optimal target sources based on query characteristics
-- Generates refined search terms for better results
+## 🔧 Full Setup (For AI Features)
 
-### Stage 2: Intelligent Source Retrieval
-Based on the query type, Honig targets specific sources:
+To unlock AI capabilities and real-time search:
 
-- **📚 Wikipedia** - For fact-based or entity-specific queries
-- **💭 Reddit & Quora** - For opinion-based or community-driven questions  
-- **🗞️ News Sources** - For current events and recent developments
-- **🔬 Academic Sources** - For technical and scientific topics
-- **🌐 General Forums** - For broader community insights
+### 1. Clone the Repository
+```bash
+git clone <your-repository-url>
+cd honig
+npm install
+```
 
-### Stage 3: Content Synthesis with Gemini
-- Scrapes and processes content from retrieved sources
-- Uses Gemini again to synthesize a comprehensive response
-- Provides clear source attribution and citations
-- Ensures accuracy and relevance
+### 2. Configure Environment Variables
+Create a `.env` file in the project root:
 
-## 🚀 Features
+```env
+# Required for AI Features
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+
+# Required for Database Features (Optional)
+VITE_SUPABASE_URL=your_supabase_url_here
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+
+# Optional: Enhanced Search Capabilities
+VITE_SERPER_API_KEY=your_serper_api_key_here
+VITE_NEWS_API_KEY=your_newsapi_key_here
+```
+
+### 3. Get Your API Keys
+
+#### **Gemini API Key (Required for AI)**
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a new API key
+3. Add to `.env` as `VITE_GEMINI_API_KEY`
+
+#### **Supabase Setup (Optional - for user accounts)**
+1. Visit [supabase.com](https://supabase.com)
+2. Create a new project
+3. Go to Settings → API
+4. Copy Project URL and anon key
+5. Add to `.env` as `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+
+#### **Search APIs (Optional - for enhanced search)**
+- **Serper API**: [serper.dev](https://serper.dev) - For Google Search
+- **NewsAPI**: [newsapi.org](https://newsapi.org) - For news sources
+
+### 4. Run the Application
+```bash
+npm run dev
+```
+
+## 🌟 Features
 
 ### 🎯 **Intelligent Query Classification**
 - Automatically detects query intent and type
@@ -92,94 +118,6 @@ Based on the query type, Honig targets specific sources:
 - **Tailwind CSS** - Modern styling
 - **Framer Motion** - Smooth animations
 
-## 📋 Prerequisites
-
-- Node.js 18+ and npm
-- Supabase account and project
-- Google Gemini API key (required)
-- Serper.dev API key (recommended)
-- NewsAPI key (recommended)
-
-## 🚀 Quick Start
-
-### 1. Clone and Install
-```bash
-git clone <repository-url>
-cd honig
-npm install
-```
-
-### 2. **CRITICAL: Supabase Setup**
-**The application will not work without proper Supabase configuration:**
-
-1. **Create Supabase Project**:
-   - Go to [supabase.com](https://supabase.com)
-   - Click "New Project"
-   - Choose your organization and create the project
-
-2. **Get Your Credentials**:
-   - In your Supabase dashboard, go to Settings → API
-   - Copy the "Project URL" 
-   - Copy the "anon public" key
-
-3. **Configure Environment Variables**:
-   ```env
-   # Replace with your actual Supabase credentials
-   VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-anon-key-here
-   ```
-
-4. **Apply Database Schema**:
-   - The database migrations will be automatically applied
-   - Ensure your Supabase project has the required tables (users, conversations, queries, responses)
-
-### 3. Environment Setup
-Copy `.env.example` to `.env` and configure:
-
-```env
-# Supabase Configuration (REQUIRED)
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# AI/LLM Configuration (REQUIRED)
-VITE_GEMINI_API_KEY=your_gemini_api_key
-
-# Search APIs for Enhanced Capabilities (RECOMMENDED)
-VITE_SERPER_API_KEY=your_serper_api_key
-VITE_NEWS_API_KEY=your_newsapi_key
-```
-
-### 4. Start Development
-```bash
-npm run dev
-```
-
-**If you see "Failed to fetch" errors, double-check your Supabase credentials in the `.env` file.**
-
-## 🔧 API Keys Setup
-
-### **Supabase Setup (REQUIRED)**
-1. Visit [supabase.com](https://supabase.com)
-2. Create a new project
-3. Go to Settings → API
-4. Copy Project URL and anon key
-5. Add to `.env` as `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
-
-### **Gemini API Key (REQUIRED)**
-1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create a new API key
-3. Add to `.env` as `VITE_GEMINI_API_KEY`
-
-### **Serper API Key (RECOMMENDED)**
-1. Sign up at [Serper.dev](https://serper.dev)
-2. Get your API key from the dashboard
-3. Add to `.env` as `VITE_SERPER_API_KEY`
-
-### **NewsAPI Key (RECOMMENDED)**
-1. Register at [NewsAPI.org](https://newsapi.org)
-2. Get your free API key
-3. Add to `.env` as `VITE_NEWS_API_KEY`
-
 ## 🎯 Usage Examples
 
 ### **Factual Queries** (→ Wikipedia, Academic)
@@ -210,7 +148,7 @@ npm run dev
 "Best practices for React performance"
 ```
 
-## 🏗 Honig Architecture
+## 🏗 Architecture
 
 ### **Query Processing Pipeline**
 1. **Input Analysis**: Gemini analyzes the raw user query
@@ -230,37 +168,40 @@ npm run dev
 - **Gemini Synthesis**: Second Gemini call for comprehensive response
 - **Citation Engine**: Automatic source attribution
 
+## 🚀 Deployment
+
+The application is automatically deployed to Netlify and includes:
+
+- ✅ **Production-ready build** with optimized assets
+- ✅ **Environment variable support** for API keys
+- ✅ **Graceful fallbacks** when APIs aren't configured
+- ✅ **Mobile-responsive design** for all devices
+- ✅ **Dark mode support** with system preference detection
+
+### **Deploy Your Own**
+
+1. **Fork this repository**
+2. **Connect to Netlify** (or your preferred hosting platform)
+3. **Set environment variables** in your hosting platform's dashboard
+4. **Deploy** - The app will work immediately, with full features when configured
+
 ## 🛠 Troubleshooting
 
-### **"Failed to fetch" Error**
-This error typically means your Supabase credentials are incorrect or missing:
+### **App Shows Blank Page**
+- Check browser console for JavaScript errors
+- Ensure environment variables are properly set
+- Try clearing browser cache and refreshing
 
-1. Check your `.env` file has the correct `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
-2. Verify the credentials in your Supabase dashboard (Settings → API)
-3. Restart your development server after updating `.env`
-4. Ensure your Supabase project is active and not paused
-
-### **Honig Not Working**
+### **AI Features Not Working**
 1. Verify your Gemini API key is valid and properly configured
-2. Check that at least one search provider (Serper or NewsAPI) is configured
-3. Ensure your API keys have sufficient quota/credits
+2. Check that the API key starts with "AIza"
+3. Ensure you have sufficient quota/credits
 4. Check the browser console for specific error messages
 
 ### **Database Connection Issues**
 1. Verify your Supabase project has the required tables
 2. Check that Row Level Security policies are properly configured
 3. Ensure your database migrations have been applied
-
-## 🚀 Deployment
-
-### **Netlify Deployment**
-```bash
-npm run build
-# Deploy dist/ folder to Netlify
-```
-
-### **Environment Variables**
-Ensure all API keys are configured in your deployment environment.
 
 ## 🤝 Contributing
 
@@ -284,3 +225,5 @@ For issues and questions:
 ---
 
 **Honig: Intelligent Research at the Speed of Thought** 🧠⚡
+
+**Live Demo**: https://charming-pithivier-97db65.netlify.app

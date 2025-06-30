@@ -26,7 +26,21 @@ function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Check if we're in a configured environment
+  const isConfigured = import.meta.env.VITE_SUPABASE_URL && 
+                      import.meta.env.VITE_SUPABASE_URL !== 'https://placeholder.supabase.co' &&
+                      import.meta.env.VITE_SUPABASE_ANON_KEY && 
+                      import.meta.env.VITE_SUPABASE_ANON_KEY !== 'placeholder-key';
+
   useEffect(() => {
+    if (!isConfigured) {
+      // Skip auth setup if not configured
+      setUserId(null);
+      setGuestMode(true);
+      setIsLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('Initial session:', session?.user?.id);
       setSession(session);
@@ -131,7 +145,7 @@ function App() {
       subscription.unsubscribe();
       window.fetch = originalFetch; // Restore original fetch
     };
-  }, [setUserId, loadConversations, setGuestMode]);
+  }, [setUserId, loadConversations, setGuestMode, isConfigured]);
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -155,6 +169,10 @@ function App() {
   }, [darkMode]);
 
   const handleLoginRequired = () => {
+    if (!isConfigured) {
+      alert('Authentication is not configured. Please set up your Supabase credentials to use login features.');
+      return;
+    }
     setShowLoginPrompt(true);
   };
 
@@ -178,6 +196,10 @@ function App() {
   };
 
   const handleLoginClick = () => {
+    if (!isConfigured) {
+      alert('Authentication is not configured. Please set up your Supabase credentials to use login features.');
+      return;
+    }
     setShowAuthModal(true);
     setAuthError(null); // Clear any previous errors
   };
@@ -239,8 +261,8 @@ function App() {
         />
       )}
 
-      {/* Auth Modal */}
-      {showAuthModal && (
+      {/* Auth Modal - only show if configured */}
+      {showAuthModal && isConfigured && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
@@ -348,6 +370,23 @@ function App() {
                   },
                 }}
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Configuration Notice */}
+      {!isConfigured && (
+        <div className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-sm">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <p className="text-sm font-medium">Demo Mode</p>
+              <p className="text-xs mt-1 opacity-90">
+                Configure your API keys to unlock full functionality. See README.md for setup instructions.
+              </p>
             </div>
           </div>
         </div>

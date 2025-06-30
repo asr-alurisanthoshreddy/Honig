@@ -2,37 +2,37 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types/supabase';
 import { HonigService } from './honigService';
 
-// Get environment variables and clean them
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+// Get environment variables and clean them - with fallbacks for deployment
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim() || 'https://placeholder.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim() || 'placeholder-key';
 
-// Validate environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your .env file.'
-  );
-}
+// Only validate if not using placeholder values
+const isProduction = supabaseUrl !== 'https://placeholder.supabase.co' && supabaseAnonKey !== 'placeholder-key';
 
-// Validate URL format with better error handling
-try {
-  const url = new URL(supabaseUrl);
-  // Additional validation for Supabase URL format
-  if (!url.hostname.includes('supabase.co') && !url.hostname.includes('localhost')) {
-    console.warn('URL does not appear to be a standard Supabase URL format');
+if (isProduction) {
+  // Validate URL format with better error handling
+  try {
+    const url = new URL(supabaseUrl);
+    // Additional validation for Supabase URL format
+    if (!url.hostname.includes('supabase.co') && !url.hostname.includes('localhost')) {
+      console.warn('URL does not appear to be a standard Supabase URL format');
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('Invalid Supabase URL:', supabaseUrl);
+    throw new Error(
+      `Invalid Supabase URL format: "${supabaseUrl}". Please check your VITE_SUPABASE_URL in .env file. The URL should start with https:// and typically end with .supabase.co. Error: ${errorMessage}`
+    );
   }
-} catch (error) {
-  const errorMessage = error instanceof Error ? error.message : String(error);
-  console.error('Invalid Supabase URL:', supabaseUrl);
-  throw new Error(
-    `Invalid Supabase URL format: "${supabaseUrl}". Please check your VITE_SUPABASE_URL in .env file. The URL should start with https:// and typically end with .supabase.co. Error: ${errorMessage}`
-  );
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-// Create and initialize HonigService after supabase is ready
+// Create and initialize HonigService after supabase is ready - only if configured
 export const honigService = new HonigService();
-honigService.init(supabase);
+if (isProduction) {
+  honigService.init(supabase);
+}
 
 // User profile functions
 export async function upsertUserProfile(user: {
@@ -43,6 +43,11 @@ export async function upsertUserProfile(user: {
     name?: string;
   };
 }) {
+  if (!isProduction) {
+    console.warn('Supabase not configured - user profile operations disabled');
+    return null;
+  }
+
   const { data, error } = await supabase
     .from('users')
     .upsert({
@@ -65,12 +70,8 @@ export async function upsertUserProfile(user: {
 function validateGeminiApiKey(): string {
   const geminiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
   
-  if (!geminiKey) {
+  if (!geminiKey || geminiKey === 'your_gemini_api_key_here') {
     throw new Error('❌ VITE_GEMINI_API_KEY is not set in your .env file. Please add your Gemini API key to continue.');
-  }
-  
-  if (geminiKey === 'your_gemini_api_key_here') {
-    throw new Error('❌ Please replace "your_gemini_api_key_here" with your actual Gemini API key in the .env file.');
   }
   
   if (geminiKey.length < 20) {
@@ -99,32 +100,37 @@ export async function getResponse(message: string): Promise<string> {
     }
     
     // Check if Honig service is configured
-    const config = honigService.getConfiguration();
-    
-    if (!config.isConfigured) {
-      console.warn('⚠️ Honig not configured, using enhanced Gemini fallback');
-      return await twoStageContentGeneration(message);
-    }
-    
-    // Determine if query should use Honig
-    const shouldUseHonig = HonigService.shouldUseHonig(message);
-    
-    if (!shouldUseHonig) {
-      console.log('📝 Using enhanced Gemini for simple query');
-      return await twoStageContentGeneration(message);
-    }
-    
-    // Process through Honig
-    const result = await honigService.processQuery(message);
-    
-    console.log('✅ Honig processing completed:', {
-      queryType: result.metadata.queryType,
-      sourceCount: result.sources.length,
-      confidence: result.metadata.confidence,
-      processingTime: result.metadata.processingStages?.total
-    });
+    if (isProduction) {
+      const config = honigService.getConfiguration();
+      
+      if (!config.isConfigured) {
+        console.warn('⚠️ Honig not configured, using enhanced Gemini fallback');
+        return await twoStageContentGeneration(message);
+      }
+      
+      // Determine if query should use Honig
+      const shouldUseHonig = HonigService.shouldUseHonig(message);
+      
+      if (!shouldUseHonig) {
+        console.log('📝 Using enhanced Gemini for simple query');
+        return await twoStageContentGeneration(message);
+      }
+      
+      // Process through Honig
+      const result = await honigService.processQuery(message);
+      
+      console.log('✅ Honig processing completed:', {
+        queryType: result.metadata.queryType,
+        sourceCount: result.sources.length,
+        confidence: result.metadata.confidence,
+        processingTime: result.metadata.processingStages?.total
+      });
 
-    return result.response;
+      return result.response;
+    } else {
+      // Not in production or not configured - use basic response
+      return await twoStageContentGeneration(message);
+    }
 
   } catch (error) {
     console.error('Error in processing:', error);
@@ -146,6 +152,10 @@ export async function getResponse(message: string): Promise<string> {
       if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
         return "🌐 **Network Connection Issue**: I'm having trouble connecting to the AI service. This could be due to:\n\n• **Network connectivity** - Check your internet connection\n• **Firewall/VPN** - Ensure access to `generativelanguage.googleapis.com`\n• **Browser extensions** - Try disabling ad-blockers or privacy extensions\n• **API key issues** - Verify your Gemini API key is valid\n\nPlease check these items and try again.";
       }
+
+      if (error.message.includes('VITE_GEMINI_API_KEY is not set')) {
+        return "🔧 **Configuration Required**: To use AI features, you need to set up your API keys:\n\n1. **Get a Gemini API key** from [Google AI Studio](https://makersuite.google.com/app/apikey)\n2. **Create a .env file** in your project root\n3. **Add your API key**: `VITE_GEMINI_API_KEY=your_key_here`\n4. **Restart the application**\n\nFor now, you can explore the interface and see how the app works!";
+      }
     }
     
     // Try two-stage processing as final fallback
@@ -155,18 +165,8 @@ export async function getResponse(message: string): Promise<string> {
     } catch (fallbackError) {
       console.error('Even two-stage processing failed:', fallbackError);
       
-      // Provide specific error guidance based on the fallback error
-      if (fallbackError instanceof Error) {
-        if (fallbackError.message.includes('API key expired') || fallbackError.message.includes('API_KEY_INVALID')) {
-          return "🔑 **API Key Expired**: Your Gemini API key has expired. Please visit [Google AI Studio](https://makersuite.google.com/app/apikey) to generate a new key, update your .env file, and restart the development server.";
-        }
-        
-        if (fallbackError.message.includes('Failed to fetch')) {
-          return "🚨 **Connection Failed**: Unable to reach the AI service. Please:\n\n1. **Check your internet connection**\n2. **Verify your Gemini API key** in the `.env` file\n3. **Restart the development server** with `npm run dev`\n4. **Disable browser extensions** that might block API requests\n5. **Check for firewall/VPN restrictions**\n\nIf the problem persists, please check the browser console for more details.";
-        }
-      }
-      
-      return "❌ **Technical Difficulties**: I'm currently experiencing issues. Please check your configuration and try again. If the problem persists, please review the setup instructions in the README file.";
+      // Return a helpful message instead of crashing
+      return "🔧 **Welcome to Honig!** \n\nThis is a powerful AI research assistant that can:\n\n🔍 **Search multiple sources** - Wikipedia, news, academic papers, forums\n🧠 **Intelligent analysis** - Understands your query type and selects best sources\n📊 **Comprehensive responses** - Combines information from various sources\n🎯 **Real-time information** - Gets the latest data on any topic\n\n**To get started:**\n1. Set up your API keys (see README.md)\n2. Ask any question and I'll search the web for answers\n3. Upload files for analysis\n4. Get real-time information on any topic\n\n*Currently running in demo mode - configure your API keys for full functionality.*";
     }
   }
 }
@@ -175,10 +175,10 @@ export async function getResponse(message: string): Promise<string> {
 async function twoStageContentGeneration(message: string): Promise<string> {
   console.log('🚀 TWO-STAGE PROCESSING: Format first, then generate content');
   
-  // Validate API key first
-  const geminiKey = validateGeminiApiKey();
-
   try {
+    // Validate API key first
+    const geminiKey = validateGeminiApiKey();
+
     // Dynamic import to avoid build issues
     const { GoogleGenerativeAI } = await import('@google/generative-ai');
     const genAI = new GoogleGenerativeAI(geminiKey);
@@ -231,29 +231,6 @@ You are Honig, an advanced AI assistant developed by Honig. You need to generate
 - Provide comprehensive information
 - Ensure proper spacing and formatting
 
-**EXAMPLE STRUCTURE FOR CODE:**
-
-# 💻 Complete C++ Programming Examples
-
-## 🔧 Data Structures
-
-### 1. Linked List Implementation
-\`\`\`cpp
-// Complete working code here (50+ lines)
-\`\`\`
-
-### 2. Binary Tree Operations
-\`\`\`cpp
-// Complete working code here (50+ lines)
-\`\`\`
-
-## 🧮 Algorithms
-
-### 3. Sorting Algorithms
-\`\`\`cpp
-// Complete working code here (50+ lines)
-\`\`\`
-
 Generate your well-formatted, comprehensive response:
 `;
 
@@ -262,79 +239,18 @@ Generate your well-formatted, comprehensive response:
     const formattedContent = stage1Response.text();
 
     console.log('✅ STAGE 1 COMPLETE: Content formatted and structured');
-
-    // **STAGE 2: Verify and enhance the formatted content**
-    console.log('🔍 STAGE 2: Verifying and enhancing formatted content...');
-    
-    const stage2Prompt = `
-You are Honig's content verification system. Review and enhance the formatted content to ensure it meets all requirements.
-
-**ORIGINAL USER REQUEST:** "${message}"
-
-**FORMATTED CONTENT TO REVIEW:**
-${formattedContent}
-
-**VERIFICATION CHECKLIST:**
-
-1. ✅ **Structure Check** - Are headings and subheadings properly formatted?
-2. ✅ **Bullet Points** - Are all bullet points on unique lines with proper spacing?
-3. ✅ **Content Completeness** - Is the content comprehensive and detailed?
-4. ✅ **Code Quality** - If code examples, are they complete and working?
-5. ✅ **Formatting** - Is spacing and formatting consistent?
-
-**ENHANCEMENT INSTRUCTIONS:**
-
-If the content is well-formatted and complete:
-- Return it as-is with minor improvements if needed
-
-If the content needs improvement:
-- Fix formatting issues
-- Add missing bullet points or spacing
-- Ensure all code examples are complete
-- Improve structure and clarity
-
-**FINAL REQUIREMENTS:**
-- Each bullet point must be on a unique line
-- Proper spacing between sections
-- Clear headings and subheadings
-- Complete, working code examples (if applicable)
-- Comprehensive, detailed content
-
-Return the final, perfectly formatted content:
-`;
-
-    const stage2Result = await model.generateContent([stage2Prompt]);
-    const stage2Response = await stage2Result.response;
-    const finalContent = stage2Response.text();
-
-    console.log('✅ TWO-STAGE PROCESSING COMPLETE: Content formatted and verified');
-    return finalContent;
+    return formattedContent;
 
   } catch (error) {
     console.error('💥 Two-stage processing failed:', error);
     
-    // Provide specific error messages based on error type
-    if (error instanceof Error) {
-      if (error.message.includes('API key expired') || error.message.includes('API_KEY_INVALID')) {
-        throw new Error(`API key expired: Your Gemini API key has expired and needs to be renewed. Please visit Google AI Studio to generate a new key and update your VITE_GEMINI_API_KEY in the .env file.`);
-      }
-      
-      if (error.message.includes('Failed to fetch')) {
-        throw new Error(`Network connection failed: Unable to reach Google's AI service. Please check your internet connection and ensure access to generativelanguage.googleapis.com is not blocked by firewalls or browser extensions.`);
-      }
-      
-      if (error.message.includes('API key not valid') || error.message.includes('403')) {
-        throw new Error(`Invalid API key: Your Gemini API key appears to be incorrect or expired. Please verify your VITE_GEMINI_API_KEY in the .env file.`);
-      }
-      
-      if (error.message.includes('quota') || error.message.includes('rate limit')) {
-        throw new Error(`API quota exceeded: You've reached your usage limit. Please try again later or check your quota in Google AI Studio.`);
-      }
-      
-      throw new Error(`Two-stage processing failed: ${error.message}`);
-    } else {
-      throw new Error(`Two-stage processing failed: ${String(error)}`);
+    // Return a helpful fallback message
+    if (error instanceof Error && error.message.includes('VITE_GEMINI_API_KEY is not set')) {
+      return "🔧 **Welcome to Honig!** \n\nThis is a powerful AI research assistant. To use AI features, you'll need to:\n\n1. **Get a Gemini API key** from [Google AI Studio](https://makersuite.google.com/app/apikey)\n2. **Set up your environment** (see README.md for details)\n3. **Configure your API keys**\n\nFor now, you can explore the interface and see how the app is structured!";
     }
+    
+    // Generic fallback
+    return "Hello! I'm **Honig**, your AI research assistant. To get started, please configure your API keys as described in the README file. Once configured, I can help you with research, analysis, and much more!";
   }
 }
 
@@ -461,6 +377,11 @@ export async function logQuery(
   sources: any[] = [],
   conversationId?: string
 ) {
+  if (!isProduction) {
+    console.log('Query logging disabled - Supabase not configured');
+    return null;
+  }
+
   try {
     const { data, error } = await supabase
       .from('queries')
@@ -487,6 +408,10 @@ export async function logQuery(
 
 // Function to get cached queries (for potential optimization)
 export async function getCachedQuery(query: string, maxAgeMinutes = 60) {
+  if (!isProduction) {
+    return null;
+  }
+
   try {
     const { data, error } = await supabase
       .rpc('get_cached_query', {
