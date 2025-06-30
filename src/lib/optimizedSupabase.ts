@@ -31,7 +31,7 @@ if (isProduction) {
   honigService.init(supabase);
 }
 
-// Enhanced Gemini response with FULL conversation context and SPECIFIC email formatting
+// Enhanced Gemini response with FULL conversation context and PROPER email formatting
 async function getContextualGeminiResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
     const geminiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
@@ -57,7 +57,7 @@ CRITICAL FORMATTING RULES:
 
 1. **EMAIL/LETTER FORMATTING RULE (ONLY when specifically requested):**
    - ONLY format emails/letters in code blocks when user explicitly asks to "write email", "write letter", "compose email", "draft email", "write mail", etc.
-   - When formatting emails in code blocks, use this EXACT format:
+   - When formatting emails in code blocks, use this EXACT format with PROPER PARAGRAPHS:
    
    \`\`\`
    Subject: [Subject based on conversation]
@@ -66,11 +66,22 @@ CRITICAL FORMATTING RULES:
    
    Dear [Name],
    
-   [Email body that references conversation context]
+   [First paragraph of email body that references conversation context]
+   
+   [Second paragraph with additional details]
+   
+   [Third paragraph if needed]
    
    Best regards,
    [Sender Name]
    \`\`\`
+
+   CRITICAL EMAIL FORMATTING REQUIREMENTS:
+   - Each paragraph must be on its own line with blank lines between paragraphs
+   - Use proper paragraph structure, NOT single long lines
+   - Break content into logical paragraphs (2-4 sentences each)
+   - Include proper spacing between all sections
+   - Reference conversation context in the email content
 
 2. **STRUCTURED RESPONSE FORMATTING (for all other responses):**
    - Use proper headings with ## and ###
@@ -133,8 +144,11 @@ The user is SPECIFICALLY asking you to write an email or letter. You MUST:
 3. Base the content on the previous conversation context
 4. Make it professional and relevant to what was discussed
 5. Reference specific information from our conversation
+6. BREAK THE EMAIL BODY INTO PROPER PARAGRAPHS - DO NOT write everything in one long line
+7. Each paragraph should be 2-4 sentences and focus on one main point
+8. Use blank lines between paragraphs for proper spacing
 
-MANDATORY FORMAT:
+MANDATORY EMAIL FORMAT WITH PROPER PARAGRAPHS:
 \`\`\`
 Subject: [Relevant Subject Based on Our Conversation]
 To: [Recipient]
@@ -142,11 +156,25 @@ From: [Sender]
 
 Dear [Name],
 
-[Email body that references and builds upon our previous conversation]
+[First paragraph - Introduction and main purpose, referencing our conversation]
+
+[Second paragraph - Key details and specific information from our discussion]
+
+[Third paragraph - Additional context or next steps if needed]
+
+[Closing paragraph - Professional closing statement]
 
 Best regards,
 [Sender Name]
 \`\`\`
+
+CRITICAL PARAGRAPH REQUIREMENTS:
+- Each paragraph must be on its own line
+- Use blank lines between paragraphs
+- Break content into logical, readable paragraphs
+- Do NOT write the entire email body as one long paragraph
+- Each paragraph should have 2-4 sentences maximum
+- Focus each paragraph on one main idea or topic
 
 IMPORTANT: The ENTIRE email must be inside the code block. Do not add any text outside the code block except for a brief introduction.
 
