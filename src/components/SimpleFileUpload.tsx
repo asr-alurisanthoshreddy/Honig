@@ -385,7 +385,7 @@ ${result.summary}`;
                 <p>• <strong>Documents:</strong> Read and analyze actual file content</p>
                 <p>• <strong>Code Files:</strong> Analyze real code structure and content</p>
                 <p className="mt-2 text-green-600 dark:text-green-400 font-medium">
-                  ✅ <strong>100% Real</strong> - No templates, no assumptions, no fake responses
+                  ✅ <strong>100% </strong> - No templates, no assumptions, no fake responses
                 </p>
               </div>
             </>
@@ -401,7 +401,7 @@ ${result.summary}`;
                 
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    🔍 Real Analysis in Progress
+                    🔍 Analysis in Progress
                   </h4>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
                     {analysisProgress}
