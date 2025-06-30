@@ -309,7 +309,7 @@ ${result.summary}`;
                 <span className="text-white font-bold text-sm">H</span>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Real File Analysis
+                Honig File Analysis
               </h3>
             </div>
             <button
