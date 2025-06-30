@@ -251,11 +251,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) 
           onSubmit={handleSubmit} 
           className="flex items-end gap-3 relative"
         >
-          {/* File Upload Button */}
+          {/* File Upload Button - moved up slightly */}
           <button
             type="button"
             onClick={onFileUpload}
-            className="flex-shrink-0 w-11 h-11 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center justify-center group"
+            className="flex-shrink-0 w-11 h-11 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center justify-center group self-end mb-1"
             title="Upload and analyze file"
           >
             <Paperclip className="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200" />
@@ -275,6 +275,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) 
               }`}
               rows={1}
               disabled={isProcessing}
+              style={{ overflow: 'hidden' }}
             />
             
             {/* Voice Recognition Indicator */}

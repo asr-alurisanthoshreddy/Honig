@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase, getResponse, logQuery, safeDbOperation, testDatabaseConnection } from '../lib/optimizedSupabase';
+import { supabase, getResponse, safeDbOperation, testDatabaseConnection } from '../lib/optimizedSupabase';
 
 export type Message = {
   id: string;
@@ -98,8 +98,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
     // Create new conversation if needed (only for logged-in users)
     if (!currentConversationId && !isGuestMode && userId) {
       currentConversationId = uuidv4();
+      set({ currentConversationId });
       
-      // Try to create conversation, but don't block on failure
+      // Try to create conversation in background
       safeDbOperation(
         async () => {
           const { error } = await supabase
@@ -116,16 +117,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
         },
         false,
         'create conversation'
-      ).then(success => {
-        if (success) {
-          set({ currentConversationId });
-        } else {
-          console.warn('Failed to create conversation, continuing in memory');
-        }
+      ).catch(() => {
+        // Silently handle conversation creation failure
+        console.warn('Failed to create conversation in database, continuing in memory');
       });
-
-      // Set conversation ID immediately for UI responsiveness
-      set({ currentConversationId });
     }
 
     // Handle file analysis messages
@@ -145,18 +140,29 @@ export const useChatStore = create<ChatState>((set, get) => ({
         messages: [...state.messages, fileAnalysisMessage]
       }));
 
-      // Try to persist to database (non-blocking)
+      // Try to persist to database (non-blocking, no error display)
       if (!isGuestMode && userId && currentConversationId) {
         safeDbOperation(
           async () => {
-            await logQuery(userId, 'File Analysis', content, [], currentConversationId);
+            const { error } = await supabase
+              .from('queries')
+              .insert({
+                id: assistantMessageId,
+                user_id: userId,
+                conversation_id: currentConversationId,
+                query_text: 'File Analysis',
+                response_text: content,
+                sources: [],
+              });
+
+            if (error) throw error;
             return true;
           },
           false,
           'persist file analysis'
-        ).catch(error => {
-          console.warn('Failed to persist file analysis:', error);
-          set({ persistenceError: 'Failed to save file analysis' });
+        ).catch(() => {
+          // Silently handle persistence failure for file analysis
+          console.warn('Failed to persist file analysis');
         });
       }
       return;
@@ -186,7 +192,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     try {
       const startTime = Date.now();
       
-      // Get optimized response (fast path for simple queries)
+      // Get optimized response
       const assistantResponse = await getResponse(content);
       const processingTime = Date.now() - startTime;
 
@@ -210,18 +216,30 @@ export const useChatStore = create<ChatState>((set, get) => ({
         isProcessing: false
       }));
 
-      // Persist to database asynchronously (non-blocking)
+      // Persist to database asynchronously (completely silent)
       if (!isGuestMode && userId && currentConversationId) {
-        // Don't await this - let it run in background
         safeDbOperation(
           async () => {
-            await logQuery(userId, content, assistantResponse, [], currentConversationId);
+            const { error: queryError } = await supabase
+              .from('queries')
+              .insert({
+                id: userMessageId,
+                user_id: userId,
+                conversation_id: currentConversationId,
+                query_text: content,
+                response_text: assistantResponse,
+                sources: [],
+              });
+
+            if (queryError) throw queryError;
             
             // Update conversation timestamp
-            await supabase
+            const { error: updateError } = await supabase
               .from('conversations')
               .update({ updated_at: new Date().toISOString() })
               .eq('id', currentConversationId);
+
+            if (updateError) throw updateError;
             
             return true;
           },
@@ -232,9 +250,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
             // Reload conversations in background
             get().loadConversations();
           }
-        }).catch(error => {
-          console.warn('Failed to persist message:', error);
-          set({ persistenceError: 'Failed to save message' });
+        }).catch(() => {
+          // Completely silent - no error display to user
+          console.warn('Failed to persist message to database');
         });
       }
 
@@ -336,10 +354,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     );
 
     if (!success) {
-      set({ 
-        persistenceError: 'Failed to load conversations',
-        dbConnectionStatus: 'disconnected'
-      });
+      set({ dbConnectionStatus: 'disconnected' });
     }
   },
 
@@ -389,8 +404,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
       'select conversation'
     );
 
+    // Don't show error for conversation loading failures
     if (!success) {
-      set({ persistenceError: 'Failed to load conversation' });
+      console.warn('Failed to load conversation');
     }
   },
 
@@ -441,7 +457,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
     );
 
     if (!success) {
-      set({ persistenceError: 'Failed to delete conversation from database' });
       // Reload conversations to restore state
       get().loadConversations();
     }
@@ -479,8 +494,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
       )
     }));
 
-    // Try to persist to database
-    const success = await safeDbOperation(
+    // Try to persist to database (silent)
+    safeDbOperation(
       async () => {
         const { error } = await supabase
           .from('queries')
@@ -492,10 +507,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
       },
       false,
       'add note'
-    );
-
-    if (!success) {
-      set({ persistenceError: 'Failed to save note' });
-    }
+    ).catch(() => {
+      console.warn('Failed to save note');
+    });
   }
 }));
