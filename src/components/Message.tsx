@@ -42,7 +42,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
   };
 
   const handleCopy = async () => {
-    if (!codeBlockRef.current) return;
+    if (codeBlockRef.current == null) return;
     
     try {
       const code = codeBlockRef.current.querySelector('code');
@@ -57,7 +57,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
   };
 
   const handleShare = async () => {
-    if (!codeBlockRef.current) return;
+    if (codeBlockRef.current == null) return;
     
     try {
       const code = codeBlockRef.current.querySelector('code');

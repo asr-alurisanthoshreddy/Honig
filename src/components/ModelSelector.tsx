@@ -36,7 +36,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
     }
   };
 
-  const currentModel = modelInfo[selectedModel] || {
+  const currentModel = modelInfo[selectedModel as keyof typeof modelInfo] || {
     name: selectedModel,
     icon: <Cpu className="w-4 h-4" />,
     description: 'AI Model',
@@ -75,7 +75,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
             >
               <div className="p-2">
                 {availableModels.map((model) => {
-                  const info = modelInfo[model] || {
+                  const info = modelInfo[model as keyof typeof modelInfo] || {
                     name: model,
                     icon: <Cpu className="w-4 h-4" />,
                     description: 'AI Model',
