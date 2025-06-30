@@ -1,372 +1,218 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Loader2, Paperclip, Mic, MicOff } from 'lucide-react';
-import { useChatStore } from '../store/optimizedChatStore';
-import { motion } from 'framer-motion';
+import { Send, Mic, MicOff, Square, Paperclip } from 'lucide-react';
+import { useChatStore } from '../store/chatStore';
+import { SimpleFileUpload } from './SimpleFileUpload';
 
 interface ChatInputProps {
-  onLoginRequired: () => void;
-  onFileUpload: () => void;
+  onSendMessage: (message: string, files?: File[]) => void;
+  disabled?: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) => {
-  const [input, setInput] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(false);
-  const [silenceTimer, setSilenceTimer] = useState<NodeJS.Timeout | null>(null);
-  const [lastSpeechTime, setLastSpeechTime] = useState<number>(0);
-  const [autoStopEnabled, setAutoStopEnabled] = useState(true);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const recognitionRef = useRef<any>(null);
-  const { sendMessage, isProcessing, isGuestMode, messages, userId } = useChatStore();
+export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
+  const [message, setMessage] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [showFileUpload, setShowFileUpload] = useState(false);
+  const [speechError, setSpeechError] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const { currentConversationId } = useChatStore();
 
-  const SILENCE_TIMEOUT = 3000;
-  const MIN_SPEECH_DURATION = 1000;
-  const isLoggedIn = !!userId;
-
-  // Load voice auto-stop setting
   useEffect(() => {
-    const savedAutoStop = localStorage.getItem('voice-auto-stop');
-    if (savedAutoStop) {
-      try {
-        const autoStop = JSON.parse(savedAutoStop);
-        setAutoStopEnabled(autoStop);
-      } catch (error) {
-        console.error('Failed to parse voice auto-stop setting:', error);
-      }
-    }
-    
-    if (isGuestMode) {
-      setAutoStopEnabled(true);
-    }
-  }, [isGuestMode]);
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'en-US';
 
-  // Speech recognition setup
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      setSpeechSupported(true);
-      
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-      
-      recognition.onstart = () => {
-        console.log('🎤 Voice recognition started');
-        setIsListening(true);
-        setLastSpeechTime(Date.now());
-      };
-      
-      recognition.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event) => {
         let finalTranscript = '';
         let interimTranscript = '';
-        let hasNewFinalResult = false;
-        
+
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
             finalTranscript += transcript;
-            hasNewFinalResult = true;
           } else {
             interimTranscript += transcript;
           }
         }
-        
+
         if (finalTranscript) {
-          setInput(prev => prev + finalTranscript);
-          setLastSpeechTime(Date.now());
-        }
-        
-        if (hasNewFinalResult || interimTranscript.trim()) {
-          setLastSpeechTime(Date.now());
-          
-          if (silenceTimer) {
-            clearTimeout(silenceTimer);
-            setSilenceTimer(null);
-          }
-          
-          if (autoStopEnabled && isListening) {
-            const timer = setTimeout(() => {
-              const timeSinceLastSpeech = Date.now() - lastSpeechTime;
-              const totalSpeechDuration = Date.now() - lastSpeechTime;
-              
-              if (timeSinceLastSpeech >= SILENCE_TIMEOUT && totalSpeechDuration >= MIN_SPEECH_DURATION) {
-                console.log('🔇 Auto-stopping due to silence');
-                stopListening();
-              }
-            }, SILENCE_TIMEOUT);
-            
-            setSilenceTimer(timer);
-          }
+          setMessage(prev => prev + finalTranscript);
         }
       };
-      
-      recognition.onerror = (event: any) => {
-        console.error('🎤 Speech recognition error:', event.error);
-        setIsListening(false);
+
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+        setSpeechError(null); // Clear any previous error
         
-        if (silenceTimer) {
-          clearTimeout(silenceTimer);
-          setSilenceTimer(null);
+        switch (event.error) {
+          case 'not-allowed':
+            setSpeechError('Microphone access denied. Please allow microphone permissions in your browser settings.');
+            break;
+          case 'no-speech':
+            setSpeechError('No speech detected. Please try again.');
+            break;
+          case 'audio-capture':
+            setSpeechError('No microphone found. Please check your microphone connection.');
+            break;
+          case 'network':
+            setSpeechError('Network error occurred. Please check your internet connection.');
+            break;
+          default:
+            setSpeechError('Speech recognition error occurred. Please try again.');
         }
         
-        if (event.error === 'not-allowed') {
-          alert('Microphone access denied. Please allow microphone permissions and try again.');
-        } else if (event.error === 'no-speech') {
-          console.log('🎤 No speech detected, stopping...');
-        } else if (event.error === 'network') {
-          alert('Network error during speech recognition. Please check your internet connection.');
-        } else {
-          alert(`Speech recognition error: ${event.error}`);
-        }
+        // Clear error message after 5 seconds
+        setTimeout(() => setSpeechError(null), 5000);
       };
-      
-      recognition.onend = () => {
-        console.log('🎤 Voice recognition ended');
-        setIsListening(false);
-        
-        if (silenceTimer) {
-          clearTimeout(silenceTimer);
-          setSilenceTimer(null);
-        }
+
+      recognitionRef.current.onend = () => {
+        setIsRecording(false);
       };
-      
-      recognitionRef.current = recognition;
-    } else {
-      console.warn('🎤 Speech recognition not supported in this browser');
-      setSpeechSupported(false);
     }
-    
+
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-      if (silenceTimer) {
-        clearTimeout(silenceTimer);
-      }
     };
-  }, [autoStopEnabled]);
+  }, []);
 
-  // Auto-resize textarea
-  useEffect(() => {
-    const textarea = inputRef.current;
-    if (!textarea) return;
-
-    textarea.style.height = 'auto';
-    textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
-  }, [input]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isProcessing) return;
-
-    if (isListening && recognitionRef.current) {
-      stopListening();
+    if (message.trim() && !disabled) {
+      onSendMessage(message.trim());
+      setMessage('');
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
-
-    await sendMessage(input);
-    setInput('');
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
   };
 
-  const stopListening = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
-    setIsListening(false);
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
     
-    if (silenceTimer) {
-      clearTimeout(silenceTimer);
-      setSilenceTimer(null);
-    }
+    // Auto-resize textarea
+    const textarea = e.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
   };
 
-  const startListening = () => {
-    if (!speechSupported) {
-      alert('Speech recognition is not supported in your browser. Please try using Chrome, Edge, or Safari.');
-      return;
-    }
-
+  const toggleRecording = () => {
     if (!recognitionRef.current) {
-      alert('Speech recognition not initialized. Please refresh the page and try again.');
+      setSpeechError('Speech recognition is not supported in your browser.');
+      setTimeout(() => setSpeechError(null), 3000);
       return;
     }
 
-    try {
-      recognitionRef.current.start();
-      setLastSpeechTime(Date.now());
-    } catch (error) {
-      console.error('🎤 Failed to start speech recognition:', error);
-      alert('Failed to start voice recognition. Please check your microphone permissions.');
-    }
-  };
-
-  const toggleVoiceRecognition = () => {
-    if (isListening) {
-      stopListening();
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
     } else {
-      startListening();
-    }
-  };
-
-  const getVoicePlaceholder = () => {
-    if (isListening) {
-      if (autoStopEnabled) {
-        return "🎤 Listening... Will auto-stop after 3 seconds of silence";
-      } else {
-        return "🎤 Listening... Click microphone to stop manually";
+      setSpeechError(null); // Clear any previous errors
+      try {
+        recognitionRef.current.start();
+        setIsRecording(true);
+      } catch (error) {
+        console.error('Failed to start speech recognition:', error);
+        setSpeechError('Failed to start speech recognition. Please try again.');
+        setTimeout(() => setSpeechError(null), 3000);
       }
     }
-    return "Ask Honig anything, upload a file, or use voice input...";
   };
 
-  const getVoiceStatusText = () => {
-    if (!speechSupported) return null;
-    
-    if (isGuestMode) {
-      return "🎤 Voice input supported • 🔇 Auto-stop ON";
+  const handleFilesSelected = (files: File[]) => {
+    if (files.length > 0) {
+      onSendMessage(message.trim() || 'Analyze these files', files);
+      setMessage('');
+      setShowFileUpload(false);
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
-    
-    if (isLoggedIn) {
-      return `🎤 Voice input supported • ${autoStopEnabled ? '🔇 Auto-stop ON' : '🎤 Manual stop'}`;
-    }
-    
-    return "🎤 Voice input supported";
   };
+
+  const supportsFileUpload = currentConversationId !== null;
+  const supportsSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="sticky bottom-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800"
-    >
-      <div className="max-w-4xl mx-auto p-4">
-        <form 
-          onSubmit={handleSubmit} 
-          className="flex items-end gap-3 relative"
-        >
-          {/* File Upload Button - moved up slightly */}
-          <button
-            type="button"
-            onClick={onFileUpload}
-            className="flex-shrink-0 w-11 h-11 bg-gray-100 dark:bg-gray-700 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center justify-center group self-end mb-1"
-            title="Upload and analyze file"
-          >
-            <Paperclip className="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200" />
-          </button>
+    <div className="border-t border-gray-200 bg-white p-4">
+      {speechError && (
+        <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {speechError}
+        </div>
+      )}
+      
+      <form onSubmit={handleSubmit} className="flex items-end gap-2">
+        <div className="flex-1 relative">
+          <textarea
+            ref={textareaRef}
+            value={message}
+            onChange={handleTextareaChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Type your message..."
+            className="w-full p-3 pr-12 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            style={{ minHeight: '48px', maxHeight: '200px' }}
+            disabled={disabled}
+            rows={1}
+          />
           
-          <div className="flex-1 relative">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={getVoicePlaceholder()}
-              className={`w-full p-4 pr-24 border-2 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100 resize-none max-h-[120px] min-h-[56px] transition-all placeholder-gray-500 dark:placeholder-gray-400 ${
-                isListening
-                  ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/10'
-                  : 'border-gray-300 dark:border-gray-600'
-              }`}
-              rows={1}
-              disabled={isProcessing}
-              style={{ overflow: 'hidden' }}
-            />
-            
-            {/* Voice Recognition Indicator */}
-            {isListening && (
-              <div className="absolute top-3 right-20 flex items-center gap-1">
-                <div className="flex gap-1">
-                  <div className="w-1 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                  <div className="w-1 h-4 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-1 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-                <span className="text-xs text-red-600 dark:text-red-400 ml-1 font-medium">
-                  {autoStopEnabled ? 'AUTO' : 'REC'}
-                </span>
-              </div>
-            )}
-            
-            {/* Voice Recognition Button */}
-            {speechSupported && (
+          <div className="absolute right-2 bottom-2 flex items-center gap-1">
+            {supportsFileUpload && (
               <button
                 type="button"
-                onClick={toggleVoiceRecognition}
-                className={`absolute right-14 bottom-3 p-2 rounded-xl transition-all ${
-                  isListening
-                    ? 'text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-gray-700 animate-pulse'
-                    : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-700'
-                }`}
-                title={
-                  isListening 
-                    ? 'Stop voice recognition' 
-                    : autoStopEnabled 
-                      ? 'Start voice recognition (auto-stop enabled)'
-                      : 'Start voice recognition (manual stop)'
-                }
-                disabled={isProcessing}
+                onClick={() => setShowFileUpload(!showFileUpload)}
+                className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Upload files"
               >
-                {isListening ? (
-                  <MicOff className="w-5 h-5" />
-                ) : (
-                  <Mic className="w-5 h-5" />
-                )}
+                <Paperclip className="w-4 h-4" />
               </button>
             )}
             
-            {/* Send Button */}
-            <button
-              type="submit"
-              disabled={!input.trim() || isProcessing}
-              className={`absolute right-3 bottom-3 p-2 rounded-xl transition-all ${
-                input.trim() && !isProcessing
-                  ? 'text-white bg-blue-600 hover:bg-blue-700 shadow-sm'
-                  : 'text-gray-400 bg-gray-100 dark:bg-gray-700 cursor-not-allowed'
-              }`}
-              aria-label="Send message"
-            >
-              {isProcessing ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Send className="w-5 h-5" />
-              )}
-            </button>
-          </div>
-        </form>
-        
-        <div className="text-xs text-center mt-3 text-gray-500 dark:text-gray-400">
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <span>
-              {isGuestMode ? (
-                <>
-                  <strong>Guest Mode:</strong> Your conversations won't be saved. 
-                  <button 
-                    onClick={onLoginRequired}
-                    className="text-blue-600 dark:text-blue-400 hover:underline ml-1"
-                  >
-                    Sign in to save progress
-                  </button>
-                </>
-              ) : (
-                <>
-                  Powered by <strong>Honig</strong> - Real-Time AI Research Assistant
-                </>
-              )}
-            </span>
-            
-            {getVoiceStatusText() && (
-              <span>• {getVoiceStatusText()}</span>
+            {supportsSpeechRecognition && (
+              <button
+                type="button"
+                onClick={toggleRecording}
+                className={`p-1.5 transition-colors ${
+                  isRecording 
+                    ? 'text-red-500 hover:text-red-600' 
+                    : 'text-gray-400 hover:text-gray-600'
+                }`}
+                title={isRecording ? 'Stop recording' : 'Start voice input'}
+              >
+                {isRecording ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </button>
             )}
           </div>
         </div>
-      </div>
-    </motion.div>
-  );
-};
+        
+        <button
+          type="submit"
+          disabled={!message.trim() || disabled}
+          className="p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <Send className="w-4 h-4" />
+        </button>
+      </form>
 
-export default ChatInput;
+      {showFileUpload && supportsFileUpload && (
+        <div className="mt-3">
+          <SimpleFileUpload
+            onFilesSelected={handleFilesSelected}
+            onCancel={() => setShowFileUpload(false)}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
