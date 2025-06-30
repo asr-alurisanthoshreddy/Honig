@@ -224,21 +224,6 @@ Be informative and well-structured in your response.`;
   }
 }
 
-// Simple response for basic queries
-function getSimpleResponse(message: string): string {
-  const messageLower = message.toLowerCase().trim();
-  
-  if (/^(hello|hi|hey)(\s|$)/i.test(messageLower)) {
-    return "Hello! I'm **Honig**, your AI research assistant developed by **Honig**. I can help you find accurate, up-to-date information on any topic by searching and analyzing multiple sources in real-time. What would you like to research today?";
-  }
-  
-  if (messageLower.includes('help')) {
-    return "I'm **Honig**, developed by **Honig**. I can help you with research, current events, technical topics, and much more. Just ask me any question!";
-  }
-  
-  return "I'm **Honig**, your AI research assistant developed by **Honig**. I can help you find accurate, current information on any topic. What would you like to know?";
-}
-
 // Enhanced query logging with sources
 export async function logQuery(
   userId: string | null,
