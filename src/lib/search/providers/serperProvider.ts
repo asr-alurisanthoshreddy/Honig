@@ -5,7 +5,7 @@ export class SerperProvider implements SearchProvider {
   name = 'Serper';
   private apiKey: string;
   private baseUrl = 'https://google.serper.dev/search';
-  private isHealthy = false;
+  private healthyStatus = false;
 
   constructor(apiKey: string) {
     if (!apiKey || apiKey.trim() === '' || apiKey === 'your_serper_api_key_here') {
@@ -13,15 +13,15 @@ export class SerperProvider implements SearchProvider {
     }
     
     this.apiKey = apiKey;
-    this.isHealthy = true;
+    this.healthyStatus = true;
   }
 
   async search(query: string, options: SearchOptions = {}): Promise<SearchResult[]> {
-    if (!this.isHealthy) {
+    if (!this.healthyStatus) {
       throw new Error('Serper provider is not properly configured');
     }
 
-    const searchParams = {
+    const searchParams: Record<string, any> = {
       q: query,
       num: options.maxResults || 10,
       gl: options.region || 'us',
@@ -29,7 +29,7 @@ export class SerperProvider implements SearchProvider {
     };
 
     if (options.timeRange && options.timeRange !== 'all') {
-      const timeMap = {
+      const timeMap: Record<string, string> = {
         day: 'd1',
         week: 'w1', 
         month: 'm1',
@@ -50,7 +50,7 @@ export class SerperProvider implements SearchProvider {
 
       if (!response.ok) {
         if (response.status === 403) {
-          this.isHealthy = false;
+          this.healthyStatus = false;
           throw new Error(`Serper API authentication failed (403). Please check your API key.`);
         } else if (response.status === 429) {
           throw new Error(`Serper API rate limit exceeded. Please try again later.`);
@@ -65,11 +65,12 @@ export class SerperProvider implements SearchProvider {
       
       return this.parseResults(data);
     } catch (error) {
-      console.error('Serper search error:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Serper search error:', errorMessage);
       
       // Mark as unhealthy if it's an auth issue
-      if (error.message.includes('403') || error.message.includes('authentication')) {
-        this.isHealthy = false;
+      if (errorMessage.includes('403') || errorMessage.includes('authentication')) {
+        this.healthyStatus = false;
       }
       
       throw error;
@@ -134,6 +135,6 @@ export class SerperProvider implements SearchProvider {
   }
 
   isHealthy(): boolean {
-    return this.isHealthy;
+    return this.healthyStatus;
   }
 }

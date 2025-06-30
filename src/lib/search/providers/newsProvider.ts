@@ -70,7 +70,8 @@ export class NewsProvider implements SearchProvider {
         }
       }));
     } catch (error) {
-      console.error('NewsAPI search error:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('NewsAPI search error:', errorMessage);
       throw error;
     }
   }

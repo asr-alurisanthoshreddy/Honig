@@ -43,8 +43,9 @@ export class SearchEngine {
         retrievedAt: new Date().toISOString()
       }));
     } catch (error) {
-      console.error(`Search failed with ${this.defaultProvider.name}:`, error);
-      throw new Error(`Search failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`Search failed with ${this.defaultProvider.name}:`, errorMessage);
+      throw new Error(`Search failed: ${errorMessage}`);
     }
   }
 
@@ -53,7 +54,8 @@ export class SearchEngine {
       try {
         return await provider.search(query, options);
       } catch (error) {
-        console.error(`Search failed with ${provider.name}:`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`Search failed with ${provider.name}:`, errorMessage);
         return [];
       }
     });

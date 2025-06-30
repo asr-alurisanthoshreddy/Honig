@@ -19,7 +19,7 @@ export class LLMRouter {
     
     // Determine query type
     let queryType: QueryClassification['queryType'] = 'conversational';
-    let suggestedModel = this.defaultProvider;
+    let suggestedModel = this.defaultProvider ?? undefined;
     
     // Code-related queries
     if (this.isCodeQuery(queryLower)) {
@@ -58,7 +58,7 @@ export class LLMRouter {
       needsLiveData,
       queryType,
       confidence: 0.8,
-      suggestedModel: suggestedModel || this.defaultProvider,
+      suggestedModel: suggestedModel ?? this.defaultProvider ?? undefined,
       timeRange
     };
   }

@@ -126,8 +126,9 @@ export class RAGPipeline {
         }
       };
     } catch (error) {
-      console.error('RAG Pipeline error:', error);
-      throw new Error(`RAG processing failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('RAG Pipeline error:', errorMessage);
+      throw new Error(`RAG processing failed: ${errorMessage}`);
     }
   }
 

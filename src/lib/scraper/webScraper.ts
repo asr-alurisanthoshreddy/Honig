@@ -108,31 +108,34 @@ export class WebScraper {
         clearTimeout(timeoutId);
       }
     } catch (error) {
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         throw new Error(`Request timeout after ${opts.timeout}ms`);
       }
       
       // Handle specific error types
-      if (error.message.includes('CORS') || error.message.includes('cors')) {
+      if (error instanceof Error && (error.message.includes('CORS') || error.message.includes('cors'))) {
         throw new Error(`CORS_BLOCKED: ${url} - Cross-origin request blocked by browser`);
       }
       
-      if (error.message.includes('Failed to fetch')) {
+      if (error instanceof Error && error.message.includes('Failed to fetch')) {
         // Try with CORS proxy if not already tried
         if (!opts.useCorsProxy && !this.corsProblematicDomains.some(domain => url.includes(domain))) {
           console.log(`🔄 Retrying ${url} with CORS proxy...`);
           try {
             return await this.scrape(url, { ...opts, useCorsProxy: true });
           } catch (proxyError) {
-            throw new Error(`FETCH_FAILED: ${url} - ${error.message} (proxy also failed: ${proxyError.message})`);
+            const proxyErrorMessage = proxyError instanceof Error ? proxyError.message : String(proxyError);
+            const originalErrorMessage = error.message;
+            throw new Error(`FETCH_FAILED: ${url} - ${originalErrorMessage} (proxy also failed: ${proxyErrorMessage})`);
           }
         } else {
           throw new Error(`FETCH_FAILED: ${url} - ${error.message}`);
         }
       }
       
-      console.error(`Scraping failed for ${url}:`, error);
-      throw new Error(`SCRAPE_ERROR: Failed to scrape ${url}: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`Scraping failed for ${url}:`, errorMessage);
+      throw new Error(`SCRAPE_ERROR: Failed to scrape ${url}: ${errorMessage}`);
     }
   }
 
@@ -143,7 +146,8 @@ export class WebScraper {
           return await this.scrape(url, options);
         } catch (error) {
           // Return error object instead of throwing
-          return new Error(`${url}: ${error.message}`);
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          return new Error(`${url}: ${errorMessage}`);
         }
       })
     );

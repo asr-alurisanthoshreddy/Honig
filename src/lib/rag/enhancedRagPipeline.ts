@@ -103,7 +103,8 @@ export class EnhancedRAGPipeline {
 
           console.log(`✅ Category scraping completed: ${categorySources.filter(s => s.content).length} successful`);
         } catch (error) {
-          console.warn('⚠️ Category scraping failed or timed out:', error.message);
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          console.warn('⚠️ Category scraping failed or timed out:', errorMessage);
           categorySources = [];
         }
       }
@@ -148,7 +149,8 @@ export class EnhancedRAGPipeline {
             console.log(`✅ Successfully scraped ${webSources.length} web sources`);
           }
         } catch (error) {
-          console.error('❌ Web search fallback failed:', error);
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          console.error('❌ Web search fallback failed:', errorMessage);
         }
       }
 
@@ -253,8 +255,9 @@ export class EnhancedRAGPipeline {
       };
 
     } catch (error) {
-      console.error('💥 Enhanced RAG Pipeline error:', error);
-      throw new Error(`Enhanced RAG processing failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('💥 Enhanced RAG Pipeline error:', errorMessage);
+      throw new Error(`Enhanced RAG processing failed: ${errorMessage}`);
     }
   }
 

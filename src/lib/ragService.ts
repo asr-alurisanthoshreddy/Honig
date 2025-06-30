@@ -26,7 +26,8 @@ export class RAGService {
         this.hasValidSearch = true;
         console.log('✅ Serper search provider initialized');
       } catch (error) {
-        console.warn('⚠️ Failed to initialize Serper provider:', error.message);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.warn('⚠️ Failed to initialize Serper provider:', errorMessage);
       }
     } else {
       console.warn('⚠️ Serper API key not configured or invalid');
@@ -39,7 +40,8 @@ export class RAGService {
         if (!this.hasValidSearch) this.hasValidSearch = true; // At least one search provider
         console.log('✅ News search provider initialized');
       } catch (error) {
-        console.warn('⚠️ Failed to initialize News provider:', error.message);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.warn('⚠️ Failed to initialize News provider:', errorMessage);
       }
     } else {
       console.warn('⚠️ News API key not configured or invalid');
@@ -57,7 +59,8 @@ export class RAGService {
         this.hasValidLLM = true;
         console.log('✅ Gemini LLM provider initialized');
       } catch (error) {
-        console.warn('⚠️ Failed to initialize Gemini provider:', error.message);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.warn('⚠️ Failed to initialize Gemini provider:', errorMessage);
       }
     } else {
       console.warn('⚠️ Gemini API key not configured or invalid');
@@ -129,8 +132,9 @@ export class RAGService {
             }
           };
         } catch (llmError) {
-          console.error('LLM generation failed:', llmError);
-          throw new Error(`AI service error: ${llmError.message}`);
+          const errorMessage = llmError instanceof Error ? llmError.message : String(llmError);
+          console.error('LLM generation failed:', errorMessage);
+          throw new Error(`AI service error: ${errorMessage}`);
         }
       }
 
@@ -168,7 +172,7 @@ Please provide a detailed, well-structured response that incorporates the releva
       const response = await this.llmRouter.generateResponse(
         enhancedPrompt,
         ragResult.context,
-        classification.suggestedModel
+        classification.suggestedModel ?? undefined
       );
 
       // Format sources for frontend
@@ -196,7 +200,8 @@ Please provide a detailed, well-structured response that incorporates the releva
       };
 
     } catch (error) {
-      console.error('Enhanced RAG Service error:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Enhanced RAG Service error:', errorMessage);
       
       // Fallback to direct LLM response if Enhanced RAG fails
       if (this.hasValidLLM) {
@@ -208,15 +213,16 @@ Please provide a detailed, well-structured response that incorporates the releva
             response: fallbackResponse + '\n\n*Note: Enhanced search capabilities were unavailable, so this response is based on my training data.*',
             sources: [],
             metadata: {
-              error: error.message,
+              error: errorMessage,
               fallback: true,
               processingTime: 0,
               enhancedRAGFailed: true
             }
           };
         } catch (fallbackError) {
-          console.error('Fallback LLM also failed:', fallbackError);
-          throw new Error(`Both Enhanced RAG and fallback failed: ${fallbackError.message}`);
+          const fallbackErrorMessage = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
+          console.error('Fallback LLM also failed:', fallbackErrorMessage);
+          throw new Error(`Both Enhanced RAG and fallback failed: ${fallbackErrorMessage}`);
         }
       } else {
         throw new Error('No valid LLM provider available for fallback');

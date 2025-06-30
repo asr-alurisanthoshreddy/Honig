@@ -50,11 +50,12 @@ export class CategoryWebScraper {
           scrapedAt: new Date()
         };
       } catch (error) {
-        console.error(`Failed to scrape ${source.name}:`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`Failed to scrape ${source.name}:`, errorMessage);
         return {
           source,
           content: null,
-          error: error.message,
+          error: errorMessage,
           scrapedAt: new Date()
         };
       }
@@ -95,7 +96,8 @@ export class CategoryWebScraper {
       // Return main content even if not perfectly relevant
       return mainContent;
     } catch (error) {
-      console.error(`Error scraping ${source.name}:`, error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`Error scraping ${source.name}:`, errorMessage);
       return null;
     }
   }
@@ -146,7 +148,7 @@ export class CategoryWebScraper {
 
       return await this.contentExtractor.extract(html, url);
     } catch (error) {
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         throw new Error(`Request timeout after ${options.timeout}ms`);
       }
       throw error;
