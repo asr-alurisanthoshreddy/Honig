@@ -380,31 +380,18 @@ const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) 
         </div>
       </form>
       
-      <div className="text-xs text-center mt-2 text-gray-500 dark:text-gray-400">
-        <div className="flex items-center justify-center gap-4 flex-wrap">
-          <span>
-            {isGuestMode ? (
-              <>
-                <strong>Guest Mode:</strong> Your conversations won't be saved. 
-                <button 
-                  onClick={onLoginRequired}
-                  className="text-blue-600 dark:text-blue-400 hover:underline ml-1"
-                >
-                  Sign in to save progress
-                </button>
-              </>
-            ) : (
-              <>
-                Powered by <strong>Honig</strong> - Real-Time LLM with Intelligent Web Search
-              </>
-            )}
-          </span>
-          
-          {getVoiceStatusText() && (
-            <span>• {getVoiceStatusText()}</span>
-          )}
-        </div>
-      </div>
+     <div className="text-xs text-center mt-2 text-gray-500 dark:text-gray-400">
+  <div className="flex items-center justify-center gap-4 flex-wrap">
+    <span>
+      Built by <strong>ASR</strong> • Powered by <strong>Honig</strong> • Built with <strong>Bolt.new</strong>
+    </span>
+    
+    {getVoiceStatusText() && (
+      <span>• {getVoiceStatusText()}</span>
+    )}
+  </div>
+</div>
+
     </motion.div>
   );
 };
