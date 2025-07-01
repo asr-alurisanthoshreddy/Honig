@@ -43,6 +43,11 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 # Optional: Enhanced Search Capabilities
 VITE_SERPER_API_KEY=your_serper_api_key_here
 VITE_NEWS_API_KEY=your_newsapi_key_here
+
+# NEW: App Integration Features
+VITE_WHATSAPP_API_KEY=your_whatsapp_business_api_key_here
+VITE_WHATSAPP_BUSINESS_ID=your_whatsapp_business_id_here
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id_here
 ```
 
 ### 3. Get Your API Keys
@@ -62,6 +67,10 @@ VITE_NEWS_API_KEY=your_newsapi_key_here
 #### **Search APIs (Optional - for enhanced search)**
 - **Serper API**: [serper.dev](https://serper.dev) - For Google Search
 - **NewsAPI**: [newsapi.org](https://newsapi.org) - For news sources
+
+#### **NEW: App Integration APIs (Optional - for automation)**
+- **WhatsApp Business API**: [developers.facebook.com](https://developers.facebook.com/docs/whatsapp) - For WhatsApp messaging
+- **Google OAuth**: [console.cloud.google.com](https://console.cloud.google.com) - For Gmail integration
 
 ### 4. Run the Application
 ```bash
@@ -98,6 +107,15 @@ npm run dev
 - Source caching for improved performance
 - User annotations and notes
 
+### 🔗 **NEW: App Integration & Automation**
+- **WhatsApp Integration** - Send messages via WhatsApp Business API
+- **Gmail Integration** - Send emails via Gmail API
+- **AI-Powered Commands** - Natural language automation
+  - "Send hi to John on WhatsApp"
+  - "Write a mail to invite John for New Year at Times Square. Email is john@gmail.com"
+- **Secure OAuth Authentication** - Industry-standard security
+- **Connection Management** - Easy connect/disconnect interface
+
 ## 🛠 Technology Stack
 
 ### **AI & Processing**
@@ -111,6 +129,12 @@ npm run dev
 - **NewsAPI** - Real-time news and articles
 - **Wikipedia API** - Factual and encyclopedic content
 - **Site-specific Search** - Reddit, Quora, academic sources
+
+### **App Integrations**
+- **WhatsApp Business API** - Automated messaging
+- **Gmail API** - Email automation
+- **OAuth2 Authentication** - Secure app connections
+- **Message Automation Service** - AI-powered command parsing
 
 ### **Frontend & Backend**
 - **React 18** with TypeScript
@@ -148,6 +172,14 @@ npm run dev
 "Best practices for React performance"
 ```
 
+### **NEW: Automation Commands**
+```
+"Send hi to John on WhatsApp"
+"Write a mail to invite Sarah for the meeting. Email is sarah@company.com"
+"Send a WhatsApp message to Mom saying I'll be late"
+"Email the team about tomorrow's deadline. Use team@company.com"
+```
+
 ## 🏗 Architecture
 
 ### **Query Processing Pipeline**
@@ -167,6 +199,12 @@ npm run dev
 - **Relevance Ranking**: Scores and prioritizes content chunks
 - **Gemini Synthesis**: Second Gemini call for comprehensive response
 - **Citation Engine**: Automatic source attribution
+
+### **NEW: App Integration Architecture**
+- **Connection Service**: Manages OAuth tokens and API connections
+- **Message Automation**: AI-powered command parsing and execution
+- **Security Layer**: Encrypted token storage and secure API calls
+- **Error Handling**: Graceful fallbacks and user feedback
 
 ## 🚀 Deployment
 
@@ -202,6 +240,22 @@ The application is automatically deployed to Netlify and includes:
 1. Verify your Supabase project has the required tables
 2. Check that Row Level Security policies are properly configured
 3. Ensure your database migrations have been applied
+
+### **NEW: App Integration Issues**
+1. **WhatsApp Connection Fails**:
+   - Verify WhatsApp Business API credentials
+   - Check that your business account is approved
+   - Ensure proper webhook configuration
+
+2. **Gmail Connection Fails**:
+   - Verify Google OAuth client ID is correct
+   - Check that Gmail API is enabled in Google Cloud Console
+   - Ensure proper redirect URIs are configured
+
+3. **Automation Commands Not Working**:
+   - Check that apps are properly connected
+   - Verify command syntax (see examples above)
+   - Check browser console for error messages
 
 ## 🤝 Contributing
 

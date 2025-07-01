@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Loader2, Paperclip, Mic, MicOff } from 'lucide-react';
+import { Send, Loader2, Paperclip, Mic, MicOff, Link } from 'lucide-react';
 import { useChatStore } from '../store/chatStore';
 import { motion } from 'framer-motion';
+import ConnectionsPanel from './ConnectionsPanel';
+import { messageAutomationService } from '../lib/connections/messageAutomation';
 
 interface ChatInputProps {
   onLoginRequired: () => void;
@@ -16,6 +18,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) 
   const [silenceTimer, setSilenceTimer] = useState<NodeJS.Timeout | null>(null);
   const [lastSpeechTime, setLastSpeechTime] = useState<number>(0);
   const [autoStopEnabled, setAutoStopEnabled] = useState(true);
+  const [showConnections, setShowConnections] = useState(false);
+  const [isProcessingAutomation, setIsProcessingAutomation] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const recognitionRef = useRef<any>(null);
   const { sendMessage, isProcessing, isGuestMode, messages, userId } = useChatStore();
@@ -184,16 +188,35 @@ const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isProcessing) return;
+    if (!input.trim() || isProcessing || isProcessingAutomation) return;
 
     // Stop listening if currently active
     if (isListening && recognitionRef.current) {
       stopListening();
     }
 
-    // Send message directly - no blocking for guest users
-    await sendMessage(input);
+    const userInput = input.trim();
     setInput('');
+
+    // Check if this is an automation command
+    setIsProcessingAutomation(true);
+    try {
+      const automationResult = await messageAutomationService.processUserMessage(userInput);
+      
+      if (automationResult.isAutomationCommand && automationResult.result) {
+        // This was an automation command, send the result as a message
+        await sendMessage(automationResult.result.message);
+        return;
+      }
+    } catch (error) {
+      console.error('Automation processing failed:', error);
+      // Continue with normal message processing
+    } finally {
+      setIsProcessingAutomation(false);
+    }
+
+    // Send as normal message
+    await sendMessage(userInput);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -258,141 +281,158 @@ const ChatInput: React.FC<ChatInputProps> = ({ onLoginRequired, onFileUpload }) 
         return "🎤 Listening... Click microphone to stop manually";
       }
     }
-    return "Ask Honig anything, upload a file, or use voice input...";
+    return "Ask Honig anything, upload a file, use voice input, or send automated messages...";
   };
 
   const getVoiceStatusText = () => {
     if (!speechSupported) return null;
     
     if (isGuestMode) {
-      return "🎤 Voice input supported • 🔇 Auto-stop ON";
+      return "🎤 Voice input supported • 🔇 Auto-stop ON • 🔗 Connect apps for automation";
     }
     
     if (isLoggedIn) {
-      return `🎤 Voice input supported • ${autoStopEnabled ? '🔇 Auto-stop ON' : '🎤 Manual stop'}`;
+      return `🎤 Voice input supported • ${autoStopEnabled ? '🔇 Auto-stop ON' : '🎤 Manual stop'} • 🔗 App automation available`;
     }
     
-    return "🎤 Voice input supported";
+    return "🎤 Voice input supported • 🔗 Connect apps for automation";
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="sticky bottom-0 bg-white dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800"
-    >
-      {/* Speech error display */}
-      {speechError && (
-        <div className="mb-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <div className="flex items-start gap-2">
-            <div className="w-4 h-4 bg-red-500 rounded-full mt-0.5 flex-shrink-0"></div>
-            <p className="text-sm text-red-700 dark:text-red-300">{speechError}</p>
-          </div>
-        </div>
-      )}
-
-      <form 
-        onSubmit={handleSubmit} 
-        className="flex items-end gap-2 max-w-3xl mx-auto relative"
+    <>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="sticky bottom-0 bg-white dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800"
       >
-        {/* File Upload Button */}
-        <button
-          type="button"
-          onClick={onFileUpload}
-          className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors self-start mt-2 flex items-center justify-center"
-          title="Upload and analyze file"
-        >
-          <Paperclip className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-        </button>
-        
-        <div className="flex-1 relative">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={getVoicePlaceholder()}
-            className={`w-full p-3 pr-20 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100 resize-none max-h-[200px] min-h-[56px] transition-all ${
-              isListening
-                ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/10'
-                : 'border-gray-300 dark:border-gray-700'
-            }`}
-            rows={1}
-            disabled={isProcessing}
-          />
-          
-          {/* Voice Recognition Indicator */}
-          {isListening && (
-            <div className="absolute top-2 right-20 flex items-center gap-1">
-              <div className="w-1 h-3 bg-red-500 rounded-full animate-pulse"></div>
-              <div className="w-1 h-4 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
-              <div className="w-1 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-              <span className="text-xs text-red-600 dark:text-red-400 ml-1">
-                {autoStopEnabled ? 'AUTO' : 'REC'}
-              </span>
+        {/* Speech error display */}
+        {speechError && (
+          <div className="mb-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="flex items-start gap-2">
+              <div className="w-4 h-4 bg-red-500 rounded-full mt-0.5 flex-shrink-0"></div>
+              <p className="text-sm text-red-700 dark:text-red-300">{speechError}</p>
             </div>
-          )}
+          </div>
+        )}
+
+        <form 
+          onSubmit={handleSubmit} 
+          className="flex items-end gap-2 max-w-3xl mx-auto relative"
+        >
+          {/* File Upload Button */}
+          <button
+            type="button"
+            onClick={onFileUpload}
+            className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors self-start mt-2 flex items-center justify-center"
+            title="Upload and analyze file"
+          >
+            <Paperclip className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+          </button>
+
+          {/* Connections Button */}
+          <button
+            type="button"
+            onClick={() => setShowConnections(true)}
+            className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-md hover:from-green-600 hover:to-blue-600 transition-colors self-start mt-2 flex items-center justify-center"
+            title="Connect apps for automation (WhatsApp, Gmail)"
+          >
+            <Link className="w-4 h-4 text-white" />
+          </button>
           
-          {/* Voice Recognition Button - Left of Send Button */}
-          {speechSupported && (
-            <button
-              type="button"
-              onClick={toggleVoiceRecognition}
-              className={`absolute right-12 bottom-3 p-1 rounded-full transition-all ${
+          <div className="flex-1 relative">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={getVoicePlaceholder()}
+              className={`w-full p-3 pr-20 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100 resize-none max-h-[200px] min-h-[56px] transition-all ${
                 isListening
-                  ? 'text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-gray-700 animate-pulse'
-                  : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-700'
+                  ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/10'
+                  : 'border-gray-300 dark:border-gray-700'
               }`}
-              title={
-                isListening 
-                  ? 'Stop voice recognition' 
-                  : autoStopEnabled 
-                    ? 'Start voice recognition (auto-stop enabled)'
-                    : 'Start voice recognition (manual stop)'
-              }
-              disabled={isProcessing}
+              rows={1}
+              disabled={isProcessing || isProcessingAutomation}
+            />
+            
+            {/* Voice Recognition Indicator */}
+            {isListening && (
+              <div className="absolute top-2 right-20 flex items-center gap-1">
+                <div className="w-1 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <div className="w-1 h-4 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-1 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                <span className="text-xs text-red-600 dark:text-red-400 ml-1">
+                  {autoStopEnabled ? 'AUTO' : 'REC'}
+                </span>
+              </div>
+            )}
+            
+            {/* Voice Recognition Button - Left of Send Button */}
+            {speechSupported && (
+              <button
+                type="button"
+                onClick={toggleVoiceRecognition}
+                className={`absolute right-12 bottom-3 p-1 rounded-full transition-all ${
+                  isListening
+                    ? 'text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-gray-700 animate-pulse'
+                    : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-700'
+                }`}
+                title={
+                  isListening 
+                    ? 'Stop voice recognition' 
+                    : autoStopEnabled 
+                      ? 'Start voice recognition (auto-stop enabled)'
+                      : 'Start voice recognition (manual stop)'
+                }
+                disabled={isProcessing || isProcessingAutomation}
+              >
+                {isListening ? (
+                  <MicOff className="w-5 h-5" />
+                ) : (
+                  <Mic className="w-5 h-5" />
+                )}
+              </button>
+            )}
+            
+            {/* Send Button - Rightmost */}
+            <button
+              type="submit"
+              disabled={!input.trim() || isProcessing || isProcessingAutomation}
+              className={`absolute right-3 bottom-3 p-1 rounded-full transition-colors ${
+                input.trim() && !isProcessing && !isProcessingAutomation
+                  ? 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-700'
+                  : 'text-gray-400 cursor-not-allowed'
+              }`}
+              aria-label="Send message"
             >
-              {isListening ? (
-                <MicOff className="w-5 h-5" />
+              {isProcessing || isProcessingAutomation ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <Mic className="w-5 h-5" />
+                <Send className="w-5 h-5" />
               )}
             </button>
-          )}
-          
-          {/* Send Button - Rightmost */}
-          <button
-            type="submit"
-            disabled={!input.trim() || isProcessing}
-            className={`absolute right-3 bottom-3 p-1 rounded-full transition-colors ${
-              input.trim() && !isProcessing
-                ? 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-700'
-                : 'text-gray-400 cursor-not-allowed'
-            }`}
-            aria-label="Send message"
-          >
-            {isProcessing ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
+          </div>
+        </form>
+        
+        <div className="text-xs text-center mt-2 text-gray-500 dark:text-gray-400">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <span>
+              Built by <strong>ASR</strong> • Powered by <strong>Honig</strong> • Built with <strong>Bolt.new</strong>
+            </span>
+            
+            {getVoiceStatusText() && (
+              <span>• {getVoiceStatusText()}</span>
             )}
-          </button>
+          </div>
         </div>
-      </form>
-      
-     <div className="text-xs text-center mt-2 text-gray-500 dark:text-gray-400">
-  <div className="flex items-center justify-center gap-4 flex-wrap">
-    <span>
-      Built by <strong>ASR</strong> • Powered by <strong>Honig</strong> • Built with <strong>Bolt.new</strong>
-    </span>
-    
-    {getVoiceStatusText() && (
-      <span>• {getVoiceStatusText()}</span>
-    )}
-  </div>
-</div>
+      </motion.div>
 
-    </motion.div>
+      {/* Connections Panel */}
+      <ConnectionsPanel
+        isOpen={showConnections}
+        onClose={() => setShowConnections(false)}
+      />
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types/supabase';
 import { HonigService } from './honigService';
+import { messageAutomationService } from './connections/messageAutomation';
 
 // Get environment variables and clean them - with fallbacks for deployment
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim() || 'https://placeholder.supabase.co';
@@ -85,11 +86,21 @@ function validateGeminiApiKey(): string {
   return geminiKey;
 }
 
-// **FIXED: Enhanced Gemini response with ISOLATED file context**
+// **FIXED: Enhanced Gemini response with ISOLATED file context and automation support**
 async function getGeminiResponseWithContext(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('🧠 Processing with ISOLATED file context...');
+    console.log('🧠 Processing with ISOLATED file context and automation support...');
     console.log(`📚 Context: ${conversationHistory.length} previous messages`);
+    
+    // Check for automation commands first
+    try {
+      const automationResult = await messageAutomationService.processUserMessage(message);
+      if (automationResult.isAutomationCommand && automationResult.result) {
+        return automationResult.result.message;
+      }
+    } catch (automationError) {
+      console.warn('Automation processing failed, continuing with normal response:', automationError);
+    }
     
     // Validate API key first
     const geminiKey = validateGeminiApiKey();
@@ -116,6 +127,11 @@ async function getGeminiResponseWithContext(message: string, conversationHistory
 4. **DETECT FOLLOW-UP QUERIES:** Determine if the current query is asking for something specific based on the MOST RECENT file content.
 
 5. **USE ONLY RELEVANT CONTENT:** If the user previously shared multiple files, use ONLY the content from the file that's relevant to their current question.
+
+**APP AUTOMATION CAPABILITIES:**
+You can help users send automated messages through connected apps:
+- WhatsApp: "Send hi to John on WhatsApp"
+- Gmail: "Write a mail to invite John for New Year at Times Square. Email is john@gmail.com"
 
 **RELEVANT CONVERSATION CONTEXT:**
 `;
@@ -159,6 +175,11 @@ async function getGeminiResponseWithContext(message: string, conversationHistory
    - Do not mix tables, questions, or content from different files
    - Only combine files if user explicitly requests it
 
+5. **App automation support:**
+   - If the user asks to send messages or emails, provide helpful guidance
+   - Explain how to connect apps if they're not connected
+   - Suggest proper command formats for automation
+
 **FORMATTING REQUIREMENTS:**
 - Use proper markdown formatting
 - Structure responses with clear headings
@@ -201,7 +222,7 @@ Analyze the relevant context and provide a response to the current query:`;
     }
     
     // Generic fallback
-    return "Hello! I'm **Honig**, your AI research assistant. To use AI features, please configure your API keys as described in the README file. Once configured, I can help you with research, analysis, and much more!";
+    return "Hello! I'm **Honig**, your AI research assistant. To use AI features, please configure your API keys as described in the README file. Once configured, I can help you with research, analysis, app automation, and much more!";
   }
 }
 
@@ -276,10 +297,10 @@ function getRelevantFileContext(message: string, conversationHistory: any[]): an
   return relevantContext;
 }
 
-// **ENHANCED: Main response function with ISOLATED file context**
+// **ENHANCED: Main response function with ISOLATED file context and automation support**
 export async function getResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
-    console.log('🤖 Processing query with ISOLATED file context...');
+    console.log('🤖 Processing query with ISOLATED file context and automation support...');
     console.log(`📚 Total conversation history: ${conversationHistory.length} messages`);
     
     // Check if Honig service is configured and should be used
@@ -287,7 +308,7 @@ export async function getResponse(message: string, conversationHistory: any[] = 
       const config = honigService.getConfiguration();
       
       if (!config.isConfigured) {
-        console.warn('⚠️ Honig not configured, using contextual Gemini with file isolation');
+        console.warn('⚠️ Honig not configured, using contextual Gemini with file isolation and automation');
         return await getGeminiResponseWithContext(message, conversationHistory);
       }
       
@@ -314,7 +335,7 @@ export async function getResponse(message: string, conversationHistory: any[] = 
 
       return result.response;
     } else {
-      // Not in production or not configured - use contextual response with file isolation
+      // Not in production or not configured - use contextual response with file isolation and automation
       return await getGeminiResponseWithContext(message, conversationHistory);
     }
 
@@ -323,13 +344,13 @@ export async function getResponse(message: string, conversationHistory: any[] = 
     
     // Try contextual Gemini as final fallback
     try {
-      console.log('🔄 Falling back to contextual Gemini with file isolation');
+      console.log('🔄 Falling back to contextual Gemini with file isolation and automation');
       return await getGeminiResponseWithContext(message, conversationHistory);
     } catch (fallbackError) {
       console.error('Even contextual Gemini failed:', fallbackError);
       
       // Return a helpful message instead of crashing
-      return "🔧 **Welcome to Honig!** \n\nThis is a powerful AI research assistant that can:\n\n🔍 **Search multiple sources** - Wikipedia, news, academic papers, forums\n🧠 **Intelligent analysis** - Understands your query type and selects best sources\n📊 **Comprehensive responses** - Combines information from various sources\n🎯 **Real-time information** - Gets the latest data on any topic\n\n**To get started:**\n1. Set up your API keys (see README.md)\n2. Ask any question and I'll search the web for answers\n3. Upload files for analysis\n4. Get real-time information on any topic\n\n*Currently running in demo mode - configure your API keys for full functionality.*";
+      return "🔧 **Welcome to Honig!** \n\nThis is a powerful AI research assistant that can:\n\n🔍 **Search multiple sources** - Wikipedia, news, academic papers, forums\n🧠 **Intelligent analysis** - Understands your query type and selects best sources\n📊 **Comprehensive responses** - Combines information from various sources\n🎯 **Real-time information** - Gets the latest data on any topic\n🔗 **App automation** - Send WhatsApp messages and emails with AI commands\n\n**To get started:**\n1. Set up your API keys (see README.md)\n2. Ask any question and I'll search the web for answers\n3. Upload files for analysis\n4. Connect apps for automated messaging\n5. Get real-time information on any topic\n\n*Currently running in demo mode - configure your API keys for full functionality.*";
     }
   }
 }
@@ -399,14 +420,14 @@ function getSimpleResponse(message: string): string {
   const messageLower = message.toLowerCase().trim();
   
   if (/^(hello|hi|hey)(\s|$)/i.test(messageLower)) {
-    return "Hello! I'm **Honig**, your AI research assistant developed by **Honig**. I can help you find accurate, up-to-date information on any topic by searching and analyzing multiple sources in real-time. What would you like to research today?";
+    return "Hello! I'm **Honig**, your AI research assistant developed by **Honig**. I can help you find accurate, up-to-date information on any topic by searching and analyzing multiple sources in real-time. I can also help you send automated messages through WhatsApp and Gmail! What would you like to research today?";
   }
   
   if (messageLower.includes('help')) {
-    return "I'm **Honig**, developed by **Honig**. I can help you with:\n\n🔍 **Real-time Research** - Current events, latest developments, breaking news\n📚 **Factual Information** - Definitions, explanations, historical facts\n💭 **Multiple Perspectives** - Opinions, reviews, community discussions\n🔬 **Technical Topics** - Science, technology, academic subjects\n💻 **Programming & Code** - Code examples, algorithms, programming concepts\n📄 **File Analysis** - Upload and analyze documents, images, PDFs\n\nJust ask me any question and I'll search the most relevant sources to give you a comprehensive answer!";
+    return "I'm **Honig**, developed by **Honig**. I can help you with:\n\n🔍 **Real-time Research** - Current events, latest developments, breaking news\n📚 **Factual Information** - Definitions, explanations, historical facts\n💭 **Multiple Perspectives** - Opinions, reviews, community discussions\n🔬 **Technical Topics** - Science, technology, academic subjects\n💻 **Programming & Code** - Code examples, algorithms, programming concepts\n📄 **File Analysis** - Upload and analyze documents, images, PDFs\n🔗 **App Automation** - Send WhatsApp messages and emails with AI commands\n\nJust ask me any question and I'll search the most relevant sources to give you a comprehensive answer!";
   }
   
-  return "I'm **Honig**, your AI research assistant developed by **Honig**. I can help you find accurate, current information on any topic. What would you like to know?";
+  return "I'm **Honig**, your AI research assistant developed by **Honig**. I can help you find accurate, current information on any topic and automate messaging through connected apps. What would you like to know?";
 }
 
 // Enhanced query logging with sources
