@@ -4,17 +4,18 @@ Honig is a sophisticated AI assistant that leverages real-time web search and Re
 
 ## 🚀 Live Demo
 
-**Deployed Application:** https://charming-pithivier-97db65.netlify.app
+**Deployed Application:** [https://honigg.netlify.app/](https://honigg.netlify.app/)
 
 The application is deployed and ready to use! You can:
-- ✅ **Try it immediately** - The app works in demo mode without any setup
-- ✅ **Explore the interface** - See all features and capabilities
-- ✅ **Test basic functionality** - Chat interface, file upload, dark mode
-- ⚙️ **Configure for full features** - Add API keys for AI capabilities
+
+* ✅ **Try it immediately** - The app works in demo mode without any setup
+* ✅ **Explore the interface** - See all features and capabilities
+* ✅ **Test basic functionality** - Chat interface, file upload, dark mode
+* ⚙️ **Configure for full features** - Add API keys for AI capabilities
 
 ## 🎯 Quick Start (No Setup Required)
 
-1. **Visit the live demo**: https://charming-pithivier-97db65.netlify.app
+1. **Visit the live demo**: [https://honigg.netlify.app/](https://honigg.netlify.app/)
 2. **Explore the interface** - Try the chat, toggle dark mode, explore features
 3. **See the app in action** - All UI components are fully functional
 
@@ -23,6 +24,7 @@ The application is deployed and ready to use! You can:
 To unlock AI capabilities and real-time search:
 
 ### 1. Clone the Repository
+
 ```bash
 git clone <your-repository-url>
 cd honig
@@ -30,6 +32,7 @@ npm install
 ```
 
 ### 2. Configure Environment Variables
+
 Create a `.env` file in the project root:
 
 ```env
@@ -43,21 +46,18 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 # Optional: Enhanced Search Capabilities
 VITE_SERPER_API_KEY=your_serper_api_key_here
 VITE_NEWS_API_KEY=your_newsapi_key_here
-
-# NEW: App Integration Features
-VITE_WHATSAPP_API_KEY=your_whatsapp_business_api_key_here
-VITE_WHATSAPP_BUSINESS_ID=your_whatsapp_business_id_here
-VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id_here
 ```
 
 ### 3. Get Your API Keys
 
 #### **Gemini API Key (Required for AI)**
+
 1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
 2. Create a new API key
 3. Add to `.env` as `VITE_GEMINI_API_KEY`
 
 #### **Supabase Setup (Optional - for user accounts)**
+
 1. Visit [supabase.com](https://supabase.com)
 2. Create a new project
 3. Go to Settings → API
@@ -65,14 +65,12 @@ VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id_here
 5. Add to `.env` as `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
 
 #### **Search APIs (Optional - for enhanced search)**
-- **Serper API**: [serper.dev](https://serper.dev) - For Google Search
-- **NewsAPI**: [newsapi.org](https://newsapi.org) - For news sources
 
-#### **NEW: App Integration APIs (Optional - for automation)**
-- **WhatsApp Business API**: [developers.facebook.com](https://developers.facebook.com/docs/whatsapp) - For WhatsApp messaging
-- **Google OAuth**: [console.cloud.google.com](https://console.cloud.google.com) - For Gmail integration
+* **Serper API**: [serper.dev](https://serper.dev) - For Google Search
+* **NewsAPI**: [newsapi.org](https://newsapi.org) - For news sources
 
 ### 4. Run the Application
+
 ```bash
 npm run dev
 ```
@@ -80,71 +78,65 @@ npm run dev
 ## 🌟 Features
 
 ### 🎯 **Intelligent Query Classification**
-- Automatically detects query intent and type
-- Routes to optimal sources based on content needs
-- Adapts search strategy for different question types
+
+* Automatically detects query intent and type
+* Routes to optimal sources based on content needs
+* Adapts search strategy for different question types
 
 ### 🔍 **Multi-Source Intelligence**
-- **Wikipedia API** for factual information
-- **Google Search** (via Serper) for general web content
-- **NewsAPI** for current events and breaking news
-- **Site-specific searches** for Reddit, Quora, and academic sources
+
+* **Wikipedia API** for factual information
+* **Google Search** (via Serper) for general web content
+* **NewsAPI** for current events and breaking news
+* **Site-specific searches** for Reddit, Quora, and academic sources
 
 ### 🧠 **Dual-Stage Gemini Pipeline**
-- **Stage 1**: Query understanding and refinement
-- **Stage 2**: Content synthesis and response generation
-- Ensures both relevance and articulation
+
+* **Stage 1**: Query understanding and refinement
+* **Stage 2**: Content synthesis and response generation
+* Ensures both relevance and articulation
 
 ### 📊 **Transparent Processing**
-- Real-time processing indicators
-- Source attribution and confidence scores
-- Processing time breakdown
-- Query type classification display
+
+* Real-time processing indicators
+* Source attribution and confidence scores
+* Processing time breakdown
+* Query type classification display
 
 ### 💾 **Advanced Data Management**
-- Conversation persistence (when logged in)
-- Guest mode for immediate access
-- Source caching for improved performance
-- User annotations and notes
 
-### 🔗 **NEW: App Integration & Automation**
-- **WhatsApp Integration** - Send messages via WhatsApp Business API
-- **Gmail Integration** - Send emails via Gmail API
-- **AI-Powered Commands** - Natural language automation
-  - "Send hi to John on WhatsApp"
-  - "Write a mail to invite John for New Year at Times Square. Email is john@gmail.com"
-- **Secure OAuth Authentication** - Industry-standard security
-- **Connection Management** - Easy connect/disconnect interface
+* Conversation persistence (when logged in)
+* Guest mode for immediate access
+* Source caching for improved performance
+* User annotations and notes
 
 ## 🛠 Technology Stack
 
 ### **AI & Processing**
-- **Google Gemini 2.0 Flash** - Dual-stage query processing and synthesis
-- **Custom Query Processor** - Intelligent query classification
-- **Multi-Source Retrieval Engine** - Targeted content gathering
-- **Content Synthesizer** - Comprehensive response generation
+
+* **Google Gemini 2.0 Flash** - Dual-stage query processing and synthesis
+* **Custom Query Processor** - Intelligent query classification
+* **Multi-Source Retrieval Engine** - Targeted content gathering
+* **Content Synthesizer** - Comprehensive response generation
 
 ### **Search & Data Sources**
-- **Serper API** - Google Search integration
-- **NewsAPI** - Real-time news and articles
-- **Wikipedia API** - Factual and encyclopedic content
-- **Site-specific Search** - Reddit, Quora, academic sources
 
-### **App Integrations**
-- **WhatsApp Business API** - Automated messaging
-- **Gmail API** - Email automation
-- **OAuth2 Authentication** - Secure app connections
-- **Message Automation Service** - AI-powered command parsing
+* **Serper API** - Google Search integration
+* **NewsAPI** - Real-time news and articles
+* **Wikipedia API** - Factual and encyclopedic content
+* **Site-specific Search** - Reddit, Quora, academic sources
 
 ### **Frontend & Backend**
-- **React 18** with TypeScript
-- **Supabase** - Database and authentication
-- **Tailwind CSS** - Modern styling
-- **Framer Motion** - Smooth animations
+
+* **React 18** with TypeScript
+* **Supabase** - Database and authentication
+* **Tailwind CSS** - Modern styling
+* **Framer Motion** - Smooth animations
 
 ## 🎯 Usage Examples
 
 ### **Factual Queries** (→ Wikipedia, Academic)
+
 ```
 "What is quantum computing?"
 "Who invented the transistor?"
@@ -152,6 +144,7 @@ npm run dev
 ```
 
 ### **Opinion-Based Queries** (→ Reddit, Quora)
+
 ```
 "What do people think about electric cars?"
 "Best programming language for beginners?"
@@ -159,6 +152,7 @@ npm run dev
 ```
 
 ### **Current Events** (→ News Sources)
+
 ```
 "Latest developments in AI this week"
 "Recent climate change news"
@@ -166,55 +160,45 @@ npm run dev
 ```
 
 ### **Technical Topics** (→ Academic, Forums)
+
 ```
 "How does neural network training work?"
 "Explain blockchain consensus mechanisms"
 "Best practices for React performance"
 ```
 
-### **NEW: Automation Commands**
-```
-"Send hi to John on WhatsApp"
-"Write a mail to invite Sarah for the meeting. Email is sarah@company.com"
-"Send a WhatsApp message to Mom saying I'll be late"
-"Email the team about tomorrow's deadline. Use team@company.com"
-```
-
 ## 🏗 Architecture
 
 ### **Query Processing Pipeline**
+
 1. **Input Analysis**: Gemini analyzes the raw user query
 2. **Query Classification**: Determines type (factual, opinion, news, technical, general)
 3. **Source Selection**: Chooses optimal sources based on query type
 4. **Search Optimization**: Generates refined search terms
 
 ### **Source Retrieval Engine**
-- **Wikipedia API**: Direct API calls for encyclopedic content
-- **Serper Integration**: Google Search with site-specific filtering
-- **NewsAPI**: Real-time news and article retrieval
-- **Content Scraping**: Intelligent web scraping with quality scoring
+
+* **Wikipedia API**: Direct API calls for encyclopedic content
+* **Serper Integration**: Google Search with site-specific filtering
+* **NewsAPI**: Real-time news and article retrieval
+* **Content Scraping**: Intelligent web scraping with quality scoring
 
 ### **Content Synthesis**
-- **Multi-Source Aggregation**: Combines content from various sources
-- **Relevance Ranking**: Scores and prioritizes content chunks
-- **Gemini Synthesis**: Second Gemini call for comprehensive response
-- **Citation Engine**: Automatic source attribution
 
-### **NEW: App Integration Architecture**
-- **Connection Service**: Manages OAuth tokens and API connections
-- **Message Automation**: AI-powered command parsing and execution
-- **Security Layer**: Encrypted token storage and secure API calls
-- **Error Handling**: Graceful fallbacks and user feedback
+* **Multi-Source Aggregation**: Combines content from various sources
+* **Relevance Ranking**: Scores and prioritizes content chunks
+* **Gemini Synthesis**: Second Gemini call for comprehensive response
+* **Citation Engine**: Automatic source attribution
 
 ## 🚀 Deployment
 
 The application is automatically deployed to Netlify and includes:
 
-- ✅ **Production-ready build** with optimized assets
-- ✅ **Environment variable support** for API keys
-- ✅ **Graceful fallbacks** when APIs aren't configured
-- ✅ **Mobile-responsive design** for all devices
-- ✅ **Dark mode support** with system preference detection
+* ✅ **Production-ready build** with optimized assets
+* ✅ **Environment variable support** for API keys
+* ✅ **Graceful fallbacks** when APIs aren't configured
+* ✅ **Mobile-responsive design** for all devices
+* ✅ **Dark mode support** with system preference detection
 
 ### **Deploy Your Own**
 
@@ -226,36 +210,23 @@ The application is automatically deployed to Netlify and includes:
 ## 🛠 Troubleshooting
 
 ### **App Shows Blank Page**
-- Check browser console for JavaScript errors
-- Ensure environment variables are properly set
-- Try clearing browser cache and refreshing
+
+* Check browser console for JavaScript errors
+* Ensure environment variables are properly set
+* Try clearing browser cache and refreshing
 
 ### **AI Features Not Working**
+
 1. Verify your Gemini API key is valid and properly configured
 2. Check that the API key starts with "AIza"
 3. Ensure you have sufficient quota/credits
 4. Check the browser console for specific error messages
 
 ### **Database Connection Issues**
+
 1. Verify your Supabase project has the required tables
 2. Check that Row Level Security policies are properly configured
 3. Ensure your database migrations have been applied
-
-### **NEW: App Integration Issues**
-1. **WhatsApp Connection Fails**:
-   - Verify WhatsApp Business API credentials
-   - Check that your business account is approved
-   - Ensure proper webhook configuration
-
-2. **Gmail Connection Fails**:
-   - Verify Google OAuth client ID is correct
-   - Check that Gmail API is enabled in Google Cloud Console
-   - Ensure proper redirect URIs are configured
-
-3. **Automation Commands Not Working**:
-   - Check that apps are properly connected
-   - Verify command syntax (see examples above)
-   - Check browser console for error messages
 
 ## 🤝 Contributing
 
@@ -272,6 +243,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🆘 Support
 
 For issues and questions:
+
 1. Check the [Issues](../../issues) page
 2. Review the documentation
 3. Create a new issue with detailed information
@@ -279,5 +251,3 @@ For issues and questions:
 ---
 
 **Honig: Intelligent Research at the Speed of Thought** 🧠⚡
-
-**Live Demo**: https://charming-pithivier-97db65.netlify.app
